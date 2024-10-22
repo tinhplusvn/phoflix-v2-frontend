@@ -1,0 +1,24 @@
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+  padding: 0 32px;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.8);
+
+  .categorys,
+  .countrys {
+    display: "flex";
+    flex-direction: "row";
+    flex-wrap: "wrap";
+    max-width: "360px";
+    padding: "8px";
+  }
+}
