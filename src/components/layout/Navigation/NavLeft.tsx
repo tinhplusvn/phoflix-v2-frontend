@@ -8,36 +8,8 @@ import _NavLink from "../../common/_NavLink";
 import Categorys from "./Catetogys";
 import Countrys from "./Countrys";
 import { useEffect, useState } from "react";
-import axios from "axios";
-
-type categoryList = {
-  name: string;
-  slug: string;
-};
-
-type countryList = {
-  name: string;
-  slug: string;
-};
 
 const NavLeft = () => {
-  const [categoryList, setCategoryList] = useState<categoryList[]>([]);
-  const [countryList, setCountryList] = useState<countryList[]>([]);
-
-  useEffect(() => {
-    const handleGetCategoryList = async () => {
-      const res = await axios.get("https://phimapi.com/the-loai");
-      const res1 = await axios.get("https://phimapi.com/quoc-gia");
-
-      setTimeout(() => {
-          setCategoryList(res.data);
-          setCountryList(res1.data);
-      }, 0)
-    };
-
-    handleGetCategoryList();
-  }, []);
-
   return (
     <Box sx={{ display: "flex" }}>
       <Dropdown>
@@ -61,9 +33,9 @@ const NavLeft = () => {
         </Menu>
       </Dropdown>
 
-      <Categorys categorys={categoryList} />
+      <Categorys />
 
-      <Countrys countrys={countryList} />
+      <Countrys />
 
       <Dropdown>
         <MenuButton variant="plain">

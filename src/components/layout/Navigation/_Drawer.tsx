@@ -19,6 +19,9 @@ import AccordionGroup from "@mui/joy/AccordionGroup";
 import AccordionSummary from "@mui/joy/AccordionSummary";
 import HistoryIcon from "@mui/icons-material/History";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import { useSelector } from "react-redux";
+import PublicIcon from "@mui/icons-material/Public";
+import { RootState } from "../../../redux/store";
 
 type _Drawer = {
   open: boolean;
@@ -26,6 +29,10 @@ type _Drawer = {
 };
 
 const _Drawer = ({ open, setOpen }: _Drawer) => {
+
+  const categories = useSelector((state: RootState) => state.movies.categories);
+  const countries = useSelector((state: RootState) => state.movies.countries);
+
   return (
     <Drawer
       open={open}
@@ -53,98 +60,34 @@ const _Drawer = ({ open, setOpen }: _Drawer) => {
           </ListItem>
           <ListItem startAction={<LiveTvRoundedIcon />}>
             <ListItemButton>
-              <_NavLink path="/phim-le" content="Phim lẻ" />
+              <_NavLink path="/chi-tiet/phim-le" content="Phim lẻ" />
             </ListItemButton>
           </ListItem>
           <ListItem startAction={<LiveTvRoundedIcon />}>
             <ListItemButton>
-              <_NavLink path="/phim-bo" content="Phim bộ" />
+              <_NavLink path="/chi-tiet/phim-bo" content="Phim bộ" />
             </ListItemButton>
           </ListItem>
           <ListItem startAction={<LiveTvRoundedIcon />}>
             <ListItemButton>
-              <_NavLink path="/hoat-hinh" content="Hoạt hình" />
+              <_NavLink path="/chi-tiet/hoat-hinh" content="Hoạt hình" />
             </ListItemButton>
           </ListItem>
           <AccordionGroup>
             <Accordion>
               <AccordionSummary>Thể loại</AccordionSummary>
               <AccordionDetails>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
+                {categories.length > 0 &&
+                  categories.map((item, index) => (
+                    <ListItem key={index} startAction={<LiveTvRoundedIcon />}>
+                      <ListItemButton>
+                        <_NavLink
+                          path={`/hoat-hinh/${item.slug}`}
+                          content={item.name}
+                        />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
               </AccordionDetails>
             </Accordion>
           </AccordionGroup>
@@ -152,81 +95,17 @@ const _Drawer = ({ open, setOpen }: _Drawer) => {
             <Accordion>
               <AccordionSummary>Quốc gia</AccordionSummary>
               <AccordionDetails>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem startAction={<LiveTvRoundedIcon />}>
-                  <ListItemButton>
-                    <_NavLink path="/hoat-hinh" content="Hoạt hình" />
-                  </ListItemButton>
-                </ListItem>
+                {countries.length > 0 &&
+                  countries.map((item, index) => (
+                    <ListItem key={index} startAction={<PublicIcon />}>
+                      <ListItemButton>
+                        <_NavLink
+                          path={`/quoc-gia/${item.slug}`}
+                          content={item.name}
+                        />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
               </AccordionDetails>
             </Accordion>
           </AccordionGroup>

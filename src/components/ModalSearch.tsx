@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Chip,
+  IconButton,
   Input,
   Modal,
   ModalClose,
@@ -14,13 +15,28 @@ import Divider from "@mui/joy/Divider";
 import HistoryIcon from "@mui/icons-material/History";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import CloseIcon from "@mui/icons-material/Close";
+import ClearIcon from "@mui/icons-material/Clear";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
+import "../styles/ModalSearch.scss";
 
 type ModalSearch = {
   open: boolean;
   setOpen: (open: boolean) => void;
 };
 
+type searchValue = string | undefined;
+
 const ModalSearch = ({ open, setOpen }: ModalSearch) => {
+  const [searchValue, setSearchValue] = useState<searchValue>();
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    navigate(`/tim-kiem/${searchValue}`);
+    setOpen(false);
+  };
+
   return (
     <Modal
       aria-labelledby="modal-title"
@@ -39,78 +55,74 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
           }}
         >
           <Input
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
             sx={{ flex: "1" }}
             variant="plain"
             placeholder="Tìm kiếm phim..."
             startDecorator={<SearchIcon color="primary" />}
           />
 
-          <Button variant="soft">Tìm kiếm</Button>
+          <Button
+            disabled={searchValue === ""}
+            onClick={() => handleSearch()}
+            variant="soft"
+          >
+            Tìm kiếm
+          </Button>
         </Box>
 
         <Divider sx={{ margin: "12px -24px" }} />
 
         <Box sx={{ height: "360px", overflowY: "auto" }}>
           <Box>
-            <Typography sx={{ marginBottom: "12px" }} level="h4">
+            <Typography
+              sx={{ marginBottom: "12px" }}
+              level="title-md"
+              color="neutral"
+            >
               Gần đây
             </Typography>
-            <ul
-              style={{
-                padding: 0,
-                margin: 0,
-                listStyle: "none",
-                display: "flex",
-                flexDirection: "column",
-                gap: "12px",
-
-                paddingRight: "12px",
-              }}
-            >
-              <li
-                style={{
-                  padding: "16px",
-                  border: "1px solid #cdd7e1",
-                  borderRadius: "12px",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                }}
-              >
-                <HistoryIcon />
-                Test
+            <ul className="search-list">
+              <li className="search-item">
+                <Box
+                  sx={{ display: "flex", alignItems: "center", gap: "12px" }}
+                >
+                  <HistoryIcon />
+                  Test
+                </Box>
+                <Box>
+                  <IconButton color="primary">
+                    <StarBorderIcon />
+                  </IconButton>
+                  <IconButton color="primary">
+                    <ClearIcon />
+                  </IconButton>
+                </Box>
               </li>
             </ul>
           </Box>
           <Box>
-            <Typography sx={{ margin: "12px 0" }} level="h4">
+            <Typography
+              sx={{ margin: "12px 0" }}
+              level="title-md"
+              color="neutral"
+            >
               Yêu thích
             </Typography>
-            <ul
-              style={{
-                padding: 0,
-                margin: 0,
-                listStyle: "none",
-                display: "flex",
-                flexDirection: "column",
-                gap: "12px",
-                paddingRight: "12px",
-              }}
-            >
-              <li
-                style={{
-                  padding: "16px",
-                  border: "1px solid #cdd7e1",
-                  borderRadius: "12px",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                }}
-              >
-                <StarBorderIcon />
-                Test
+            <ul className="search-list">
+              <li className="search-item">
+                <Box
+                  sx={{ display: "flex", alignItems: "center", gap: "12px" }}
+                >
+                  <StarBorderIcon />
+                  Test
+                </Box>
+                <Box>
+                  <IconButton color="primary">
+                    <ClearIcon />
+                  </IconButton>
+                </Box>
               </li>
             </ul>
           </Box>

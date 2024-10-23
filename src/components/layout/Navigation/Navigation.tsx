@@ -6,21 +6,20 @@ import NavLeft from "./NavLeft";
 import NavRight from "./NavRight";
 import MenuIcon from "@mui/icons-material/Menu";
 import "../../../styles/Navigation.scss";
+import { IconButton } from "@mui/joy";
 import {
-  Divider,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  Menu,
-} from "@mui/joy";
+  getCategories,
+  getCountries,
+} from "../../../redux/asyncThunk/moviesThunk";
+import { AppDispatch } from "../../../redux/store";
 
 import _Drawer from "./_Drawer";
+import { useDispatch } from "react-redux";
 
 const Navigation = () => {
-  const [width, setWidth] = useState<number>(window.innerWidth);
   const [open, setOpen] = useState<boolean>(false);
+  const dispatch: AppDispatch = useDispatch();
+  const [width, setWidth] = useState<number>(window.innerWidth);
 
   useEffect(() => {
     const handleResize = () => {
@@ -28,6 +27,11 @@ const Navigation = () => {
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    dispatch(getCategories());
+    dispatch(getCountries());
   }, []);
 
   return (

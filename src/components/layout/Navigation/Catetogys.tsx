@@ -3,13 +3,19 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import _NavLink from "../../common/_NavLink";
 
 import "../../../styles/Navigation.scss";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { useEffect } from "react";
+import CustomSkeleton from "../../common/CustomSkeleton";
 
 type item = {
   slug: string;
   name: string;
 };
 
-const Categorys = ({ categorys }: { categorys: any }) => {
+const Categorys = () => {
+  const categories = useSelector((state: RootState) => state.movies.categories);
+
   return (
     <Box>
       <Dropdown>
@@ -27,63 +33,11 @@ const Categorys = ({ categorys }: { categorys: any }) => {
             padding: "8px",
           }}
         >
-          {categorys.length === 0 && (
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "12px",
-              }}
-            >
-              <Skeleton
-                animation="wave"
-                variant="text"
-                sx={{ width: "106px" }}
-              />
-              <Skeleton
-                animation="wave"
-                variant="text"
-                sx={{ width: "106px" }}
-              />
-              <Skeleton
-                animation="wave"
-                variant="text"
-                sx={{ width: "106px" }}
-              />
-              <Skeleton
-                animation="wave"
-                variant="text"
-                sx={{ width: "106px" }}
-              />
-              <Skeleton
-                animation="wave"
-                variant="text"
-                sx={{ width: "106px" }}
-              />
-              <Skeleton
-                animation="wave"
-                variant="text"
-                sx={{ width: "106px" }}
-              />
-              <Skeleton
-                animation="wave"
-                variant="text"
-                sx={{ width: "106px" }}
-              />
-              <Skeleton
-                animation="wave"
-                variant="text"
-                sx={{ width: "106px" }}
-              />
-              <Skeleton
-                animation="wave"
-                variant="text"
-                sx={{ width: "106px" }}
-              />
-            </Box>
+          {categories.length === 0 && (
+            <CustomSkeleton quantity={15} width={106} />
           )}
-          {categorys.length > 0 &&
-            categorys.map((item: item, index: number) => (
+          {categories.length > 0 &&
+            categories.map((item: item, index: number) => (
               <MenuItem key={index} sx={{ borderRadius: "8px", flex: "auto" }}>
                 <_NavLink path={`/chi-tiet/${item.slug}`} content={item.name} />
               </MenuItem>

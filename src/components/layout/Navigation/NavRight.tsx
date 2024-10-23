@@ -26,7 +26,7 @@ const NavRight = ({ width }: NavRight) => {
               color="neutral"
               startDecorator={<SearchIcon color="primary" />}
             >
-              Tìm kiếm phim...
+              Tìm kiếm...
             </Button>
           </>
         ) : (

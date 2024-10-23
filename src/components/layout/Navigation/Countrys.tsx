@@ -3,13 +3,18 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import _NavLink from "../../common/_NavLink";
 
 import "../../../styles/Navigation.scss";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import CustomSkeleton from "../../common/CustomSkeleton";
 
 type item = {
   slug: string;
   name: string;
 };
 
-const Countrys = ({ countrys }: { countrys: any }) => {
+const Countrys = () => {
+  const countries = useSelector((state: RootState) => state.movies.countries);
+
   return (
     <Box>
       <Dropdown>
@@ -27,11 +32,15 @@ const Countrys = ({ countrys }: { countrys: any }) => {
             padding: "8px",
           }}
         >
-          {countrys.map((item: item, index: number) => (
-            <MenuItem key={index} sx={{ borderRadius: "8px", flex: "auto" }}>
-              <_NavLink path={`/chi-tiet/${item.slug}`} content={item.name} />
-            </MenuItem>
-          ))}
+          {countries.length === 0 && (
+            <CustomSkeleton quantity={15} width={106} />
+          )}
+          {countries.length > 0 &&
+            countries.map((item: item, index: number) => (
+              <MenuItem key={index} sx={{ borderRadius: "8px", flex: "auto" }}>
+                <_NavLink path={`/chi-tiet/${item.slug}`} content={item.name} />
+              </MenuItem>
+            ))}
         </Menu>
       </Dropdown>
     </Box>
