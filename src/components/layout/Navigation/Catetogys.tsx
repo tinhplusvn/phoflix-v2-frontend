@@ -39,7 +39,7 @@ const Categorys = () => {
           {categories.length > 0 &&
             categories.map((item: item, index: number) => (
               <MenuItem key={index} sx={{ borderRadius: "8px", flex: "auto" }}>
-                <_NavLink path={`/chi-tiet/${item.slug}`} content={item.name} />
+                <_NavLink path={`/chi-tiet/the-loai/${item.slug}`} content={item.name} />
               </MenuItem>
             ))}
         </Menu>

@@ -3,32 +3,40 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import LiveTvRoundedIcon from "@mui/icons-material/LiveTvRounded";
 import HistoryIcon from "@mui/icons-material/History";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-
+import MovieFilterOutlinedIcon from "@mui/icons-material/MovieFilterOutlined";
+import MovieCreationOutlinedIcon from "@mui/icons-material/MovieCreationOutlined";
+import SlideshowOutlinedIcon from "@mui/icons-material/SlideshowOutlined";
 import _NavLink from "../../common/_NavLink";
 import Categorys from "./Catetogys";
 import Countrys from "./Countrys";
-import { useEffect, useState } from "react";
 
 const NavLeft = () => {
   return (
     <Box sx={{ display: "flex" }}>
       <Dropdown>
         <MenuButton variant="plain">
-          Kho Phim
+          Danh mục
           <KeyboardArrowDownIcon />
         </MenuButton>
         <Menu>
           <MenuItem>
-            <LiveTvRoundedIcon />
-            <_NavLink path="/chi-tiet/phim-le" content="Phim lẻ" />
+            {/* <MovieCreationOutlinedIcon /> */}
+            <_NavLink path="/chi-tiet/danh-sach/phim-le" content="Phim Lẻ" />
           </MenuItem>
           <MenuItem>
-            <LiveTvRoundedIcon />
-            <_NavLink path="/chi-tiet/phim-bo" content="Phim bộ" />
+            {/* <MovieFilterOutlinedIcon /> */}
+            <_NavLink path="/chi-tiet/danh-sach/phim-bo" content="Phim Bộ" />
           </MenuItem>
           <MenuItem>
-            <LiveTvRoundedIcon />
-            <_NavLink path="/chi-tiet/hoat-hinh" content="Hoạt hình" />
+            {/* <SlideshowOutlinedIcon /> */}
+            <_NavLink
+              path="/chi-tiet/danh-sach/hoat-hinh"
+              content="Hoạt Hình"
+            />
+          </MenuItem>
+          <MenuItem>
+            {/* <LiveTvRoundedIcon /> */}
+            <_NavLink path="/chi-tiet/danh-sach/tv-shows" content="Tv Shows" />
           </MenuItem>
         </Menu>
       </Dropdown>

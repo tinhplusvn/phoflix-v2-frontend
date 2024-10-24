@@ -7,6 +7,8 @@ import {
   getFeatureFilm,
   getTelevisionSeries,
   getTvShows,
+  getMovieInfo,
+  getMovieDetail,
 } from "../asyncThunk/moviesThunk";
 
 export interface Categorys {
@@ -27,6 +29,8 @@ export interface MoviesState {
   cartoon: any;
   featureFilm: any;
   tvShows: any;
+  movieInfo: any;
+  movieDetail: any;
   isLoading: boolean;
 }
 
@@ -37,27 +41,20 @@ const initialState: MoviesState = {
     items: [],
     pagination: {},
   },
-  featureFilm: {
+  featureFilm: [],
+  televisionSeries: [],
+  cartoon: [],
+  tvShows: [],
+  movieInfo: {},
+  movieDetail: {
     items: [],
-    pagination: {},
     titlePage: "",
+    pagination: {
+      totalItems: 0,
+      totalPages: 0,
+    },
   },
-  televisionSeries: {
-    items: [],
-    pagination: {},
-    titlePage: "",
-  },
-  cartoon: {
-    items: [],
-    pagination: {},
-    titlePage: "",
-  },
-  tvShows: {
-    items: [],
-    pagination: {},
-    titlePage: "",
-  },
-  isLoading: false,
+  isLoading: true,
 };
 
 export const moviesSlice = createSlice({
@@ -103,9 +100,7 @@ export const moviesSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getFeatureFilm.fulfilled, (state, action) => {
-        state.featureFilm.items = action.payload.data.items;
-        state.featureFilm.pagination = action.payload.data.params.pagination;
-        state.featureFilm.titlePage = action.payload.data.titlePage;
+        state.featureFilm = action.payload.data.items;
         state.isLoading = false;
       })
       .addCase(getFeatureFilm.rejected, (state, action) => {
@@ -116,10 +111,7 @@ export const moviesSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getTelevisionSeries.fulfilled, (state, action) => {
-        state.televisionSeries.items = action.payload.data.items;
-        state.televisionSeries.pagination =
-          action.payload.data.params.pagination;
-        state.televisionSeries.titlePage = action.payload.data.titlePage;
+        state.televisionSeries = action.payload.data.items;
         state.isLoading = false;
       })
       .addCase(getTelevisionSeries.rejected, (state, action) => {
@@ -130,9 +122,7 @@ export const moviesSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getCartoon.fulfilled, (state, action) => {
-        state.cartoon.items = action.payload.data.items;
-        state.cartoon.pagination = action.payload.data.params.pagination;
-        state.cartoon.titlePage = action.payload.data.titlePage;
+        state.cartoon = action.payload.data.items;
         state.isLoading = false;
       })
       .addCase(getCartoon.rejected, (state, action) => {
@@ -143,12 +133,39 @@ export const moviesSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getTvShows.fulfilled, (state, action) => {
-        state.tvShows.items = action.payload.data.items;
-        state.tvShows.pagination = action.payload.data.params.pagination;
-        state.tvShows.titlePage = action.payload.data.titlePage;
+        state.tvShows = action.payload.data.items;
         state.isLoading = false;
       })
       .addCase(getTvShows.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+
+      // lấy thông tin phim
+      .addCase(getMovieInfo.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(getMovieInfo.fulfilled, (state, action) => {
+        state.movieInfo = action.payload.movie;
+        state.isLoading = false;
+      })
+      .addCase(getMovieInfo.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+
+      // chi tiết phim
+      .addCase(getMovieDetail.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(getMovieDetail.fulfilled, (state, action) => {
+        const { items, titlePage } = action.payload;
+        const { totalItems, totalPages } = action.payload.params.pagination;
+        state.movieDetail.items = items;
+        state.movieDetail.titlePage = titlePage;
+        state.movieDetail.pagination.totalItems = totalItems;
+        state.movieDetail.pagination.totalPages = totalPages;
+        state.isLoading = false;
+      })
+      .addCase(getMovieDetail.rejected, (state, action) => {
         state.isLoading = false;
       });
   },

@@ -3,8 +3,10 @@ import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import _NavLink from "./common/_NavLink";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SlideItem = ({ item }: any) => {
+  const navigate = useNavigate();
   const [width, setWidth] = useState<number>(window.innerWidth);
 
   useEffect(() => {
@@ -39,9 +41,10 @@ const SlideItem = ({ item }: any) => {
         <Box
           sx={{
             width: "160px",
-            height: "100%",
+            height: "160px",
             overflow: "hidden",
             borderRadius: "12px",
+            border: '1px solid #aaa'
           }}
         >
           <img
@@ -68,7 +71,7 @@ const SlideItem = ({ item }: any) => {
             maxWidth: "280px",
           }}
           color="primary"
-          level="h3"
+          level="title-lg"
         >
           {item.name}
         </Typography>
@@ -89,23 +92,25 @@ const SlideItem = ({ item }: any) => {
         )}
         <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
           <Button
+            onClick={() => navigate(`/dang-xem/${item.slug}`)}
             size={`${width > 1024 ? "md" : "sm"}`}
             color="primary"
             variant="solid"
             startDecorator={<PlayArrowRoundedIcon />}
           >
-            <_NavLink path="/" content="Xem ngay" />
+            Xem ngay
           </Button>
           <Button
+            onClick={() => navigate(`/thong-tin/${item.slug}`)}
             size={`${width > 1024 ? "md" : "sm"}`}
             color="neutral"
             variant="soft"
             startDecorator={<InfoOutlinedIcon />}
           >
-            <_NavLink path="/" content="Chi tiết" />
+            Chi tiết
           </Button>
         </Box>
-        <Chip sx={{ marginTop: "12px" }} variant="soft" color="primary">
+        <Chip size="sm" sx={{ marginTop: "12px" }} variant="soft" color="primary">
           Năm phát hành {item.year}
         </Chip>
       </Box>

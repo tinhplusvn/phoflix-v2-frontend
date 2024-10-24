@@ -1,6 +1,4 @@
 .movie-item {
-  width: calc(16.66667% - 18px);
-  margin: 0 8px;
   height: 320px;
   border: 1px solid #ccc;
   border-radius: 12px;
@@ -8,15 +6,9 @@
   position: relative;
   transition: 0.3s;
 
-  @media (max-width: 1024px) {
-    width: calc(33.33333% - 18px);
-  }
-
-  @media (max-width: 576px) {
-    width: calc(50% - 18px);
-  }
   &:hover {
-    transform: translateY(-6px);
+    z-index: 12;
+    transform: scale(1.2);
   }
 
   &:hover .movie-item-info {

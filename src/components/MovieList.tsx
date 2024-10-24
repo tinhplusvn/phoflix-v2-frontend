@@ -11,78 +11,35 @@ import {
 import { useEffect } from "react";
 import MovieItem from "./MovieItem";
 import _NavLink from "./common/_NavLink";
-import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
-import LiveTvRoundedIcon from "@mui/icons-material/LiveTvRounded";
-const MovieList = ({ movies, titlePage, path }: any) => {
-  useEffect(() => {
-    console.log(movies);
-  }, [movies]);
 
+const MovieList = ({ movies }: any) => {
   return (
     <Box>
-      <Alert
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          margin: "24px 0",
-        }}
-      >
-        <Typography
-          startDecorator={<LiveTvRoundedIcon />}
-          color="neutral"
-          level="h3"
-        >
-          {titlePage}
-        </Typography>
-        <Button variant="outlined">
-          <_NavLink path={`/chi-tiet/${path}`} content="Xem thêm" />
-          <ChevronRightRoundedIcon />
-        </Button>
-      </Alert>
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          rowGap: "16px",
-          margin: "0 -8px",
-        }}
-      >
+      <Grid container spacing={1} sx={{ flexGrow: 1 }}>
         {movies.length === 0 &&
           Array(18)
             .fill(null)
             .map((_, index) => (
-              <Card
-                key={index}
-                variant="outlined"
-                sx={{
-                  width: " calc(16.66667% - 50px)",
-                  display: "flex",
-                  gap: 2,
-                  margin: "0 8px",
-                  height: "280px",
-                }}
-              >
-                <AspectRatio sx={{ width: "100%", height: "100%" }}>
-                  <Skeleton variant="overlay">
+              <Grid xs={6} sm={4} lg={2} md={3} key={index}>
+                <AspectRatio ratio="3/4" sx={{ borderRadius: "12px" }}>
+                  <Skeleton animation="wave" variant="overlay">
                     <img
-                      style={{ width: "100%", height: "100%" }}
                       alt=""
                       src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
                     />
                   </Skeleton>
                 </AspectRatio>
-
-                <Skeleton variant="text" level="h2" />
-                <Skeleton variant="text" level="h2" />
-                <Skeleton variant="text" level="h4" />
-                <Skeleton variant="text" level="h1" />
-              </Card>
+              </Grid>
             ))}
+      </Grid>
+      <Grid container spacing={1} sx={{ flexGrow: 1 }}>
         {movies.length > 0 &&
           movies.map((movie: any, index: number) => (
-            <MovieItem key={index} movie={movie} />
+            <Grid xs={6} sm={4} lg={2} md={3} key={index}>
+              <MovieItem movie={movie} />
+            </Grid>
           ))}
-      </Box>
+      </Grid>
     </Box>
   );
 };

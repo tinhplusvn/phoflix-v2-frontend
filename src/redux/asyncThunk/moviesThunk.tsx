@@ -50,7 +50,7 @@ export const getFeatureFilm = createAsyncThunk(
   async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_PHIM_LE}?limit=18` as string
+        `${process.env.REACT_APP_API_PHIM_LE}?limit=24` as string
       );
       const data = await response.json();
       return data;
@@ -65,7 +65,7 @@ export const getTelevisionSeries = createAsyncThunk(
   async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_PHIM_BO}?limit=18` as string
+        `${process.env.REACT_APP_API_PHIM_BO}?limit=24` as string
       );
       const data = await response.json();
       return data;
@@ -78,7 +78,7 @@ export const getTelevisionSeries = createAsyncThunk(
 export const getCartoon = createAsyncThunk("movies/getCartoon", async () => {
   try {
     const response = await fetch(
-      `${process.env.REACT_APP_API_HOAT_HINH}?limit=18` as string
+      `${process.env.REACT_APP_API_HOAT_HINH}?limit=24` as string
     );
     const data = await response.json();
     return data;
@@ -90,7 +90,7 @@ export const getCartoon = createAsyncThunk("movies/getCartoon", async () => {
 export const getTvShows = createAsyncThunk("movies/getTvShows", async () => {
   try {
     const response = await fetch(
-      `${process.env.REACT_APP_API_TV_SHOWS}?limit=18` as string
+      `${process.env.REACT_APP_API_TV_SHOWS}?limit=24` as string
     );
     const data = await response.json();
     return data;
@@ -98,3 +98,34 @@ export const getTvShows = createAsyncThunk("movies/getTvShows", async () => {
     console.log(error);
   }
 });
+
+export const getMovieInfo = createAsyncThunk(
+  "movies/getMovieInfo",
+  async (slug: string) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_THONG_TIN_PHIM}/${slug}` as string
+      );
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const getMovieDetail = createAsyncThunk(
+  "movies/getMovieDetail",
+  async (rawData: any) => {
+    const { describe, slug, page } = rawData;
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE}/${describe}/${slug}?page=${page}&limit=24` as string
+      );
+      const data = await response.json();
+      return data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);

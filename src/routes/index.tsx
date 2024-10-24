@@ -8,12 +8,14 @@ import Info from "../pages/Info";
 import SavedMovies from "../pages/SavedMovies";
 import ViewingHistory from "../pages/ViewingHistory";
 import UserInfo from "../pages/UserInfo";
+import Watch from "../pages/Watch";
 
 const publicRoutes = [
   { path: "/", component: Home },
   { path: "/dang-nhap", component: Login },
   { path: "/dang-ky", component: Register },
-  { path: "/chi-tiet/:slug", component: Detail },
+  { path: "/chi-tiet/:describe/:slug", component: Detail },
+  { path: "/dang-xem/:slug", component: Watch },
   { path: "/tim-kiem/:slug", component: Search },
   { path: "/thong-tin/:slug", component: Info },
   { path: "/phim-da-luu", component: SavedMovies },

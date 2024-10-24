@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Typography } from "@mui/joy";
+import { Box, Button, Chip, IconButton, Typography } from "@mui/joy";
 import { Link } from "react-router-dom";
 
 import "../styles/MovieItem.scss";
@@ -19,6 +19,23 @@ const MovieItem = ({ movie }: any) => {
           alt={movie.name}
         />
       </Link>
+      <Box
+        sx={{
+          position: "absolute",
+          top: "8px",
+          right: "8px",
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "12px",
+        }}
+      >
+        <Chip size="sm" variant="soft" color="neutral">
+          {movie.lang}
+        </Chip>
+        <Chip size="sm" variant="soft" color="primary">
+          {movie.time}
+        </Chip>
+      </Box>
       <Box className="movie-item-info">
         <Typography
           sx={{
@@ -36,14 +53,14 @@ const MovieItem = ({ movie }: any) => {
             display: "flex",
             gap: "12px",
             marginTop: "12px",
-            justifyContent: 'space-between'
+            justifyContent: "space-between",
           }}
         >
-          <Button size="md" variant="solid" color="primary">
-            <_NavLink path="/" content="Xem ngay" />
+          <Button size="sm" variant="solid" color="primary">
+            <_NavLink path={`/xem-ngay/${movie.slug}`} content="Xem ngay" />
           </Button>
-          <Button size="md" variant="soft" color="neutral">
-            <_NavLink path="/" content="Chi tiết" />
+          <Button size="sm" variant="soft" color="neutral">
+            <_NavLink path={`/thong-tin/${movie.slug}`} content="Chi tiết" />
           </Button>
         </Box>
       </Box>
