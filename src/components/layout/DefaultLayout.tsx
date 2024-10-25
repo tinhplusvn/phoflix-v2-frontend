@@ -1,19 +1,13 @@
 import { Box } from "@mui/joy";
 import Navigation from "./Navigation/Navigation";
 
+import "../../styles/DefaultLayout.scss";
+
 const DefaultLayout = ({ children }: { children: any }) => {
   return (
-    <Box sx={{ maxWidth: "100vw", overflow: "hidden" }}>
+    <Box className="container-layout">
       <Navigation />
-      <Box
-        sx={{
-          display: "flex",
-          padding: "32px",
-          gap: "32px",
-        }}
-      >
-        {children}
-      </Box>
+      <Box className="container-children">{children}</Box>
     </Box>
   );
 };

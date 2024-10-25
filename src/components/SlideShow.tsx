@@ -34,12 +34,7 @@ const SlideShow = () => {
       >
         {items.length === 0 && (
           <SwiperSlide>
-            <Skeleton animation="wave" variant="overlay">
-              <img
-                alt=""
-                src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-              />
-            </Skeleton>
+            <Skeleton animation="wave" variant="overlay" />
           </SwiperSlide>
         )}
         {items.length > 0 &&

@@ -11,12 +11,16 @@ import {
 import { useEffect } from "react";
 import MovieItem from "./MovieItem";
 import _NavLink from "./common/_NavLink";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 const MovieList = ({ movies }: any) => {
+  const isLoading = useSelector((state: RootState) => state.movies.isLoading);
+
   return (
     <Box>
       <Grid container spacing={1} sx={{ flexGrow: 1 }}>
-        {movies.length === 0 &&
+        {isLoading &&
           Array(18)
             .fill(null)
             .map((_, index) => (

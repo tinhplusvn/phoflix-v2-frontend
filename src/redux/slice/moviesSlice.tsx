@@ -9,6 +9,7 @@ import {
   getTvShows,
   getMovieInfo,
   getMovieDetail,
+  searchMovie,
 } from "../asyncThunk/moviesThunk";
 
 export interface Categorys {
@@ -31,6 +32,7 @@ export interface MoviesState {
   tvShows: any;
   movieInfo: any;
   movieDetail: any;
+  searchMovie: any;
   isLoading: boolean;
 }
 
@@ -49,6 +51,13 @@ const initialState: MoviesState = {
   movieDetail: {
     items: [],
     titlePage: "",
+    pagination: {
+      totalItems: 0,
+      totalPages: 0,
+    },
+  },
+  searchMovie: {
+    items: [],
     pagination: {
       totalItems: 0,
       totalPages: 0,
@@ -166,6 +175,22 @@ export const moviesSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(getMovieDetail.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+
+      // tìm kiếm phim
+      .addCase(searchMovie.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(searchMovie.fulfilled, (state, action) => {
+        const { items } = action.payload;
+        const { totalItems, totalPages } = action.payload.params.pagination;
+        state.searchMovie.items = items;
+        state.searchMovie.pagination.totalItems = totalItems;
+        state.searchMovie.pagination.totalPages = totalPages;
+        state.isLoading = false;
+      })
+      .addCase(searchMovie.rejected, (state, action) => {
         state.isLoading = false;
       });
   },

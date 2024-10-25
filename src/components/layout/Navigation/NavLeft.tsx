@@ -1,14 +1,11 @@
 import { Box, Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import LiveTvRoundedIcon from "@mui/icons-material/LiveTvRounded";
 import HistoryIcon from "@mui/icons-material/History";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import MovieFilterOutlinedIcon from "@mui/icons-material/MovieFilterOutlined";
-import MovieCreationOutlinedIcon from "@mui/icons-material/MovieCreationOutlined";
-import SlideshowOutlinedIcon from "@mui/icons-material/SlideshowOutlined";
 import _NavLink from "../../common/_NavLink";
 import Categorys from "./Catetogys";
 import Countrys from "./Countrys";
+import Year from "./Year";
 
 const NavLeft = () => {
   return (
@@ -20,22 +17,18 @@ const NavLeft = () => {
         </MenuButton>
         <Menu>
           <MenuItem>
-            {/* <MovieCreationOutlinedIcon /> */}
             <_NavLink path="/chi-tiet/danh-sach/phim-le" content="Phim Lẻ" />
           </MenuItem>
           <MenuItem>
-            {/* <MovieFilterOutlinedIcon /> */}
             <_NavLink path="/chi-tiet/danh-sach/phim-bo" content="Phim Bộ" />
           </MenuItem>
           <MenuItem>
-            {/* <SlideshowOutlinedIcon /> */}
             <_NavLink
               path="/chi-tiet/danh-sach/hoat-hinh"
               content="Hoạt Hình"
             />
           </MenuItem>
           <MenuItem>
-            {/* <LiveTvRoundedIcon /> */}
             <_NavLink path="/chi-tiet/danh-sach/tv-shows" content="Tv Shows" />
           </MenuItem>
         </Menu>
@@ -43,7 +36,9 @@ const NavLeft = () => {
 
       <Categorys />
 
-      <Countrys />
+      <Countrys />  
+
+      <Year/>
 
       <Dropdown>
         <MenuButton variant="plain">

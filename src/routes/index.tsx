@@ -16,7 +16,7 @@ const publicRoutes = [
   { path: "/dang-ky", component: Register },
   { path: "/chi-tiet/:describe/:slug", component: Detail },
   { path: "/dang-xem/:slug", component: Watch },
-  { path: "/tim-kiem/:slug", component: Search },
+  { path: "/tim-kiem/:keyword", component: Search },
   { path: "/thong-tin/:slug", component: Info },
   { path: "/phim-da-luu", component: SavedMovies },
   { path: "/lich-su-da-xem", component: ViewingHistory },

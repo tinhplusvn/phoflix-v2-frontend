@@ -1,11 +1,14 @@
 import { Box, Button, Chip, IconButton, Typography } from "@mui/joy";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import "../styles/MovieItem.scss";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import _NavLink from "./common/_NavLink";
 
 const MovieItem = ({ movie }: any) => {
+  const navigate = useNavigate();
+
   return (
     <Box className="movie-item">
       <Link to={`/thong-tin/${movie.slug}`}>
@@ -51,16 +54,28 @@ const MovieItem = ({ movie }: any) => {
         <Box
           sx={{
             display: "flex",
-            gap: "12px",
+            gap: 1,
             marginTop: "12px",
-            justifyContent: "space-between",
+            flexDirection: "column",
           }}
         >
-          <Button size="sm" variant="solid" color="primary">
-            <_NavLink path={`/xem-ngay/${movie.slug}`} content="Xem ngay" />
+          <Button
+            startDecorator={<PlayArrowRoundedIcon />}
+            onClick={() => navigate(`/dang-xem/${movie.slug}`)}
+            size="sm"
+            variant="solid"
+            color="primary"
+          >
+            Xem ngay
           </Button>
-          <Button size="sm" variant="soft" color="neutral">
-            <_NavLink path={`/thong-tin/${movie.slug}`} content="Chi tiết" />
+          <Button
+            startDecorator={<InfoOutlinedIcon />}
+            onClick={() => navigate(`/thong-tin/${movie.slug}`)}
+            size="sm"
+            variant="soft"
+            color="neutral"
+          >
+            Chi tiết
           </Button>
         </Box>
       </Box>

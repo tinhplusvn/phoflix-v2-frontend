@@ -103,10 +103,16 @@ export const getMovieInfo = createAsyncThunk(
   "movies/getMovieInfo",
   async (slug: string) => {
     try {
+      const delay = (ms: number) =>
+        new Promise((resolve) => setTimeout(resolve, ms));
+
+      //   Chờ 10 giây
+        // await delay(1000000);
       const response = await fetch(
         `${process.env.REACT_APP_API_THONG_TIN_PHIM}/${slug}` as string
       );
       const data = await response.json();
+
       return data;
     } catch (error) {
       console.log(error);
@@ -117,11 +123,31 @@ export const getMovieInfo = createAsyncThunk(
 export const getMovieDetail = createAsyncThunk(
   "movies/getMovieDetail",
   async (rawData: any) => {
-    const { describe, slug, page } = rawData;
+    let { describe, slug, page } = rawData;
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_BASE}/${describe}/${slug}?page=${page}&limit=24` as string
-      );
+      const baseApi = `${process.env.REACT_APP_API_BASE}/${describe}/${slug}`;
+
+      const response =
+        describe !== "nam"
+          ? await fetch(`${baseApi}?page=${page}&limit=24` as string)
+          : await fetch(baseApi as string);
+
+      const data = await response.json();
+      return data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const searchMovie = createAsyncThunk(
+  "movies/searchMovie",
+  async (keyword: string) => {
+    try {
+      const baseApi = `${process.env.REACT_APP_API_TIM_KIEM}?keyword=${keyword}&limit=24`;
+
+      const response = await fetch(baseApi);
+
       const data = await response.json();
       return data.data;
     } catch (error) {
