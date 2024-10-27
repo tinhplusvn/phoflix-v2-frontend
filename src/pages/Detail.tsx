@@ -16,6 +16,9 @@ import MovieList from "../components/MovieList";
 import { Pagination, Stack } from "@mui/material";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 import _ from "lodash";
+import SkeletonMovie from "../components/common/SkeletonMovies";
+import SkeletonPage from "../components/common/SkeletonPage";
+import { scrollToTop } from "../utils";
 
 // định nghĩa kiểu dữ liệu cho object
 type describe = Record<string, string>;
@@ -79,20 +82,26 @@ const Detail = () => {
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
+    scrollToTop()
   };
 
   useEffect(() => {
-    const rawData = {
-      describe: params.describe,
-      slug: params.slug,
-      page: currentPage,
-    };
-    dispatch(getMovieDetail(rawData));
+    dispatch(
+      getMovieDetail({
+        describe: params.describe,
+        slug: params.slug,
+        page: currentPage,
+      })
+    );
   }, [params, currentPage]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [params]);
+
+  if (movies.length === 0 && totalItems === 0 && totalPages === 0) {
+    return <SkeletonPage />;
+  }
 
   return (
     <Box
@@ -103,76 +112,40 @@ const Detail = () => {
         width: "100%",
       }}
     >
-      {isLoading && (
-        <Box>
-          <Skeleton
-            animation="wave"
-            variant="text"
-            sx={{ width: "360px", marginBottom: "24px" }}
-          />
-          <Alert
-            color="primary"
-            sx={{
-              height: "54px",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Skeleton animation="wave" variant="text" sx={{ width: 240 }} />
-            <Skeleton animation="wave" variant="text" sx={{ width: 120 }} />
-          </Alert>
-        </Box>
-      )}
-      {movies.length > 0 && (
-        <Box>
-          <BreadcrumbsCustom paths={breadcrumbsPaths} />
-          <Alert
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
-            }}
-            color="primary"
-          >
-            <Typography startDecorator={<LiveTvRoundedIcon />} level="h4">
-              {`${titlePage} (${totalItems} bộ)`}
-            </Typography>
-            <Typography
-              color="primary"
-              level="title-sm"
-            >{`Trang ${currentPage}`}</Typography>
-          </Alert>
-        </Box>
-      )}
-
       <Box>
-        <MovieList movies={movies} />
-      </Box>
-
-      {isLoading && (
-        <Box
+        <BreadcrumbsCustom paths={breadcrumbsPaths} />
+        <Alert
           sx={{
             display: "flex",
+            justifyContent: "space-between",
             alignItems: "center",
-            justifyContent: "center",
+            width: "100%",
           }}
+          color="primary"
         >
-          <Skeleton sx={{ width: "300px" }} variant="text" level="h2" />
-        </Box>
-      )}
-      {movies.length > 0 && (
-        <Stack spacing={2} sx={{ marginTop: "24px", alignItems: "center" }}>
-          <Pagination
-            onChange={handleChange}
-            count={totalPages}
-            variant="outlined"
-            shape="rounded"
-          />
-        </Stack>
-      )}
+          <Typography startDecorator={<LiveTvRoundedIcon />} level="h4">
+            {`${titlePage} (${totalItems} bộ)`}
+          </Typography>
+          <Typography
+            color="primary"
+            level="title-sm"
+          >{`Trang ${currentPage}`}</Typography>
+        </Alert>
+      </Box>
+
+      <MovieList movies={movies} />
+
+      <Stack spacing={2} sx={{ marginTop: "24px", alignItems: "center" }}>
+        <Pagination
+          onChange={handleChange}
+          count={totalPages}
+          variant="outlined"
+          shape="rounded"
+        />
+      </Stack>
     </Box>
   );
 };
 
 export default Detail;
+

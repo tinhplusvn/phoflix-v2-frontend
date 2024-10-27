@@ -7,16 +7,7 @@
   .info-container-inner {
     display: flex;
     gap: 32px;
-    padding: 16px;
-    border-radius: 12px;
     align-items: start;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-
-    @media (max-width: 1024px) {
-      padding: unset;
-      border-radius: unset;
-      box-shadow: unset;
-    }
 
     @media (max-width: 1024px) {
       flex-direction: column;
@@ -75,4 +66,3 @@
     }
   }
 }
-

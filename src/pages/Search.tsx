@@ -15,6 +15,8 @@ import LiveTvRoundedIcon from "@mui/icons-material/LiveTvRounded";
 import MovieList from "../components/MovieList";
 import { Pagination, Stack } from "@mui/material";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
+import SkeletonMovie from "../components/common/SkeletonMovies";
+import SkeletonPage from "../components/common/SkeletonPage";
 
 const Search = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -45,9 +47,13 @@ const Search = () => {
     setCurrentPage(1);
   }, [params]);
 
+  if (movies.length === 0 && totalItems === 0 && totalPages === 0) {
+    return <SkeletonPage />;
+  }
+
   return (
     <>
-      {!isLoading && <BreadcrumbsCustom paths={breadcrumbsPaths} />}
+      <BreadcrumbsCustom paths={breadcrumbsPaths} />
       <Box
         sx={{
           display: "flex",
@@ -56,79 +62,42 @@ const Search = () => {
           width: "100%",
         }}
       >
-        {isLoading && (
-          <p>
-            <Skeleton
-              animation="wave"
-              variant="text"
-              sx={{ width: "360px", marginBottom: "24px" }}
-            />
-            <Alert
-              color="primary"
-              sx={{
-                height: "54px",
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <Skeleton animation="wave" variant="text" sx={{ width: 240 }} />
-              <Skeleton animation="wave" variant="text" sx={{ width: 120 }} />
-            </Alert>
-          </p>
-        )}
-        {!isLoading && (
-          <Alert
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
-            }}
+        <Alert
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+          }}
+          color="primary"
+        >
+          <Typography startDecorator={<LiveTvRoundedIcon />} level="h4">
+            {movies.length > 0
+              ? `Tìm kiếm được ${totalItems} bộ phim phù hợp cho từ khoá "${params.keyword}"`
+              : `Không tìm thấy phim phù hợp cho từ khoá "${params.keyword}"`}
+          </Typography>
+
+          <Typography
             color="primary"
-          >
-            <Typography startDecorator={<LiveTvRoundedIcon />} level="h4">
-              {movies.length > 0
-                ? `Tìm kiếm được ${totalItems} bộ phim phù hợp cho từ khoá "${params.keyword}"`
-                : `Không tìm thấy phim phù hợp cho từ khoá "${params.keyword}"`}
-              {}
-            </Typography>
-            {movies.length > 0 && (
-              <Typography
-                color="primary"
-                level="title-sm"
-              >{`Trang ${currentPage}`}</Typography>
-            )}
-          </Alert>
-        )}
+            level="title-sm"
+          >{`Trang ${currentPage}`}</Typography>
+        </Alert>
 
-        <Box>
-          <MovieList movies={movies} />
-        </Box>
+        <MovieList movies={movies} />
 
-        {isLoading && (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Skeleton sx={{ width: "300px" }} variant="text" level="h2" />
-          </Box>
-        )}
-        {movies.length > 0 && (
-          <Stack spacing={2} sx={{ marginTop: "24px", alignItems: "center" }}>
-            <Pagination
-              onChange={handleChange}
-              count={totalPages}
-              variant="outlined"
-              shape="rounded"
-            />
-          </Stack>
-        )}
+        <Stack spacing={2} sx={{ marginTop: "24px", alignItems: "center" }}>
+          <Pagination
+            onChange={handleChange}
+            count={totalPages}
+            variant="outlined"
+            shape="rounded"
+          />
+        </Stack>
       </Box>
     </>
   );
 };
 
 export default Search;
+
+

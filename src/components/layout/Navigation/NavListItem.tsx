@@ -3,24 +3,14 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import _NavLink from "../../common/_NavLink";
 
 import "../../../styles/Navigation.scss";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
-import { useEffect } from "react";
-import CustomSkeleton from "../../common/CustomSkeleton";
+import SkeletonNav from "../../common/SkeletonNav";
 
-type item = {
-  slug: string;
-  name: string;
-};
-
-const Categorys = () => {
-  const categories = useSelector((state: RootState) => state.movies.categories);
-
+const NavListItem = ({ data, describe, title }: any) => {
   return (
     <Box>
       <Dropdown>
         <MenuButton variant="plain" color="neutral">
-          Thể loại
+          {title}
           <KeyboardArrowDownIcon />
         </MenuButton>
         <Menu
@@ -33,13 +23,14 @@ const Categorys = () => {
             padding: "8px",
           }}
         >
-          {categories.length === 0 && (
-            <CustomSkeleton quantity={15} width={106} />
-          )}
-          {categories.length > 0 &&
-            categories.map((item: item, index: number) => (
+          {data.length === 0 && <SkeletonNav quantity={15} width={106} />}
+          {data.length > 0 &&
+            data.map((item: any, index: number) => (
               <MenuItem key={index} sx={{ borderRadius: "8px", flex: "auto" }}>
-                <_NavLink path={`/chi-tiet/the-loai/${item.slug}`} content={item.name} />
+                <_NavLink
+                  path={`/chi-tiet/${describe}/${item.slug}`}
+                  content={item.name}
+                />
               </MenuItem>
             ))}
         </Menu>
@@ -48,4 +39,4 @@ const Categorys = () => {
   );
 };
 
-export default Categorys;
+export default NavListItem;

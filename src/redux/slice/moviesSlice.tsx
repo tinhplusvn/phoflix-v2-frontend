@@ -11,6 +11,7 @@ import {
   getMovieDetail,
   searchMovie,
 } from "../asyncThunk/moviesThunk";
+import { delay } from "../../utils";
 
 export interface Categorys {
   slug: string;
@@ -47,7 +48,10 @@ const initialState: MoviesState = {
   televisionSeries: [],
   cartoon: [],
   tvShows: [],
-  movieInfo: {},
+  movieInfo: {
+    info: {},
+    episodes: []
+  },
   movieDetail: {
     items: [],
     titlePage: "",
@@ -66,12 +70,16 @@ const initialState: MoviesState = {
   isLoading: true,
 };
 
+
+
 export const moviesSlice = createSlice({
   name: "movies",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
+
+    // lấy danh sách thể loại
       .addCase(getCategories.pending, (state, action) => {
         state.isLoading = true;
       })
@@ -83,6 +91,7 @@ export const moviesSlice = createSlice({
         state.isLoading = false;
       })
 
+      // lấy danh sách quốc gia
       .addCase(getCountries.pending, (state, action) => {
         state.isLoading = true;
       })
@@ -94,6 +103,7 @@ export const moviesSlice = createSlice({
         state.isLoading = false;
       })
 
+      // lấy danh sách slide
       .addCase(getSlideShow.pending, (state, action) => {
         state.isLoading = true;
       })
@@ -105,6 +115,7 @@ export const moviesSlice = createSlice({
         state.isLoading = false;
       })
 
+      // lấy dữ liệu phim lẻ
       .addCase(getFeatureFilm.pending, (state, action) => {
         state.isLoading = true;
       })
@@ -116,6 +127,7 @@ export const moviesSlice = createSlice({
         state.isLoading = false;
       })
 
+      // lấy dữ liệu phim bộ
       .addCase(getTelevisionSeries.pending, (state, action) => {
         state.isLoading = true;
       })
@@ -127,6 +139,8 @@ export const moviesSlice = createSlice({
         state.isLoading = false;
       })
 
+
+      // lấy dữ liệu phim hoạt hình
       .addCase(getCartoon.pending, (state, action) => {
         state.isLoading = true;
       })
@@ -138,6 +152,8 @@ export const moviesSlice = createSlice({
         state.isLoading = false;
       })
 
+
+      // lấy dữ liệu tv shows
       .addCase(getTvShows.pending, (state, action) => {
         state.isLoading = true;
       })
@@ -154,7 +170,9 @@ export const moviesSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getMovieInfo.fulfilled, (state, action) => {
-        state.movieInfo = action.payload.movie;
+        state.movieInfo.info = action.payload.movie;
+        console.log(action.payload.episodes[0].server_data);
+        state.movieInfo.episodes = action.payload.episodes[0].server_data;
         state.isLoading = false;
       })
       .addCase(getMovieInfo.rejected, (state, action) => {

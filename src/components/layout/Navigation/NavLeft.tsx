@@ -3,11 +3,15 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import HistoryIcon from "@mui/icons-material/History";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import _NavLink from "../../common/_NavLink";
-import Categorys from "./Catetogys";
-import Countrys from "./Countrys";
 import Year from "./Year";
+import NavListItem from "./NavListItem";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const NavLeft = () => {
+  const categories = useSelector((state: RootState) => state.movies.categories);
+  const countries = useSelector((state: RootState) => state.movies.countries);
+
   return (
     <Box sx={{ display: "flex" }}>
       <Dropdown>
@@ -34,11 +38,11 @@ const NavLeft = () => {
         </Menu>
       </Dropdown>
 
-      <Categorys />
+      <NavListItem data={categories} describe="the-loai" title="Thể loại" />
 
-      <Countrys />  
+      <NavListItem data={countries} describe="the-loai" title="Quốc gia" />
 
-      <Year/>
+      <Year />
 
       <Dropdown>
         <MenuButton variant="plain">

@@ -40,44 +40,17 @@ const MovieItem = ({ movie }: any) => {
         </Chip>
       </Box>
       <Box className="movie-item-info">
-        <Typography
-          sx={{
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            width: "100%",
-          }}
-          level="title-md"
+        <Typography level="title-md">{movie.name}</Typography>
+        <Button
+          sx={{ marginTop: "12px", width: "100%" }}
+          startDecorator={<PlayArrowRoundedIcon />}
+          onClick={() => navigate(`/dang-xem/${movie.slug}`)}
+          size="sm"
+          variant="solid"
+          color="primary"
         >
-          {movie.name}
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            gap: 1,
-            marginTop: "12px",
-            flexDirection: "column",
-          }}
-        >
-          <Button
-            startDecorator={<PlayArrowRoundedIcon />}
-            onClick={() => navigate(`/dang-xem/${movie.slug}`)}
-            size="sm"
-            variant="solid"
-            color="primary"
-          >
-            Xem ngay
-          </Button>
-          <Button
-            startDecorator={<InfoOutlinedIcon />}
-            onClick={() => navigate(`/thong-tin/${movie.slug}`)}
-            size="sm"
-            variant="soft"
-            color="neutral"
-          >
-            Chi tiết
-          </Button>
-        </Box>
+          Xem ngay
+        </Button>
       </Box>
     </Box>
   );

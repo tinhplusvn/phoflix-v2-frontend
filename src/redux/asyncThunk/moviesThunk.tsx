@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { delay } from "../../utils";
 
 export const getCategories = createAsyncThunk(
   "movies/getCategories",
@@ -53,6 +54,7 @@ export const getFeatureFilm = createAsyncThunk(
         `${process.env.REACT_APP_API_PHIM_LE}?limit=24` as string
       );
       const data = await response.json();
+      console.log(data)
       return data;
     } catch (error) {
       console.log(error);
@@ -103,11 +105,6 @@ export const getMovieInfo = createAsyncThunk(
   "movies/getMovieInfo",
   async (slug: string) => {
     try {
-      const delay = (ms: number) =>
-        new Promise((resolve) => setTimeout(resolve, ms));
-
-      //   Chờ 10 giây
-        // await delay(1000000);
       const response = await fetch(
         `${process.env.REACT_APP_API_THONG_TIN_PHIM}/${slug}` as string
       );

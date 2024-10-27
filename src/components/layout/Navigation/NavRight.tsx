@@ -1,6 +1,5 @@
-import { Box, Button, IconButton, Input } from "@mui/joy";
+import { Box, Button, IconButton } from "@mui/joy";
 import SearchIcon from "@mui/icons-material/Search";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import ThemeMode from "./ThemeMode";
 
 import _NavLink from "../../common/_NavLink";
@@ -17,10 +16,15 @@ const NavRight = ({ width }: NavRight) => {
 
   return (
     <>
-      <Box sx={{ display: "flex", gap: "16px" }}>
+      <Box sx={{ display: "flex", gap: "16px", maxHeight: "36px" }}>
         {width > 1024 ? (
           <>
             <Button
+              sx={{
+                padding: "8px",
+                justifyContent: "start",
+                minWidth: "160px",
+              }}
               onClick={() => setOpen(true)}
               variant="outlined"
               color="neutral"
@@ -38,10 +42,6 @@ const NavRight = ({ width }: NavRight) => {
         )}
 
         <ThemeMode />
-
-        <IconButton variant="outlined">
-          <NotificationsNoneIcon color="primary" />
-        </IconButton>
 
         <Button variant="solid">
           <_NavLink path="/dang-nhap" content="Đăng nhập" />

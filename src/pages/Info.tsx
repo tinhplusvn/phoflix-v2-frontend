@@ -3,6 +3,7 @@ import {
   AspectRatio,
   Box,
   Button,
+  Divider,
   IconButton,
   Skeleton,
   Tooltip,
@@ -20,19 +21,20 @@ import InfoRow from "../components/common/InfoRow";
 
 import "../styles/Info.scss";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
+import MovieSuggestions from "../components/MovieSuggestions";
 
 const Info = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const movieInfo = useSelector((state: RootState) => state.movies.movieInfo);
+  const movieInfo = useSelector((state: RootState) => state.movies.movieInfo.info);
   const isLoading = useSelector((state: RootState) => state.movies.isLoading);
   const params: any = useParams();
   const [isSave, setIsSave] = useState<boolean>(false);
-  const breadcrumbsPaths = ['Thông tin phim', movieInfo.name]
+  const breadcrumbsPaths = ["Thông tin phim", movieInfo.name];
 
   useEffect(() => {
     dispatch(getMovieInfo(params.slug));
-  }, []);
+  }, [params]);
 
   if (Object.keys(movieInfo).length === 0) {
     return <CustomSkeleton />;
@@ -40,9 +42,8 @@ const Info = () => {
 
   return (
     <>
-      {Object.keys(movieInfo).length > 0 && (
-        <BreadcrumbsCustom paths={breadcrumbsPaths} />
-      )}
+      <BreadcrumbsCustom paths={breadcrumbsPaths} />
+
       <Box className="info-container">
         <Box className="info-container-inner">
           <SectionCardMovie
@@ -59,6 +60,11 @@ const Info = () => {
         {movieInfo?.trailer_url && (
           <SectionTrailerMovie trailer_url={movieInfo.trailer_url} />
         )}
+
+        <MovieSuggestions
+          categories={movieInfo.category}
+          countries={movieInfo.country}
+        />
       </Box>
     </>
   );
@@ -111,7 +117,7 @@ const SectionInfoMovie = ({ movieInfo }: any) => {
   return (
     <Box className="section-info-movie">
       <Alert
-        color="primary"
+        color="neutral"
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -131,7 +137,7 @@ const SectionInfoMovie = ({ movieInfo }: any) => {
           gap: "8px",
           alignItems: "start",
         }}
-        color="primary"
+        color="neutral"
       >
         <InfoRow
           canPress={false}
@@ -199,11 +205,11 @@ const SectionContentMovie = ({ content }: { content: string }) => {
   return (
     <Box>
       <Alert color="neutral">
-        <Typography level="h4">Nội dung phim</Typography>
+        <Typography level="title-lg">Nội dung phim</Typography>
       </Alert>
-      <Box sx={{ padding: "8px" }}>
-        <Typography level="body-lg">{content}</Typography>
-      </Box>
+      <Typography sx={{ padding: " 8px" }} level="body-lg">
+        {content}
+      </Typography>
     </Box>
   );
 };
@@ -211,14 +217,17 @@ const SectionContentMovie = ({ content }: { content: string }) => {
 const SectionTrailerMovie = ({ trailer_url }: { trailer_url: string }) => {
   return (
     <Box>
-      <Alert color="neutral">
+      <Alert
+        color="neutral"
+        sx={{ flexDirection: "column", alignItems: "start" }}
+      >
         <Typography level="h4">Trailer phim</Typography>
       </Alert>
       <Box
         sx={{
           width: "100%",
           height: "360px",
-          borderRadius: "12px",
+          borderRadius: "8px",
           overflow: "hidden",
           marginTop: "12px",
         }}
@@ -249,7 +258,7 @@ const CustomSkeleton = () => {
         gap: "23px",
       }}
     >
-      <Skeleton animation="wave" variant="text" sx={{ width: "360px" }} />
+      <Skeleton animation="wave" variant="text" width="50%" />
 
       <Skeleton
         sx={{
@@ -259,16 +268,19 @@ const CustomSkeleton = () => {
           },
           height: "360px",
           borderRadius: "12px",
-          marginTop: "40px",
+          marginTop: "64px",
         }}
         animation="wave"
         variant="overlay"
       />
 
-      <Box sx={{ minHeight: "60px", marginTop: "400px", width: "100%" }}>
-        <Alert color="neutral" sx={{ marginBottom: "12px" }}>
-          <Typography level="h4">Nội dung phim</Typography>
-        </Alert>
+      <Box sx={{ marginTop: "400px" }}>
+        <Skeleton
+          animation="wave"
+          variant="text"
+          level="h1"
+          sx={{ width: "100%" }}
+        />
         <Skeleton animation="wave" variant="text" sx={{ width: "100%" }} />
         <Skeleton animation="wave" variant="text" sx={{ width: "100%" }} />
         <Skeleton animation="wave" variant="text" sx={{ width: "100%" }} />

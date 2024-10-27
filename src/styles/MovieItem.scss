@@ -6,9 +6,13 @@
   position: relative;
   transition: 0.3s;
 
-  &:hover {
-    z-index: 12;
-    transform: scale(1.2);
+  img {
+    transition: 0.3s;
+  }
+
+  &:hover img {
+    filter: brightness(0.5);
+    transform: scale(1.1);
   }
 
   &:hover .movie-item-info {
