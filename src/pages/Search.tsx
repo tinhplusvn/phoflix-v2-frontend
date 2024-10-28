@@ -48,7 +48,7 @@ const Search = () => {
   }, [params]);
 
   if (movies.length === 0 && totalItems === 0 && totalPages === 0) {
-    return <SkeletonPage />;
+    return <SkeletonPage page="search" />;
   }
 
   return (
@@ -99,5 +99,3 @@ const Search = () => {
 };
 
 export default Search;
-
-

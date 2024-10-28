@@ -1,13 +1,25 @@
-import { Box, Button, Chip, IconButton, Typography } from "@mui/joy";
+import { Box, Button, Chip, Tooltip, Typography } from "@mui/joy";
 import { Link, useNavigate } from "react-router-dom";
 
 import "../styles/MovieItem.scss";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import _NavLink from "./common/_NavLink";
+import { AppDispatch } from "../redux/store";
+import { useDispatch } from "react-redux";
+import { removeFromViewingHistory } from "../redux/slice/viewingHistorySlice";
+import { unSaveMovie } from "../redux/slice/savedMoviesSlice";
 
-const MovieItem = ({ movie }: any) => {
+const MovieItem = ({ movie, page }: any) => {
   const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
+
+  const handleRemoveFromViewingHisotry = (slug: string) => {
+    dispatch(removeFromViewingHistory(slug));
+  };
+
+  const handleUnSaveMovie = (slug: string) => {
+    dispatch(unSaveMovie(slug));
+  };
 
   return (
     <Box className="movie-item">
@@ -18,7 +30,11 @@ const MovieItem = ({ movie }: any) => {
             height: "100%",
             objectFit: "cover",
           }}
-          src={`https://phimimg.com/${movie.poster_url}`}
+          src={
+            movie.poster_url.includes("https://phimimg.com/")
+              ? movie.poster_url
+              : `https://phimimg.com/${movie.poster_url}`
+          }
           alt={movie.name}
         />
       </Link>
@@ -41,16 +57,42 @@ const MovieItem = ({ movie }: any) => {
       </Box>
       <Box className="movie-item-info">
         <Typography level="title-md">{movie.name}</Typography>
-        <Button
-          sx={{ marginTop: "12px", width: "100%" }}
-          startDecorator={<PlayArrowRoundedIcon />}
-          onClick={() => navigate(`/dang-xem/${movie.slug}`)}
-          size="sm"
-          variant="solid"
-          color="primary"
+        <Box
+          sx={{
+            display: "flex",
+            marginTop: "12px",
+            justifyContent: "space-between",
+          }}
         >
-          Xem ngay
-        </Button>
+          <Button
+            sx={{ width: page ? "unset" : "100%" }}
+            startDecorator={<PlayArrowRoundedIcon />}
+            onClick={() => navigate(`/dang-xem/${movie.slug}`)}
+            size="sm"
+            variant="solid"
+            color="primary"
+          >
+            Xem ngay
+          </Button>
+          {(page === "viewingHistory" || page === "savedMovies") && (
+            <Tooltip
+              title={
+                page === "viewingHistory" ? "Xoá khỏi lịch sử" : "Bỏ lưu phim"
+              }
+            >
+              <Button
+                onClick={() =>
+                  page === "viewingHistory"
+                    ? handleRemoveFromViewingHisotry(movie.slug)
+                    : handleUnSaveMovie(movie.slug)
+                }
+                color="danger"
+              >
+                Xoá
+              </Button>
+            </Tooltip>
+          )}
+        </Box>
       </Box>
     </Box>
   );

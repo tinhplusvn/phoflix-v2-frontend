@@ -1,9 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
 import moviesReducer from "./slice/moviesSlice";
+import commentReducer from "./slice/commentsSlice";
+import viewingHistoryReducer from "./slice/viewingHistorySlice";
+import watchReducer from "./slice/watchSlice";
+import savedMovieReducer from "./slice/savedMoviesSlice";
 
 export const store = configureStore({
   reducer: {
     movies: moviesReducer,
+    comments: commentReducer,
+    viewingHistory: viewingHistoryReducer,
+    watch: watchReducer,
+    savedMovies: savedMovieReducer,
   },
 });
 

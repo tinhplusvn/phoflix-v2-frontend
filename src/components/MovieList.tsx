@@ -4,7 +4,7 @@ import _NavLink from "./common/_NavLink";
 import SkeletonMovie from "./common/SkeletonMovies";
 import { useEffect } from "react";
 
-const MovieList = ({ movies }: any) => {
+const MovieList = ({ movies, page }: any) => {
   if (movies.length === 0) {
     return <SkeletonMovie quantity={18} />;
   }
@@ -15,7 +15,7 @@ const MovieList = ({ movies }: any) => {
         {movies.length > 0 &&
           movies.map((movie: any, index: number) => (
             <Grid xs={6} sm={4} lg={2} md={3} key={index}>
-              <MovieItem movie={movie} />
+              <MovieItem movie={movie} page={page} />
             </Grid>
           ))}
       </Grid>

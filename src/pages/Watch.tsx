@@ -2,11 +2,8 @@ import {
   Alert,
   Box,
   Button,
-  Chip,
+  Divider,
   IconButton,
-  Modal,
-  ModalClose,
-  Sheet,
   Tooltip,
   Typography,
 } from "@mui/joy";
@@ -20,13 +17,20 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ModalInstructDowload from "../components/ModalInstructDowload";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import SkeletonPage from "../components/common/SkeletonPage";
+import { Rating } from "@mui/material";
+import Comments from "../components/Comments";
+import MovieSuggestions from "../components/MovieSuggestions";
+import { addViewingHistory } from "../redux/slice/viewingHistorySlice";
+import { updateWatchedEpisodes } from "../redux/slice/watchSlice";
+import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 
 type Episode = {
-  name: string | undefined;
-  slug: string | undefined;
-  filename: string | undefined;
-  link_embed: string | undefined;
-  link_m3u8: string | undefined;
+  name: string;
+  slug: string;
+  filename: string;
+  link_embed: string;
+  link_m3u8: string;
 };
 
 type TypeCopy = "not-copy" | "copied";
@@ -39,49 +43,83 @@ const Watch = () => {
   const episodes = useSelector(
     (state: RootState) => state.movies.movieInfo.episodes
   );
+  const watchedEpisodes = useSelector(
+    (state: RootState) => state.watch.watchedEpisodes
+  );
   const params = useParams();
   const [currentEpisode, setCurrentEpisode] = useState<Episode>({
-    name: undefined,
-    slug: undefined,
-    filename: undefined,
-    link_embed: undefined,
-    link_m3u8: undefined,
+    name: "",
+    slug: "",
+    filename: "",
+    link_embed: "",
+    link_m3u8: "",
   });
   const [open, setOpen] = useState<boolean>(false);
-  const [typeCopy, setTypeCopy] = useState<TypeCopy>("not-copy");
+  const breadcrumbsPaths = [
+    "Đang xem",
+    currentEpisode.filename.replace(`- ${currentEpisode.name}`, ""),
+    currentEpisode.name,
+  ];
 
   useEffect(() => {
     dispatch(getMovieInfo(params.slug as string));
   }, []);
 
   useEffect(() => {
+    const currentEpisode = handleGetCurrentEpisodes();
     if (episodes.length > 0) {
-      setCurrentEpisode(episodes[0]);
+      if (!currentEpisode) {
+        setCurrentEpisode(episodes[0]);
+      } else {
+        setCurrentEpisode(currentEpisode);
+      }
     }
   }, [episodes, movieInfo]);
+
+  useEffect(() => {
+    if (movieInfo.slug) {
+      dispatch(addViewingHistory(movieInfo));
+    }
+  }, [params, movieInfo]);
+
+  const handleGetCurrentEpisodes = () => {
+    const objCurrentEpisodes = watchedEpisodes.find(
+      (item: any) => item.slug === params.slug
+    );
+
+    return objCurrentEpisodes?.currentEpisode;
+  };
 
   const handleChangeEpisode = (item: Episode) => {
     setCurrentEpisode(item);
     scrollToTop();
+    handleUpdateWatchedEpisodes(item);
   };
 
-  const handleCopyLinkM3U8 = (link_m3u8: string) => {
-    copyText(link_m3u8);
-    setTypeCopy("copied");
-
-    setTimeout(() => setTypeCopy("not-copy"), 1000);
+  const handleUpdateWatchedEpisodes = (item: Episode) => {
+    dispatch(
+      updateWatchedEpisodes({
+        currentEpisode: item,
+        slug: params.slug,
+      })
+    );
   };
+
+  if (Object.keys(movieInfo).length === 0) {
+    return <SkeletonPage page="watch" />;
+  }
 
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+        <BreadcrumbsCustom paths={breadcrumbsPaths} />
         <Alert>
           <Typography level="title-lg">{currentEpisode.filename}</Typography>
         </Alert>
         <Box
           sx={{
             width: "100%",
-            height: { lg: "540px", xs: "260px" },
+            height: { lg: "480px", xs: "260px" },
             borderRadius: "8px",
             border: "1px solid #aaa",
             overflow: "hidden",
@@ -97,6 +135,11 @@ const Watch = () => {
             allow="fullscreen"
           ></iframe>
         </Box>
+
+        <Alert>
+          <Typography level="title-lg">Đánh giá phim</Typography>
+          <Rating name="half-rating" defaultValue={0} precision={1} />
+        </Alert>
 
         <Alert
           sx={{ flexDirection: "column", alignItems: "start", gap: "24px" }}
@@ -115,54 +158,20 @@ const Watch = () => {
           </Box>
         </Alert>
 
-        <Alert sx={{ flexDirection: "column", alignItems: "start" }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "100%",
-            }}
-          >
-            <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
-              <Typography level="title-lg">Liên kết M3U8</Typography>
+        <SectionLinkM3U8
+          link_m3u8={currentEpisode.link_m3u8 as string}
+          setOpen={setOpen}
+        />
 
-              <Tooltip title="Hướng dẫn tải xuống">
-                <IconButton size="sm" onClick={() => setOpen(true)}>
-                  <HelpOutlineOutlinedIcon />
-                </IconButton>
-              </Tooltip>
-            </Box>
-            {typeCopy === "not-copy" ? (
-              <Tooltip title="Sao chép">
-                <IconButton
-                  onClick={() =>
-                    handleCopyLinkM3U8(currentEpisode.link_m3u8 as string)
-                  }
-                >
-                  <ContentCopyIcon />
-                </IconButton>
-              </Tooltip>
-            ) : (
-              <Tooltip title="Đã sao chép">
-                <IconButton>
-                  <CheckOutlinedIcon />
-                </IconButton>
-              </Tooltip>
-            )}
-          </Box>
+        <Divider />
 
-          <Typography
-            sx={{
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              width: "100%",
-            }}
-            level="body-md"
-          >
-            {currentEpisode.link_m3u8}
-          </Typography>
-        </Alert>
+        <Comments />
+
+        <Divider />
+        <MovieSuggestions
+          categories={movieInfo.category}
+          countries={movieInfo.country}
+        />
       </Box>
 
       <ModalInstructDowload open={open} setOpen={setOpen} />
@@ -170,3 +179,65 @@ const Watch = () => {
   );
 };
 export default Watch;
+
+interface IProps {
+  link_m3u8: string;
+  setOpen: (open: boolean) => void;
+}
+
+const SectionLinkM3U8 = ({ link_m3u8, setOpen }: IProps) => {
+  const [typeCopy, setTypeCopy] = useState<TypeCopy>("not-copy");
+
+  const handleCopyLinkM3U8 = (link_m3u8: string) => {
+    copyText(link_m3u8);
+    setTypeCopy("copied");
+
+    setTimeout(() => setTypeCopy("not-copy"), 1000);
+  };
+  return (
+    <Alert sx={{ flexDirection: "column", alignItems: "start" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
+        <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
+          <Typography level="title-lg">Liên kết M3U8</Typography>
+
+          <Tooltip title="Hướng dẫn tải xuống">
+            <IconButton size="sm" onClick={() => setOpen(true)}>
+              <HelpOutlineOutlinedIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
+        {typeCopy === "not-copy" ? (
+          <Tooltip title="Sao chép">
+            <IconButton onClick={() => handleCopyLinkM3U8(link_m3u8 as string)}>
+              <ContentCopyIcon />
+            </IconButton>
+          </Tooltip>
+        ) : (
+          <Tooltip title="Đã sao chép">
+            <IconButton>
+              <CheckOutlinedIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+      </Box>
+
+      <Typography
+        sx={{
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          width: "100%",
+        }}
+        level="body-md"
+      >
+        {link_m3u8}
+      </Typography>
+    </Alert>
+  );
+};

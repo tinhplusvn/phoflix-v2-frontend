@@ -171,7 +171,6 @@ export const moviesSlice = createSlice({
       })
       .addCase(getMovieInfo.fulfilled, (state, action) => {
         state.movieInfo.info = action.payload.movie;
-        console.log(action.payload.episodes[0].server_data);
         state.movieInfo.episodes = action.payload.episodes[0].server_data;
         state.isLoading = false;
       })

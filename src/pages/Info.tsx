@@ -22,22 +22,37 @@ import InfoRow from "../components/common/InfoRow";
 import "../styles/Info.scss";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 import MovieSuggestions from "../components/MovieSuggestions";
+import SkeletonPage from "../components/common/SkeletonPage";
+import { savedMovie, unSaveMovie } from "../redux/slice/savedMoviesSlice";
 
 const Info = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const movieInfo = useSelector((state: RootState) => state.movies.movieInfo.info);
+  const movieInfo = useSelector(
+    (state: RootState) => state.movies.movieInfo.info
+  );
+  const savedMovies = useSelector((state: RootState) => state.savedMovies);
   const isLoading = useSelector((state: RootState) => state.movies.isLoading);
   const params: any = useParams();
   const [isSave, setIsSave] = useState<boolean>(false);
   const breadcrumbsPaths = ["Thông tin phim", movieInfo.name];
 
   useEffect(() => {
+    const isExist = handleCheckSaveMovie();
+    isExist && setIsSave(true);
+  }, []);
+
+  useEffect(() => {
     dispatch(getMovieInfo(params.slug));
   }, [params]);
 
+  const handleCheckSaveMovie = () => {
+    const isExist = savedMovies.some((item: any) => item.slug === params.slug);
+    return isExist;
+  };
+
   if (Object.keys(movieInfo).length === 0) {
-    return <CustomSkeleton />;
+    return <SkeletonPage page="info" />;
   }
 
   return (
@@ -61,6 +76,8 @@ const Info = () => {
           <SectionTrailerMovie trailer_url={movieInfo.trailer_url} />
         )}
 
+        <Divider/>
+
         <MovieSuggestions
           categories={movieInfo.category}
           countries={movieInfo.country}
@@ -73,6 +90,19 @@ const Info = () => {
 export default Info;
 
 const SectionCardMovie = ({ movieInfo, navigate, isSave, setIsSave }: any) => {
+  const dispatch: AppDispatch = useDispatch();
+
+  const handleSaveMovie = () => {
+    dispatch(savedMovie(movieInfo));
+    setIsSave(!isSave);
+  };
+
+  const handleUnSaveMovie = () => {
+    console.log(movieInfo.slug);
+    dispatch(unSaveMovie(movieInfo.slug));
+    setIsSave(!isSave);
+  };
+
   return (
     <Box className="section-card-movie">
       <Box className="section-card-movie-inner">
@@ -90,7 +120,7 @@ const SectionCardMovie = ({ movieInfo, navigate, isSave, setIsSave }: any) => {
         {isSave ? (
           <Tooltip title="Xoá khỏi danh sách" variant="soft" color="danger">
             <IconButton
-              onClick={() => setIsSave(!isSave)}
+              onClick={() => handleUnSaveMovie()}
               variant="solid"
               color="danger"
             >
@@ -100,7 +130,7 @@ const SectionCardMovie = ({ movieInfo, navigate, isSave, setIsSave }: any) => {
         ) : (
           <Tooltip title="Thêm vào danh sách" variant="soft" color="primary">
             <IconButton
-              onClick={() => setIsSave(!isSave)}
+              onClick={() => handleSaveMovie()}
               variant="solid"
               color="neutral"
             >
@@ -243,47 +273,6 @@ const SectionTrailerMovie = ({ trailer_url }: { trailer_url: string }) => {
           referrerPolicy="strict-origin-when-cross-origin"
           src={trailer_url.replace("watch?v=", "/embed/")}
         ></iframe>
-      </Box>
-    </Box>
-  );
-};
-
-const CustomSkeleton = () => {
-  return (
-    <Box
-      sx={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        gap: "23px",
-      }}
-    >
-      <Skeleton animation="wave" variant="text" width="50%" />
-
-      <Skeleton
-        sx={{
-          width: {
-            xs: "calc(100vw - 32px)",
-            md: "calc(100vw - 64px)",
-          },
-          height: "360px",
-          borderRadius: "12px",
-          marginTop: "64px",
-        }}
-        animation="wave"
-        variant="overlay"
-      />
-
-      <Box sx={{ marginTop: "400px" }}>
-        <Skeleton
-          animation="wave"
-          variant="text"
-          level="h1"
-          sx={{ width: "100%" }}
-        />
-        <Skeleton animation="wave" variant="text" sx={{ width: "100%" }} />
-        <Skeleton animation="wave" variant="text" sx={{ width: "100%" }} />
-        <Skeleton animation="wave" variant="text" sx={{ width: "100%" }} />
       </Box>
     </Box>
   );

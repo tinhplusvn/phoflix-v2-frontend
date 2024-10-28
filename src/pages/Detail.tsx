@@ -82,7 +82,7 @@ const Detail = () => {
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
-    scrollToTop()
+    scrollToTop();
   };
 
   useEffect(() => {
@@ -100,7 +100,7 @@ const Detail = () => {
   }, [params]);
 
   if (movies.length === 0 && totalItems === 0 && totalPages === 0) {
-    return <SkeletonPage />;
+    return <SkeletonPage page="detail" />;
   }
 
   return (
@@ -148,4 +148,3 @@ const Detail = () => {
 };
 
 export default Detail;
-
