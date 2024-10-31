@@ -1,9 +1,9 @@
 import { Box, Skeleton } from "@mui/joy";
 import SkeletonMovie from "./SkeletonMovies";
 
-type Page = "info" | "watch" | "detail" | "search" | "viewing-history";
+type Iprops = "info" | "watch" | "detail" | "search" | "viewing-history";
 
-const SkeletonPage = ({ page }: any) => {
+const SkeletonPage = ({ page }: { page: string }) => {
   return (
     <>
       {(page === "detail" ||

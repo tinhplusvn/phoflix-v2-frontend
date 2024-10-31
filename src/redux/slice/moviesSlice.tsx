@@ -11,46 +11,52 @@ import {
   getMovieDetail,
   searchMovie,
 } from "../asyncThunk/moviesThunk";
-import { delay } from "../../utils";
-
-export interface Categorys {
-  slug: string;
-  name: string;
-}
-
-export interface Countrys {
-  slug: string;
-  name: string;
-}
+import {
+  ICategory,
+  ICountry,
+  IEpisodes,
+  IMovie,
+  IPagination,
+} from "../../interfaces/movie";
 
 export interface MoviesState {
-  categories: Categorys[];
-  countries: Countrys[];
-  slideShow: any;
-  televisionSeries: any;
-  cartoon: any;
-  featureFilm: any;
-  tvShows: any;
-  movieInfo: any;
-  movieDetail: any;
-  searchMovie: any;
+  categories: ICategory[];
+  countries: ICountry[];
+  slideShow: IMovie[];
+  televisionSeries: IMovie[];
+  cartoon: IMovie[];
+  featureFilm: IMovie[];
+  tvShows: IMovie[];
+  movieInfo: {
+    info: IMovie;
+    episodes: IEpisodes[];
+    status: string | boolean;
+  };
+  movieDetail: {
+    items: IMovie[];
+    titlePage: string;
+    pagination: IPagination;
+  };
+  searchMovie: {
+    items: IMovie[];
+    pagination: IPagination;
+  };
   isLoading: boolean;
+  isError: boolean;
 }
 
 const initialState: MoviesState = {
   categories: [],
   countries: [],
-  slideShow: {
-    items: [],
-    pagination: {},
-  },
+  slideShow: [],
   featureFilm: [],
   televisionSeries: [],
   cartoon: [],
   tvShows: [],
   movieInfo: {
     info: {},
-    episodes: []
+    episodes: [],
+    status: false,
   },
   movieDetail: {
     items: [],
@@ -67,10 +73,9 @@ const initialState: MoviesState = {
       totalPages: 0,
     },
   },
-  isLoading: true,
+  isLoading: false,
+  isError: false,
 };
-
-
 
 export const moviesSlice = createSlice({
   name: "movies",
@@ -79,7 +84,7 @@ export const moviesSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-    // lấy danh sách thể loại
+      // lấy danh sách thể loại
       .addCase(getCategories.pending, (state, action) => {
         state.isLoading = true;
       })
@@ -108,7 +113,7 @@ export const moviesSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getSlideShow.fulfilled, (state, action) => {
-        state.slideShow.items = action.payload.items;
+        state.slideShow = action.payload.items;
         state.isLoading = false;
       })
       .addCase(getSlideShow.rejected, (state, action) => {
@@ -139,7 +144,6 @@ export const moviesSlice = createSlice({
         state.isLoading = false;
       })
 
-
       // lấy dữ liệu phim hoạt hình
       .addCase(getCartoon.pending, (state, action) => {
         state.isLoading = true;
@@ -151,7 +155,6 @@ export const moviesSlice = createSlice({
       .addCase(getCartoon.rejected, (state, action) => {
         state.isLoading = false;
       })
-
 
       // lấy dữ liệu tv shows
       .addCase(getTvShows.pending, (state, action) => {
@@ -168,11 +171,14 @@ export const moviesSlice = createSlice({
       // lấy thông tin phim
       .addCase(getMovieInfo.pending, (state, action) => {
         state.isLoading = true;
+        state.movieInfo.status = false;
+        state.isError = false;
       })
       .addCase(getMovieInfo.fulfilled, (state, action) => {
-        state.movieInfo.info = action.payload.movie;
-        state.movieInfo.episodes = action.payload.episodes[0].server_data;
-        state.isLoading = false;
+        state.movieInfo.info = action.payload?.movie;
+        state.movieInfo.episodes = action.payload.episodes[0]?.server_data;
+        state.movieInfo.status = action.payload?.status;
+        state.isError = !action.payload?.status;
       })
       .addCase(getMovieInfo.rejected, (state, action) => {
         state.isLoading = false;
@@ -181,15 +187,21 @@ export const moviesSlice = createSlice({
       // chi tiết phim
       .addCase(getMovieDetail.pending, (state, action) => {
         state.isLoading = true;
+        state.isError = false;
+        state.movieDetail.items = []
       })
       .addCase(getMovieDetail.fulfilled, (state, action) => {
-        const { items, titlePage } = action.payload;
-        const { totalItems, totalPages } = action.payload.params.pagination;
-        state.movieDetail.items = items;
-        state.movieDetail.titlePage = titlePage;
-        state.movieDetail.pagination.totalItems = totalItems;
-        state.movieDetail.pagination.totalPages = totalPages;
-        state.isLoading = false;
+        if (action.payload) {
+          const { items, titlePage } = action.payload;
+          const { totalItems, totalPages } = action.payload.params.pagination;
+          state.movieDetail.items = items;
+          state.movieDetail.titlePage = titlePage;
+          state.movieDetail.pagination.totalItems = totalItems;
+          state.movieDetail.pagination.totalPages = totalPages;
+        }
+
+        state.isError = !action.payload;
+        state.isLoading = !action.payload;
       })
       .addCase(getMovieDetail.rejected, (state, action) => {
         state.isLoading = false;
@@ -198,14 +210,18 @@ export const moviesSlice = createSlice({
       // tìm kiếm phim
       .addCase(searchMovie.pending, (state, action) => {
         state.isLoading = true;
+        state.isError = false
       })
       .addCase(searchMovie.fulfilled, (state, action) => {
-        const { items } = action.payload;
-        const { totalItems, totalPages } = action.payload.params.pagination;
-        state.searchMovie.items = items;
-        state.searchMovie.pagination.totalItems = totalItems;
-        state.searchMovie.pagination.totalPages = totalPages;
-        state.isLoading = false;
+        if (action.payload) {
+          const { items } = action.payload;
+          const { totalItems, totalPages } = action.payload.params.pagination;
+          state.searchMovie.items = items;
+          state.searchMovie.pagination.totalItems = totalItems;
+          state.searchMovie.pagination.totalPages = totalPages;
+          state.isLoading = !action.payload;
+          state.isError = (action.payload.items === 0)
+        }
       })
       .addCase(searchMovie.rejected, (state, action) => {
         state.isLoading = false;

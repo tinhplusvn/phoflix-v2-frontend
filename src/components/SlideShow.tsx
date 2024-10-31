@@ -1,21 +1,21 @@
-import React, { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-
 import "../styles/SlideShow.scss";
-
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import { Box, Button, Chip, Skeleton, Typography } from "@mui/joy";
+import { Box, Skeleton } from "@mui/joy";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import _NavLink from "./common/_NavLink";
 import SlideItem from "./SlideItem";
+import { IMovie } from "../interfaces/movie";
 
 const SlideShow = () => {
-  const items = useSelector((state: RootState) => state.movies.slideShow.items);
+  const items:IMovie[] = useSelector((state: RootState) => state.movies.slideShow);
+  const isLoading: boolean = useSelector(
+    (state: RootState) => state.movies.isLoading
+  );
 
   return (
     <Box>
@@ -32,13 +32,13 @@ const SlideShow = () => {
         modules={[Autoplay, Pagination, Navigation]}
         className="mySwiper"
       >
-        {items.length === 0 && (
+        {!isLoading && items.length === 0 && (
           <SwiperSlide>
             <Skeleton animation="wave" variant="overlay" />
           </SwiperSlide>
         )}
         {items.length > 0 &&
-          items.map((item: any, index: number) => (
+          items.map((item, index) => (
             <SwiperSlide
               key={index}
               style={{

@@ -4,9 +4,11 @@ import commentReducer from "./slice/commentsSlice";
 import viewingHistoryReducer from "./slice/viewingHistorySlice";
 import watchReducer from "./slice/watchSlice";
 import savedMovieReducer from "./slice/savedMoviesSlice";
+import systemReducer from "./slice/systemSlice";
 
 export const store = configureStore({
   reducer: {
+    system: systemReducer,
     movies: moviesReducer,
     comments: commentReducer,
     viewingHistory: viewingHistoryReducer,

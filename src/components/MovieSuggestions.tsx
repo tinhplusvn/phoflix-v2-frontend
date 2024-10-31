@@ -11,22 +11,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getMovieDetail } from "../redux/asyncThunk/moviesThunk";
 import MovieList from "./MovieList";
+import { ICategory, ICountry } from "../interfaces/movie";
 
 type describe = "the-loai" | "quoc-gia";
-interface listItem {
-  slug: string;
-  name: string;
+interface IProps {
+  categories: ICategory[];
+  countries: ICountry[];
 }
 
-interface Props {
-  categories: listItem[];
-  countries: listItem[];
-}
-
-const MovieSuggestions = ({ categories, countries }: Props) => {
+const MovieSuggestions = ({ categories, countries }: IProps) => {
   const dispatch: AppDispatch = useDispatch();
   const movies = useSelector((state: RootState) => state.movies.movieDetail);
-  const [value, setValue] = useState<string | null>(categories[0].slug);
+  const [value, setValue] = useState<string | null>(
+    categories[0].slug as string
+  );
 
   useEffect(() => {
     dispatch(
@@ -67,9 +65,9 @@ const MovieSuggestions = ({ categories, countries }: Props) => {
               setValue(value);
             }}
           >
-            {categories.map((item: any, index: number) => (
+            {categories.map((item, index) => (
               <Button
-                onClick={() => handleChangeSuggestion(item.slug, "the-loai")}
+                onClick={() => handleChangeSuggestion(item.slug as string, "the-loai")}
                 key={index}
                 value={item.slug}
                 disabled={value === item.slug}
@@ -84,9 +82,11 @@ const MovieSuggestions = ({ categories, countries }: Props) => {
               setValue(value);
             }}
           >
-            {countries.map((item: any, index: number) => (
+            {countries.map((item, index) => (
               <Button
-                onClick={() => handleChangeSuggestion(item.slug, "quoc-gia")}
+                onClick={() =>
+                  handleChangeSuggestion(item.slug as string, "quoc-gia")
+                }
                 key={index}
                 value={item.slug}
                 disabled={value === item.slug}

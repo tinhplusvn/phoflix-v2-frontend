@@ -14,7 +14,7 @@ import { getMovieInfo } from "../redux/asyncThunk/moviesThunk";
 import { useParams } from "react-router-dom";
 import { copyText, scrollToTop } from "../utils";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import ModalInstructDowload from "../components/ModalInstructDowload";
+import ModalInstructDowload from "../components/modals/ModalInstructDowload";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SkeletonPage from "../components/common/SkeletonPage";
@@ -39,6 +39,10 @@ const Watch = () => {
   const dispatch: AppDispatch = useDispatch();
   const movieInfo = useSelector(
     (state: RootState) => state.movies.movieInfo.info
+  );
+  const isError = useSelector((state: RootState) => state.movies.isError);
+  const status = useSelector(
+    (state: RootState) => state.movies.movieInfo.status
   );
   const episodes = useSelector(
     (state: RootState) => state.movies.movieInfo.episodes
@@ -83,8 +87,8 @@ const Watch = () => {
   }, [params, movieInfo]);
 
   const handleGetCurrentEpisodes = () => {
-    const objCurrentEpisodes = watchedEpisodes.find(
-      (item: any) => item.slug === params.slug
+    const objCurrentEpisodes: any = watchedEpisodes.find(
+      (item) => item.slug === params.slug
     );
 
     return objCurrentEpisodes?.currentEpisode;
@@ -105,8 +109,16 @@ const Watch = () => {
     );
   };
 
-  if (Object.keys(movieInfo).length === 0) {
-    return <SkeletonPage page="watch" />;
+  if (!status && !isError) {
+    return <SkeletonPage page="info" />;
+  }
+
+  if (isError) {
+    return (
+      <Typography level="title-lg" color="danger">
+        Không tìm thấy thông tin phim!
+      </Typography>
+    );
   }
 
   return (
@@ -169,8 +181,8 @@ const Watch = () => {
 
         <Divider />
         <MovieSuggestions
-          categories={movieInfo.category}
-          countries={movieInfo.country}
+          categories={movieInfo.category ?? []}
+          countries={movieInfo.country ?? []}
         />
       </Box>
 

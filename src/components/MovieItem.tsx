@@ -8,8 +8,14 @@ import { AppDispatch } from "../redux/store";
 import { useDispatch } from "react-redux";
 import { removeFromViewingHistory } from "../redux/slice/viewingHistorySlice";
 import { unSaveMovie } from "../redux/slice/savedMoviesSlice";
+import { IMovie } from "../interfaces/movie";
 
-const MovieItem = ({ movie, page }: any) => {
+interface IProps {
+  movie: IMovie;
+  page: string;
+}
+
+const MovieItem = ({ movie, page }: IProps) => {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
 
@@ -31,7 +37,7 @@ const MovieItem = ({ movie, page }: any) => {
             objectFit: "cover",
           }}
           src={
-            movie.poster_url.includes("https://phimimg.com/")
+            (movie.poster_url as string).includes("https://phimimg.com/")
               ? movie.poster_url
               : `https://phimimg.com/${movie.poster_url}`
           }
@@ -83,8 +89,8 @@ const MovieItem = ({ movie, page }: any) => {
               <Button
                 onClick={() =>
                   page === "viewingHistory"
-                    ? handleRemoveFromViewingHisotry(movie.slug)
-                    : handleUnSaveMovie(movie.slug)
+                    ? handleRemoveFromViewingHisotry(movie.slug as string)
+                    : handleUnSaveMovie(movie.slug as string)
                 }
                 color="danger"
               >

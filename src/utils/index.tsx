@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 export const delay = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -12,3 +14,5 @@ export const copyText = async (text: string) => {
     console.error("Không thể sao chép: ", err);
   }
 };
+
+

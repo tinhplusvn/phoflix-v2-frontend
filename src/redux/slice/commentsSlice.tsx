@@ -1,13 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-interface Comment {
-  // id:string,
+ 
+export interface IComments {
   name: string;
   content: string;
 }
-type Comments = Comment[];
 
-const initialState: Comments =
+const initialState: IComments[] =
   JSON.parse(localStorage.getItem("comments") as string) ?? [];
 
 export const commentsSlice = createSlice({

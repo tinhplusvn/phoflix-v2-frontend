@@ -9,11 +9,9 @@ import {
   getTelevisionSeries,
   getTvShows,
 } from "../redux/asyncThunk/moviesThunk";
-import { Alert, Box, Button, Typography } from "@mui/joy";
+import { Box } from "@mui/joy";
 import MovieList from "../components/MovieList";
-import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import LiveTvRoundedIcon from "@mui/icons-material/LiveTvRounded";
-import { useNavigate } from "react-router-dom";
 import TitleContainer from "../components/common/TitleContainer";
 
 const Home = () => {

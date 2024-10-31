@@ -5,7 +5,7 @@ import MovieList from "../components/MovieList";
 import { useEffect, useState } from "react";
 import SkeletonPage from "../components/common/SkeletonPage";
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
-import ModalAlertDialog from "../components/ModalAlertDialog";
+import ModalAlertDialog from "../components/modals/ModalAlertDialog";
 import { clearViewingHistory } from "../redux/slice/viewingHistorySlice";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 
@@ -22,7 +22,11 @@ const ViewingHistory = () => {
   };
 
   if (viewingHistory.length === 0) {
-    return <SkeletonPage page="viewing-history" />;
+    return (
+      <Typography level="title-lg" color="primary">
+        Lịch sử xem trống!
+      </Typography>
+    );
   }
 
   return (

@@ -1,6 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { IMovie } from "../../interfaces/movie";
 
-const initialState: any = {
+
+interface initialState {
+  watchedEpisodes: IMovie[];
+}
+
+const initialState: initialState = {
   watchedEpisodes:
     JSON.parse(localStorage.getItem("watched-episodes") as string) ?? [],
 };
@@ -10,9 +16,8 @@ export const watchSlice = createSlice({
   initialState,
   reducers: {
     updateWatchedEpisodes: (state, action) => {
-      console.log(action.payload);
       const index = state.watchedEpisodes.findIndex(
-        (item: any) => item.slug === action.payload.slug
+        (item) => item.slug === action.payload.slug
       );
 
       if (index === -1) {
@@ -26,8 +31,6 @@ export const watchSlice = createSlice({
         JSON.stringify(state.watchedEpisodes)
       );
     },
-
-   
   },
 });
 

@@ -24,16 +24,21 @@ import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 import MovieSuggestions from "../components/MovieSuggestions";
 import SkeletonPage from "../components/common/SkeletonPage";
 import { savedMovie, unSaveMovie } from "../redux/slice/savedMoviesSlice";
+import { IMovie } from "../interfaces/movie";
 
 const Info = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const movieInfo = useSelector(
+  const movieInfo: IMovie = useSelector(
     (state: RootState) => state.movies.movieInfo.info
   );
   const savedMovies = useSelector((state: RootState) => state.savedMovies);
   const isLoading = useSelector((state: RootState) => state.movies.isLoading);
-  const params: any = useParams();
+  const isError = useSelector((state: RootState) => state.movies.isError);
+  const status = useSelector(
+    (state: RootState) => state.movies.movieInfo.status
+  );
+  const params = useParams();
   const [isSave, setIsSave] = useState<boolean>(false);
   const breadcrumbsPaths = ["Thông tin phim", movieInfo.name];
 
@@ -43,7 +48,7 @@ const Info = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(getMovieInfo(params.slug));
+    dispatch(getMovieInfo(params.slug as string));
   }, [params]);
 
   const handleCheckSaveMovie = () => {
@@ -51,13 +56,21 @@ const Info = () => {
     return isExist;
   };
 
-  if (Object.keys(movieInfo).length === 0) {
+  if (!status && !isError) {
     return <SkeletonPage page="info" />;
+  }
+
+  if (isError) {
+    return (
+      <Typography level="title-lg" color="danger">
+        Không tìm thấy thông tin phim!
+      </Typography>
+    );
   }
 
   return (
     <>
-      <BreadcrumbsCustom paths={breadcrumbsPaths} />
+      <BreadcrumbsCustom paths={breadcrumbsPaths as string[]} />
 
       <Box className="info-container">
         <Box className="info-container-inner">
@@ -70,18 +83,20 @@ const Info = () => {
 
           <SectionInfoMovie movieInfo={movieInfo} />
         </Box>
-        <SectionContentMovie content={movieInfo.content} />
+        <SectionContentMovie content={movieInfo.content as string} />
 
         {movieInfo?.trailer_url && (
           <SectionTrailerMovie trailer_url={movieInfo.trailer_url} />
         )}
 
-        <Divider/>
+        <Divider />
 
-        <MovieSuggestions
-          categories={movieInfo.category}
-          countries={movieInfo.country}
-        />
+        {Object.keys(movieInfo).length > 0 && (
+          <MovieSuggestions
+            categories={movieInfo.category ?? []}
+            countries={movieInfo.country ?? []}
+          />
+        )}
       </Box>
     </>
   );
@@ -89,7 +104,19 @@ const Info = () => {
 
 export default Info;
 
-const SectionCardMovie = ({ movieInfo, navigate, isSave, setIsSave }: any) => {
+interface ISectionCardMovie {
+  movieInfo: IMovie;
+  navigate: any;
+  isSave: boolean;
+  setIsSave: (isSave: boolean) => void;
+}
+
+const SectionCardMovie = ({
+  movieInfo,
+  navigate,
+  isSave,
+  setIsSave,
+}: ISectionCardMovie) => {
   const dispatch: AppDispatch = useDispatch();
 
   const handleSaveMovie = () => {
@@ -98,7 +125,6 @@ const SectionCardMovie = ({ movieInfo, navigate, isSave, setIsSave }: any) => {
   };
 
   const handleUnSaveMovie = () => {
-    console.log(movieInfo.slug);
     dispatch(unSaveMovie(movieInfo.slug));
     setIsSave(!isSave);
   };

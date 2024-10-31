@@ -3,10 +3,14 @@ import Navigation from "./Navigation/Navigation";
 
 import "../../styles/DefaultLayout.scss";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { scrollToTop } from "../../utils";
 
-const DefaultLayout = ({ children }: { children: any }) => {
+interface IProps {
+  children: React.ReactNode;
+}
+
+const DefaultLayout = ({ children }: IProps) => {
   const params = useParams();
 
   useEffect(() => scrollToTop(), [params]);

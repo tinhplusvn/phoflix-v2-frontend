@@ -18,10 +18,11 @@ import {
   addComment,
   editComment,
   filterComment,
+  IComments,
   removeComment,
 } from "../redux/slice/commentsSlice";
 import _ from "lodash";
-import ModalAlertDialog from "./ModalAlertDialog";
+import ModalAlertDialog from "./modals/ModalAlertDialog";
 
 type filter = "latest" | "oldest";
 
@@ -68,7 +69,6 @@ const Comments = () => {
     dispatch(removeComment(indexDelete));
     setOpen(false);
   };
-
 
   return (
     <>
@@ -168,6 +168,18 @@ const Comments = () => {
 
 export default Comments;
 
+interface ICommentList {
+  comments: IComments[];
+  setOpen: (open: boolean) => void;
+  indexEdit: number;
+  valueEditComment: string;
+  setIndexDelete: (index: number) => void;
+  setValueEditComment: (value: string) => void;
+  setIndexEdit: (index: number) => void;
+  handleEditComment: (index: number, content: string) => void;
+  handSaveEditComment: (index: number) => void;
+}
+
 const CommentList = ({
   comments,
   setOpen,
@@ -178,7 +190,7 @@ const CommentList = ({
   setIndexEdit,
   handleEditComment,
   handSaveEditComment,
-}: any) => {
+}: ICommentList) => {
   return (
     <ul
       style={{
@@ -189,7 +201,7 @@ const CommentList = ({
         width: `${indexEdit !== -1 ? "100%" : "unset"}`,
       }}
     >
-      {comments.map((item: any, index: number) => (
+      {comments.map((item, index) => (
         <li key={index} style={{ display: "flex", gap: "12px" }}>
           <Box>
             <Avatar />

@@ -8,6 +8,7 @@ import {
   ModalClose,
   ModalDialog,
   Sheet,
+  TextField,
   Typography,
 } from "@mui/joy";
 import SearchIcon from "@mui/icons-material/Search";
@@ -18,7 +19,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useRef, useState } from "react";
 import _ from "lodash";
-import "../styles/ModalSearch.scss";
+import "../../styles/ModalSearch.scss";
 
 type ModalSearch = {
   open: boolean;
@@ -33,6 +34,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
   const [searchRecent, setSearchRecent] = useState<string[]>([]);
   const [searchFavorite, setSearchFavorite] = useState<string[]>([]);
   const navigate = useNavigate();
+  const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const _searchRecent: string[] =
@@ -42,6 +44,14 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
 
     setSearchRecent(_searchRecent);
     setSearchFavorite(_searchFavorite);
+  }, []);
+
+  useEffect(() => {
+    if (searchRef.current) {
+      setTimeout(() => {
+        searchRef.current?.focus();
+      }, 100);
+    }
   }, []);
 
   const handleSearchInput = (actions: actions) => {
@@ -114,7 +124,15 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
       onClose={() => setOpen(false)}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
-      <ModalDialog sx={{ minWidth: "50%" }} layout="center">
+      <ModalDialog
+        sx={{
+          minWidth: {
+            xs: "90%",
+            sm: "50%",
+          },
+        }}
+        layout="center"
+      >
         <Box
           sx={{
             display: "flex",
@@ -124,6 +142,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
           }}
         >
           <Input
+            ref={searchRef}
             onKeyDown={(e) => e.code === "Enter" && handleSearchInput("recent")}
             value={searchValue || ""}
             onChange={(e) => setSearchValue(e.target.value)}
@@ -163,7 +182,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
                         display: "flex",
                         alignItems: "center",
                         gap: "12px",
-                        flex: '1'
+                        flex: "1",
                       }}
                     >
                       <HistoryIcon />
@@ -208,7 +227,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
                         display: "flex",
                         alignItems: "center",
                         gap: "12px",
-                        flex: '1'
+                        flex: "1",
                       }}
                     >
                       <StarBorderIcon />

@@ -5,14 +5,25 @@ import ThemeMode from "./ThemeMode";
 import _NavLink from "../../common/_NavLink";
 import UserOptions from "./UserOptions";
 import { useState } from "react";
-import ModalSearch from "../../ModalSearch";
+import ModalSearch from "../../modals/ModalSearch";
+import ModalLoginOrRegister from "../../modals/ModalAuthentication";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { setOpen } from "../../../redux/slice/systemSlice";
 
 type NavRight = {
   width: number;
 };
 
 const NavRight = ({ width }: NavRight) => {
-  const [open, setOpen] = useState<boolean>(false);
+  const [openModalSearch, setOpenModalSearch] = useState<boolean>(false);
+  const dispatch: AppDispatch = useDispatch();
+  const open = useSelector((state: RootState) => state.system.isOpen);
+  const type = useSelector((state: RootState) => state.system.type);
+
+  const handleSetOpen = (isOpen: boolean) => {
+    dispatch(setOpen(isOpen));
+  };
 
   return (
     <>
@@ -25,7 +36,7 @@ const NavRight = ({ width }: NavRight) => {
                 justifyContent: "start",
                 minWidth: "160px",
               }}
-              onClick={() => setOpen(true)}
+              onClick={() => setOpenModalSearch(true)}
               variant="outlined"
               color="neutral"
               startDecorator={<SearchIcon color="primary" />}
@@ -35,7 +46,10 @@ const NavRight = ({ width }: NavRight) => {
           </>
         ) : (
           <>
-            <IconButton onClick={() => setOpen(true)} variant="outlined">
+            <IconButton
+              onClick={() => setOpenModalSearch(true)}
+              variant="outlined"
+            >
               <SearchIcon color="primary" />
             </IconButton>
           </>
@@ -43,14 +57,19 @@ const NavRight = ({ width }: NavRight) => {
 
         <ThemeMode />
 
-        <Button variant="solid">
-          <_NavLink path="/dang-nhap" content="Đăng nhập" />
+        <Button
+          onClick={() => handleSetOpen(true)}
+          variant="solid"
+        >
+          Đăng nhập
         </Button>
 
         <UserOptions />
       </Box>
 
-      <ModalSearch open={open} setOpen={setOpen} />
+      <ModalSearch open={openModalSearch} setOpen={setOpenModalSearch} />
+
+      <ModalLoginOrRegister type={type} open={open} setOpen={handleSetOpen} />
     </>
   );
 };

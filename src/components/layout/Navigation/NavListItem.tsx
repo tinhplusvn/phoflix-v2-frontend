@@ -4,8 +4,15 @@ import _NavLink from "../../common/_NavLink";
 
 import "../../../styles/Navigation.scss";
 import SkeletonNav from "../../common/SkeletonNav";
+import { ICategory, ICountry } from "../../../interfaces/movie";
 
-const NavListItem = ({ data, describe, title }: any) => {
+interface IProps {
+  data: ICategory[] | ICountry[];
+  describe: string;
+  title: string;
+}
+
+const NavListItem = ({ data, describe, title }: IProps) => {
   return (
     <Box>
       <Dropdown>
@@ -25,11 +32,11 @@ const NavListItem = ({ data, describe, title }: any) => {
         >
           {data.length === 0 && <SkeletonNav quantity={15} width={106} />}
           {data.length > 0 &&
-            data.map((item: any, index: number) => (
+            data.map((item, index: number) => (
               <MenuItem key={index} sx={{ borderRadius: "8px", flex: "auto" }}>
                 <_NavLink
                   path={`/chi-tiet/${describe}/${item.slug}`}
-                  content={item.name}
+                  content={item.name as string}
                 />
               </MenuItem>
             ))}

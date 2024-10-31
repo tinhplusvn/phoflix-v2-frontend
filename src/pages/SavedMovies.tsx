@@ -5,7 +5,7 @@ import MovieList from "../components/MovieList";
 import { useState } from "react";
 import SkeletonPage from "../components/common/SkeletonPage";
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
-import ModalAlertDialog from "../components/ModalAlertDialog";
+import ModalAlertDialog from "../components/modals/ModalAlertDialog";
 import BookmarkAddedRoundedIcon from "@mui/icons-material/BookmarkAddedRounded";
 import { clearSavedMovies } from "../redux/slice/savedMoviesSlice";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
@@ -21,7 +21,11 @@ const SavedMovie = () => {
   };
 
   if (savedMovies.length === 0) {
-    return <SkeletonPage page="saved-movies" />;
+    return (
+      <Typography level="title-lg" color="primary">
+        Chưa có bộ phim nào được lưu!
+      </Typography>
+    );
   }
 
   return (

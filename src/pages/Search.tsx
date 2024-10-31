@@ -31,23 +31,24 @@ const Search = () => {
   );
 
   const isLoading = useSelector((state: RootState) => state.movies.isLoading);
+  const isError = useSelector((state: RootState) => state.movies.isError);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const params: any = useParams();
-  const breadcrumbsPaths = ["Tìm kiếm", params.keyword];
+  const params = useParams();
+  const breadcrumbsPaths = ["Tìm kiếm", params.keyword as string];
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
   };
 
   useEffect(() => {
-    dispatch(searchMovie(params.keyword));
+    dispatch(searchMovie(params.keyword as string));
   }, [params, currentPage]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [params]);
 
-  if (movies.length === 0 && totalItems === 0 && totalPages === 0) {
+  if (isLoading) {
     return <SkeletonPage page="search" />;
   }
 
@@ -83,16 +84,19 @@ const Search = () => {
           >{`Trang ${currentPage}`}</Typography>
         </Alert>
 
-        <MovieList movies={movies} />
-
-        <Stack spacing={2} sx={{ marginTop: "24px", alignItems: "center" }}>
-          <Pagination
-            onChange={handleChange}
-            count={totalPages}
-            variant="outlined"
-            shape="rounded"
-          />
-        </Stack>
+        {movies.length > 0 && (
+          <>
+            <MovieList movies={movies} />
+            <Stack spacing={2} sx={{ marginTop: "24px", alignItems: "center" }}>
+              <Pagination
+                onChange={handleChange}
+                count={totalPages}
+                variant="outlined"
+                shape="rounded"
+              />
+            </Stack>
+          </>
+        )}
       </Box>
     </>
   );

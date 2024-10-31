@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { IMovie } from "../../interfaces/movie";
 
-const initialState: any =
+const initialState: IMovie[] =
   JSON.parse(localStorage.getItem("viewing-history") as string) ?? [];
 
 export const viewingHistorySlice = createSlice({
@@ -8,9 +9,7 @@ export const viewingHistorySlice = createSlice({
   initialState,
   reducers: {
     addViewingHistory: (state, action) => {
-      const isExist = state.some(
-        (item: any) => item.slug === action.payload.slug
-      );
+      const isExist = state.some((item) => item.slug === action.payload.slug);
 
       if (!isExist) {
         state.push(action.payload);
@@ -18,9 +17,7 @@ export const viewingHistorySlice = createSlice({
       }
     },
     removeFromViewingHistory: (state, action) => {
-      const index = state.findIndex(
-        (item: any) => item.slug === action.payload
-      );
+      const index = state.findIndex((item) => item.slug === action.payload);
       if (index !== -1) {
         state.splice(index, 1);
         localStorage.setItem("viewing-history", JSON.stringify(state));

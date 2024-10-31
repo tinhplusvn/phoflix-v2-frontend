@@ -4,8 +4,14 @@ import _NavLink from "./common/_NavLink";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { IMovie } from "../interfaces/movie";
 
-const SlideItem = ({ item }: any) => {
+interface IProps {
+    item:IMovie,
+    key:number
+}
+
+const SlideItem = ({ item }: IProps ) => {
   const navigate = useNavigate();
   const [width, setWidth] = useState<number>(window.innerWidth);
 

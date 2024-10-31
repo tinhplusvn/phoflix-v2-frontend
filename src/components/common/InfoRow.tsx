@@ -1,9 +1,10 @@
 import { Box, Chip, Typography } from "@mui/joy";
 import { Link } from "react-router-dom";
+import { ICategory, ICountry } from "../../interfaces/movie";
 
 type IProps = {
   label: string;
-  value: any;
+  value: string | any;
   type: "only" | "many";
   canPress: boolean;
   describe?: string;

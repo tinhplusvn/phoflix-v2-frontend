@@ -1,11 +1,4 @@
-import {
-  Alert,
-  AspectRatio,
-  Box,
-  Button,
-  Skeleton,
-  Typography,
-} from "@mui/joy";
+import { Alert, Box, Typography } from "@mui/joy";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -16,7 +9,6 @@ import MovieList from "../components/MovieList";
 import { Pagination, Stack } from "@mui/material";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 import _ from "lodash";
-import SkeletonMovie from "../components/common/SkeletonMovies";
 import SkeletonPage from "../components/common/SkeletonPage";
 import { scrollToTop } from "../utils";
 
@@ -41,6 +33,7 @@ const Detail = () => {
     (state: RootState) => state.movies.movieDetail.titlePage
   );
   const isLoading = useSelector((state: RootState) => state.movies.isLoading);
+  const isError = useSelector((state: RootState) => state.movies.isError);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const params = useParams<{ describe: string; slug: string }>();
   const [describeMapping, setDescribeMapping] = useState<describe>({
@@ -59,11 +52,11 @@ const Detail = () => {
 
   useEffect(() => {
     const categoryMapping = Object.fromEntries(
-      categories.map((category: any) => [category.slug, category.name])
+      categories.map((category) => [category.slug, category.name])
     );
 
     const countryMapping = Object.fromEntries(
-      countries.map((country: any) => [country.slug, country.name])
+      countries.map((country) => [country.slug, country.name])
     );
 
     setSlugMapping((prev) => ({
@@ -99,8 +92,16 @@ const Detail = () => {
     setCurrentPage(1);
   }, [params]);
 
-  if (movies.length === 0 && totalItems === 0 && totalPages === 0) {
+  if (isLoading || (totalItems === 0 && totalPages === 0)) {
     return <SkeletonPage page="detail" />;
+  }
+
+  if (!isLoading && isError) {
+    return (
+      <Typography level="title-lg" color="danger">
+        Không tìm thấy thông tin phim!
+      </Typography>
+    );
   }
 
   return (
@@ -137,6 +138,7 @@ const Detail = () => {
 
       <Stack spacing={2} sx={{ marginTop: "24px", alignItems: "center" }}>
         <Pagination
+          defaultPage={currentPage}
           onChange={handleChange}
           count={totalPages}
           variant="outlined"

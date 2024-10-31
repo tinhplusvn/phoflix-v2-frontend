@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { IMovie } from "../../interfaces/movie";
 
-const initialState: any =
+const initialState: IMovie[] =
   JSON.parse(localStorage.getItem("saved-movied") as string) ?? [];
 
 export const savedMovies = createSlice({
@@ -8,9 +9,7 @@ export const savedMovies = createSlice({
   initialState,
   reducers: {
     savedMovie: (state, action) => {
-      const movie = state.find(
-        (item: any) => item.slug === action.payload.slug
-      );
+      const movie = state.find((item) => item.slug === action.payload.slug);
 
       if (!movie) {
         state.push(action.payload);
@@ -18,9 +17,7 @@ export const savedMovies = createSlice({
       }
     },
     unSaveMovie: (state, action) => {
-      const index = state.findIndex(
-        (item: any) => item.slug === action.payload
-      );
+      const index = state.findIndex((item) => item.slug === action.payload);
       if (index !== -1) {
         state.splice(index, 1);
         localStorage.setItem("saved-movied", JSON.stringify(state));

@@ -2,9 +2,15 @@ import { Box, Grid } from "@mui/joy";
 import MovieItem from "./MovieItem";
 import _NavLink from "./common/_NavLink";
 import SkeletonMovie from "./common/SkeletonMovies";
-import { useEffect } from "react";
+import { IMovie } from "../interfaces/movie";
 
-const MovieList = ({ movies, page }: any) => {
+interface IProps {
+  movies: IMovie[];
+  page?: string;
+}
+
+const MovieList = ({ movies, page }: IProps) => {
+
   if (movies.length === 0) {
     return <SkeletonMovie quantity={18} />;
   }
@@ -13,9 +19,9 @@ const MovieList = ({ movies, page }: any) => {
     <Box>
       <Grid container spacing={1} sx={{ flexGrow: 1 }}>
         {movies.length > 0 &&
-          movies.map((movie: any, index: number) => (
+          movies.map((movie: IMovie, index) => (
             <Grid xs={6} sm={4} lg={2} md={3} key={index}>
-              <MovieItem movie={movie} page={page} />
+              <MovieItem movie={movie} page={page as string} />
             </Grid>
           ))}
       </Grid>
