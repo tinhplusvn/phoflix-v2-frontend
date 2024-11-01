@@ -60,7 +60,7 @@ const SavedMovie = () => {
       <ModalAlertDialog
         open={open}
         setOpen={setOpen}
-        handleSubmid={handleClearSavedMovie}
+        handleSubmit={handleClearSavedMovie}
         title="Xoá phim đã lưu"
         content="Tất cả phim đã lưu của bạn sẽ bị xoá vĩnh viễn?"
       />

@@ -1,10 +1,9 @@
 import { Box } from "@mui/joy";
 import Navigation from "./Navigation/Navigation";
-
-import "../../styles/DefaultLayout.scss";
 import { useParams } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { scrollToTop } from "../../utils";
+import Footer from "./Footer";
 
 interface IProps {
   children: React.ReactNode;
@@ -16,9 +15,26 @@ const DefaultLayout = ({ children }: IProps) => {
   useEffect(() => scrollToTop(), [params]);
 
   return (
-    <Box className="container-layout">
+    <Box
+      sx={{
+        maxWidth: "100vw",
+        marginTop: "60px",
+        overflow: "hidden",
+      }}
+    >
       <Navigation />
-      <Box className="container-children">{children}</Box>
+      <Box
+        sx={{
+          padding: {
+            xs: "16px",
+            sm: "24px",
+            md: "32px",
+          },
+        }}
+      >
+        {children}
+      </Box>
+      <Footer/>
     </Box>
   );
 };

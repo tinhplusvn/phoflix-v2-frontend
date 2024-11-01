@@ -1,11 +1,9 @@
 import {
   Alert,
-  AspectRatio,
   Box,
   Button,
   Divider,
   IconButton,
-  Skeleton,
   Tooltip,
   Typography,
 } from "@mui/joy";
@@ -18,6 +16,8 @@ import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import BookmarkRemoveOutlinedIcon from "@mui/icons-material/BookmarkRemoveOutlined";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import InfoRow from "../components/common/InfoRow";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+import YouTubeIcon from "@mui/icons-material/YouTube";
 
 import "../styles/Info.scss";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
@@ -43,7 +43,7 @@ const Info = () => {
   const breadcrumbsPaths = ["Thông tin phim", movieInfo.name];
 
   useEffect(() => {
-    const isExist = handleCheckSaveMovie();
+    const isExist: boolean = handleCheckSaveMovie();
     isExist && setIsSave(true);
   }, []);
 
@@ -52,7 +52,9 @@ const Info = () => {
   }, [params]);
 
   const handleCheckSaveMovie = () => {
-    const isExist = savedMovies.some((item: any) => item.slug === params.slug);
+    const isExist: boolean = savedMovies.some(
+      (item) => item.slug === params.slug
+    );
     return isExist;
   };
 
@@ -261,7 +263,9 @@ const SectionContentMovie = ({ content }: { content: string }) => {
   return (
     <Box>
       <Alert color="neutral">
-        <Typography level="title-lg">Nội dung phim</Typography>
+        <Typography startDecorator={<ArticleOutlinedIcon />} level="title-lg">
+          Nội dung phim
+        </Typography>
       </Alert>
       <Typography sx={{ padding: " 8px" }} level="body-lg">
         {content}
@@ -277,7 +281,9 @@ const SectionTrailerMovie = ({ trailer_url }: { trailer_url: string }) => {
         color="neutral"
         sx={{ flexDirection: "column", alignItems: "start" }}
       >
-        <Typography level="h4">Trailer phim</Typography>
+        <Typography startDecorator={<YouTubeIcon />} level="h4">
+          Trailer phim
+        </Typography>
       </Alert>
       <Box
         sx={{

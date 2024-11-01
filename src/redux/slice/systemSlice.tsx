@@ -2,13 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export interface ISystemState {
   type: string;
-  isOpen: boolean;
-  theme: 'light'|'dark';
+  isOpenModalAuthentication: boolean;
+  theme: "light" | "dark";
 }
 
 const initialState: ISystemState = {
   type: "login",
-  isOpen: false,
+  isOpenModalAuthentication: false,
   theme: "light",
 };
 
@@ -17,7 +17,7 @@ export const systemSlice = createSlice({
   initialState,
   reducers: {
     setOpen: (state, action) => {
-      state.isOpen = action.payload;
+      state.isOpenModalAuthentication = action.payload;
     },
     setType: (state, action) => {
       state.type = action.payload;

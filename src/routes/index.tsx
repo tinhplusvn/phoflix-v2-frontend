@@ -16,7 +16,7 @@ const publicRoutes = [
   { path: "/thong-tin/:slug", component: Info },
   { path: "/phim-da-luu", component: SavedMovies },
   { path: "/lich-su-da-xem", component: ViewingHistory },
-  { path: "/thong-tin-nguoi-dung/:username", component: UserInfo },
+  { path: "/thong-tin-nguoi-dung", component: UserInfo },
   { path: "*", component: NotFound }
 ];
 export default publicRoutes;

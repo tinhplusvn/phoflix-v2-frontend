@@ -1,22 +1,16 @@
-import {
-  Alert,
-  AspectRatio,
-  Box,
-  Button,
-  Skeleton,
-  Typography,
-} from "@mui/joy";
-import { useEffect, useRef, useState } from "react";
+import { Alert, Box, Typography } from "@mui/joy";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { AppDispatch, RootState } from "../redux/store";
-import { getMovieDetail, searchMovie } from "../redux/asyncThunk/moviesThunk";
+import { searchMovie } from "../redux/asyncThunk/moviesThunk";
 import LiveTvRoundedIcon from "@mui/icons-material/LiveTvRounded";
 import MovieList from "../components/MovieList";
 import { Pagination, Stack } from "@mui/material";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
-import SkeletonMovie from "../components/common/SkeletonMovies";
 import SkeletonPage from "../components/common/SkeletonPage";
+
+import searchNotFoundImg from "../images/search-not-found.png";
 
 const Search = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -31,7 +25,6 @@ const Search = () => {
   );
 
   const isLoading = useSelector((state: RootState) => state.movies.isLoading);
-  const isError = useSelector((state: RootState) => state.movies.isError);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const params = useParams();
   const breadcrumbsPaths = ["Tìm kiếm", params.keyword as string];
@@ -41,7 +34,12 @@ const Search = () => {
   };
 
   useEffect(() => {
-    dispatch(searchMovie(params.keyword as string));
+    dispatch(
+      searchMovie({
+        keyword: params.keyword as string,
+        page: currentPage,
+      })
+    );
   }, [params, currentPage]);
 
   useEffect(() => {
@@ -72,10 +70,10 @@ const Search = () => {
           }}
           color="primary"
         >
-          <Typography startDecorator={<LiveTvRoundedIcon />} level="h4">
+          <Typography startDecorator={<LiveTvRoundedIcon />} level="title-lg">
             {movies.length > 0
               ? `Tìm kiếm được ${totalItems} bộ phim phù hợp cho từ khoá "${params.keyword}"`
-              : `Không tìm thấy phim phù hợp cho từ khoá "${params.keyword}"`}
+              : `Không tìm thấy phim phù hợp!`}
           </Typography>
 
           <Typography
@@ -84,18 +82,39 @@ const Search = () => {
           >{`Trang ${currentPage}`}</Typography>
         </Alert>
 
-        {movies.length > 0 && (
+        {movies.length > 0 && !isLoading && (
           <>
             <MovieList movies={movies} />
             <Stack spacing={2} sx={{ marginTop: "24px", alignItems: "center" }}>
               <Pagination
                 onChange={handleChange}
                 count={totalPages}
+                page={currentPage}
                 variant="outlined"
                 shape="rounded"
               />
             </Stack>
           </>
+        )}
+
+        {movies.length === 0 && !isLoading && (
+          <Box
+            sx={{
+              width: {
+                xs: "320px",
+                md: "400px",
+              },
+              height: {
+                xs: "320px",
+                md: "480px",
+              },
+              backgroundImage: `url(${searchNotFoundImg})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              margin: "auto",
+            }}
+          />
         )}
       </Box>
     </>

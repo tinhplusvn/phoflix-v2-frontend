@@ -13,13 +13,13 @@ interface IProps {
   title: string;
   content: string;
   setOpen: (open: boolean) => void;
-  handleSubmid: () => void;
+  handleSubmit: () => void;
 }
 
 const ModalAlertDialog = ({
   open,
   setOpen,
-  handleSubmid,
+  handleSubmit,
   title,
   content,
 }: IProps) => {
@@ -30,7 +30,7 @@ const ModalAlertDialog = ({
         <Divider />
         <DialogContent>{content}</DialogContent>
         <DialogActions>
-          <Button variant="solid" color="danger" onClick={handleSubmid}>
+          <Button variant="solid" color="danger" onClick={handleSubmit}>
             Xác nhận
           </Button>
           <Button

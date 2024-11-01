@@ -38,7 +38,7 @@ const Navigation = () => {
     <>
       <Box className="navigation">
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {width < 1024 && (
+          {width < 1200 && (
             <IconButton
               sx={{ marginRight: "12px" }}
               variant="outlined"
@@ -49,7 +49,7 @@ const Navigation = () => {
             </IconButton>
           )}
 
-          {width > 1024 && (
+          {width > 1200 && (
             <>
               <Typography
                 color="primary"
@@ -65,7 +65,7 @@ const Navigation = () => {
         <NavRight width={width} />
       </Box>
 
-      {width < 1024 && <_Drawer open={open} setOpen={setOpen} />}
+      {width < 1200 && <_Drawer open={open} setOpen={setOpen} />}
     </>
   );
 };

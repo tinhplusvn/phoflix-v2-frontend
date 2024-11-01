@@ -1,14 +1,10 @@
 import {
   Box,
   Button,
-  Chip,
   IconButton,
   Input,
   Modal,
-  ModalClose,
   ModalDialog,
-  Sheet,
-  TextField,
   Typography,
 } from "@mui/joy";
 import SearchIcon from "@mui/icons-material/Search";
@@ -17,7 +13,7 @@ import HistoryIcon from "@mui/icons-material/History";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import _ from "lodash";
 import "../../styles/ModalSearch.scss";
 

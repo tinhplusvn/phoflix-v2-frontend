@@ -54,7 +54,6 @@ export const getFeatureFilm = createAsyncThunk(
         `${process.env.REACT_APP_API_PHIM_LE}?limit=24` as string
       );
       const data = await response.json();
-      console.log(data)
       return data;
     } catch (error) {
       console.log(error);
@@ -139,12 +138,12 @@ export const getMovieDetail = createAsyncThunk(
 
 export const searchMovie = createAsyncThunk(
   "movies/searchMovie",
-  async (keyword: string) => {
+  async (rawData: any) => {
+    const { keyword, page } = rawData;
+
     try {
-      const baseApi = `${process.env.REACT_APP_API_TIM_KIEM}?keyword=${keyword}&limit=24`;
-
+      const baseApi = `${process.env.REACT_APP_API_TIM_KIEM}?keyword=${keyword}&limit=24&page=${page}`;
       const response = await fetch(baseApi);
-
       const data = await response.json();
       return data.data;
     } catch (error) {

@@ -40,7 +40,7 @@ const NavLeft = () => {
 
       <NavListItem data={categories} describe="the-loai" title="Thể loại" />
 
-      <NavListItem data={countries} describe="the-loai" title="Quốc gia" />
+      <NavListItem data={countries} describe="quoc-gia" title="Quốc gia" />
 
       <Year />
 

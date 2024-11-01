@@ -24,6 +24,9 @@ import MovieSuggestions from "../components/MovieSuggestions";
 import { addViewingHistory } from "../redux/slice/viewingHistorySlice";
 import { updateWatchedEpisodes } from "../redux/slice/watchSlice";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
+import PollOutlinedIcon from "@mui/icons-material/PollOutlined";
+import SubscriptionsOutlinedIcon from "@mui/icons-material/SubscriptionsOutlined";
+import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 
 type Episode = {
   name: string;
@@ -71,7 +74,7 @@ const Watch = () => {
 
   useEffect(() => {
     const currentEpisode = handleGetCurrentEpisodes();
-    if (episodes.length > 0) {
+    if (episodes?.length > 0) {
       if (!currentEpisode) {
         setCurrentEpisode(episodes[0]);
       } else {
@@ -123,8 +126,8 @@ const Watch = () => {
 
   return (
     <>
+      <BreadcrumbsCustom paths={breadcrumbsPaths} />
       <Box sx={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-        <BreadcrumbsCustom paths={breadcrumbsPaths} />
         <Alert>
           <Typography level="title-lg">{currentEpisode.filename}</Typography>
         </Alert>
@@ -149,14 +152,22 @@ const Watch = () => {
         </Box>
 
         <Alert>
-          <Typography level="title-lg">Đánh giá phim</Typography>
+          <Typography startDecorator={<PollOutlinedIcon />} level="title-lg">
+            Đánh giá phim
+          </Typography>
           <Rating name="half-rating" defaultValue={0} precision={1} />
+          <Typography level="title-sm">50 lượt đánh giá</Typography>
         </Alert>
 
         <Alert
           sx={{ flexDirection: "column", alignItems: "start", gap: "24px" }}
         >
-          <Typography level="title-lg">Danh sách tập</Typography>
+          <Typography
+            startDecorator={<SubscriptionsOutlinedIcon />}
+            level="title-lg"
+          >
+            Danh sách tập
+          </Typography>
           <Box sx={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
             {episodes.map((item: Episode, index: number) => (
               <Button
@@ -216,7 +227,9 @@ const SectionLinkM3U8 = ({ link_m3u8, setOpen }: IProps) => {
         }}
       >
         <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
-          <Typography level="title-lg">Liên kết M3U8</Typography>
+          <Typography startDecorator={<LinkOutlinedIcon />} level="title-lg">
+            Liên kết M3U8
+          </Typography>
 
           <Tooltip title="Hướng dẫn tải xuống">
             <IconButton size="sm" onClick={() => setOpen(true)}>

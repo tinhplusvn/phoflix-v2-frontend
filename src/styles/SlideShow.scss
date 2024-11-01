@@ -4,10 +4,6 @@
   overflow: hidden;
   border: 1px solid #ccc;
 
-  @media (max-width: 1024px) {
-    width: calc(100vw - 32px);
-  }
-
   .swiper-slide {
     text-align: center;
     font-size: 18px;

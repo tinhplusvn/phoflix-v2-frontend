@@ -12,7 +12,9 @@ import SlideItem from "./SlideItem";
 import { IMovie } from "../interfaces/movie";
 
 const SlideShow = () => {
-  const items:IMovie[] = useSelector((state: RootState) => state.movies.slideShow);
+  const items: IMovie[] = useSelector(
+    (state: RootState) => state.movies.slideShow
+  );
   const isLoading: boolean = useSelector(
     (state: RootState) => state.movies.isLoading
   );
@@ -32,7 +34,7 @@ const SlideShow = () => {
         modules={[Autoplay, Pagination, Navigation]}
         className="mySwiper"
       >
-        {!isLoading && items.length === 0 && (
+        {items.length === 0 && (
           <SwiperSlide>
             <Skeleton animation="wave" variant="overlay" />
           </SwiperSlide>

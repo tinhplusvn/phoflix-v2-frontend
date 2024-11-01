@@ -61,7 +61,7 @@ const ViewingHistory = () => {
       <ModalAlertDialog
         open={open}
         setOpen={setOpen}
-        handleSubmid={handleClearViewingHistory}
+        handleSubmit={handleClearViewingHistory}
         title="Xoá lịch sử đã xem"
         content="Lịch sử đã xem gần đây của bạn sẽ bị xoá vĩnh viễn?"
       />

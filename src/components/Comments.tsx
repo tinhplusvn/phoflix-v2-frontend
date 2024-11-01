@@ -23,6 +23,7 @@ import {
 } from "../redux/slice/commentsSlice";
 import _ from "lodash";
 import ModalAlertDialog from "./modals/ModalAlertDialog";
+import ModalReportComment from "./modals/ModalReportComment";
 
 type filter = "latest" | "oldest";
 
@@ -33,7 +34,8 @@ const Comments = () => {
   const [valueEditComment, setValueEditComment] = useState<string>("");
   const [indexEdit, setIndexEdit] = useState<number>(-1);
   const [indexDelete, setIndexDelete] = useState<number>(-1);
-  const [open, setOpen] = useState<boolean>(false);
+  const [openModalAlertDiaLog, setOpenModalAlertDiaLog] =
+    useState<boolean>(false);
   const [typeFilter, setTypeFilter] = useState<filter>("latest");
 
   useEffect(() => {
@@ -67,7 +69,7 @@ const Comments = () => {
 
   const handleDeleteComment = () => {
     dispatch(removeComment(indexDelete));
-    setOpen(false);
+    setOpenModalAlertDiaLog(false);
   };
 
   return (
@@ -123,7 +125,14 @@ const Comments = () => {
             }}
           >
             {comments.length > 0 && (
-              <Alert sx={{ gap: "12px", alignItems: "center" }}>
+              <Alert
+                sx={{
+                  gap: "12px",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
                 <Typography
                   startDecorator={<FilterAltOutlinedIcon />}
                   level="title-md"
@@ -148,7 +157,7 @@ const Comments = () => {
               handSaveEditComment={handSaveEditComment}
               comments={comments}
               setIndexEdit={setIndexEdit}
-              setOpen={setOpen}
+              setOpen={setOpenModalAlertDiaLog}
               setIndexDelete={setIndexDelete}
             />
           </Box>
@@ -156,9 +165,9 @@ const Comments = () => {
       </Box>
 
       <ModalAlertDialog
-        handleSubmid={handleDeleteComment}
-        open={open}
-        setOpen={setOpen}
+        handleSubmit={handleDeleteComment}
+        open={openModalAlertDiaLog}
+        setOpen={setOpenModalAlertDiaLog}
         title="Xoá bình luận"
         content="Bình luận của bạn sẽ được gỡ khỏi hệ thống"
       />
@@ -170,9 +179,9 @@ export default Comments;
 
 interface ICommentList {
   comments: IComments[];
-  setOpen: (open: boolean) => void;
   indexEdit: number;
   valueEditComment: string;
+  setOpen: (open: boolean) => void;
   setIndexDelete: (index: number) => void;
   setValueEditComment: (value: string) => void;
   setIndexEdit: (index: number) => void;
@@ -182,102 +191,127 @@ interface ICommentList {
 
 const CommentList = ({
   comments,
-  setOpen,
   indexEdit,
   valueEditComment,
+  setOpen,
   setIndexDelete,
   setValueEditComment,
   setIndexEdit,
   handleEditComment,
   handSaveEditComment,
 }: ICommentList) => {
+  const [openModalReportComment, setOpenModalReportComments] =
+    useState<boolean>(false);
+
   return (
-    <ul
-      style={{
-        listStyle: "none",
-        display: "flex",
-        flexDirection: "column",
-        gap: "24px",
-        width: `${indexEdit !== -1 ? "100%" : "unset"}`,
-      }}
-    >
-      {comments.map((item, index) => (
-        <li key={index} style={{ display: "flex", gap: "12px" }}>
-          <Box>
-            <Avatar />
-          </Box>
-          <Box
-            sx={{
-              border: "1px solid #aaa",
-              padding: "8px",
-              borderRadius: "8px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "12px",
-              width: `${indexEdit !== -1 ? "100%" : "unset"}`,
-            }}
-          >
+    <>
+      <ul
+        style={{
+          listStyle: "none",
+          display: "flex",
+          flexDirection: "column",
+          gap: "24px",
+          width: `${indexEdit !== -1 ? "100%" : "unset"}`,
+        }}
+      >
+        {comments.map((item, index) => (
+          <li key={index} style={{ display: "flex", gap: "12px" }}>
             <Box>
-              <Typography level="title-md" color="primary">
-                {item.name}
-              </Typography>
+              <Avatar />
+            </Box>
+            <Box
+              sx={{
+                border: "1px solid #aaa",
+                padding: "8px",
+                borderRadius: "8px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+                width: `${indexEdit !== -1 ? "100%" : "unset"}`,
+              }}
+            >
+              <Box>
+                <Typography level="title-md" color="primary">
+                  {item.name}
+                </Typography>
+                {index !== indexEdit ? (
+                  <Typography
+                    sx={{
+                      wordBreak: "break-word",
+                    }}
+                    level="body-sm"
+                  >
+                    {item.content}
+                  </Typography>
+                ) : (
+                  <Textarea
+                    onChange={(e) => setValueEditComment(e.target.value)}
+                    sx={{ marginTop: "12px" }}
+                    value={valueEditComment}
+                    variant="outlined"
+                  />
+                )}
+              </Box>
+              <Divider />
               {index !== indexEdit ? (
-                <Typography level="body-sm">{item.content}</Typography>
+                <Box sx={{ display: "flex" }}>
+                  <Button
+                    onClick={() => {
+                      setOpen(true);
+                      setIndexDelete(index);
+                    }}
+                    variant="plain"
+                    color="danger"
+                    size="sm"
+                  >
+                    Xoá
+                  </Button>
+                  <Button
+                    onClick={() => handleEditComment(index, item.content)}
+                    variant="plain"
+                    color="primary"
+                    size="sm"
+                  >
+                    Chỉnh sửa
+                  </Button>
+                  <Button
+                    onClick={() => setOpenModalReportComments(true)}
+                    variant="plain"
+                    color="neutral"
+                    size="sm"
+                  >
+                    Báo cáo
+                  </Button>
+                </Box>
               ) : (
-                <Textarea
-                  onChange={(e) => setValueEditComment(e.target.value)}
-                  sx={{ marginTop: "12px" }}
-                  value={valueEditComment}
-                  variant="outlined"
-                />
+                <Box sx={{ display: "flex" }}>
+                  <Button
+                    onClick={() => setIndexEdit(-1)}
+                    variant="plain"
+                    color="neutral"
+                    size="sm"
+                  >
+                    Huỷ
+                  </Button>
+                  <Button
+                    onClick={() => handSaveEditComment(index)}
+                    variant="plain"
+                    color="primary"
+                    size="sm"
+                  >
+                    Xác nhận
+                  </Button>
+                </Box>
               )}
             </Box>
-            <Divider />
-            {index !== indexEdit ? (
-              <Box sx={{ display: "flex" }}>
-                <Button
-                  onClick={() => {
-                    setOpen(true);
-                    setIndexDelete(index);
-                  }}
-                  variant="plain"
-                  color="danger"
-                  size="sm"
-                >
-                  Xoá
-                </Button>
-                <Button
-                  onClick={() => handleEditComment(index, item.content)}
-                  variant="plain"
-                  color="neutral"
-                  size="sm"
-                >
-                  Chỉnh sửa
-                </Button>
-              </Box>
-            ) : (
-              <Box sx={{ display: "flex" }}>
-                <Button
-                  onClick={() => setIndexEdit(-1)}
-                  variant="plain"
-                  color="neutral"
-                  size="sm"
-                >
-                  Huỷ
-                </Button>
-                <Button
-                  onClick={() => handSaveEditComment(index)}
-                  variant="plain"
-                  color="primary"
-                  size="sm"
-                >
-                  Xác nhận
-                </Button>
-              </Box>
-            )}
-          </Box>
-        </li>
-      ))}
-    </ul>
+          </li>
+        ))}
+      </ul>
+
+      <ModalReportComment
+        open={openModalReportComment}
+        setOpen={setOpenModalReportComments}
+      />
+    </>
   );
 };

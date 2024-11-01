@@ -18,7 +18,9 @@ type NavRight = {
 const NavRight = ({ width }: NavRight) => {
   const [openModalSearch, setOpenModalSearch] = useState<boolean>(false);
   const dispatch: AppDispatch = useDispatch();
-  const open = useSelector((state: RootState) => state.system.isOpen);
+  const open = useSelector(
+    (state: RootState) => state.system.isOpenModalAuthentication
+  );
   const type = useSelector((state: RootState) => state.system.type);
 
   const handleSetOpen = (isOpen: boolean) => {
@@ -41,7 +43,7 @@ const NavRight = ({ width }: NavRight) => {
               color="neutral"
               startDecorator={<SearchIcon color="primary" />}
             >
-              Tìm kiếm...
+              Tìm kiếm phim...
             </Button>
           </>
         ) : (

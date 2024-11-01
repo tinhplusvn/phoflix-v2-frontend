@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Modal,
   ModalClose,
@@ -33,13 +34,24 @@ const ModalInstructDowload = ({ open, setOpen }: IProps) => {
         sx={{
           width: { xs: "90%", md: "50%" },
           borderRadius: "md",
-          p: 3,
+          padding: {
+            xs: "16px",
+            md: "24px",
+          },
           boxShadow: "lg",
         }}
       >
         <ModalClose variant="plain" sx={{ m: 1 }} />
-        <Box sx={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: 'wrap' }}>
-          <Typography level="h4" textColor="inherit" sx={{ mb: 1 }}>
+        <Alert
+          sx={{
+            display: "flex",
+            gap: "12px",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginTop: "48px",
+          }}
+        >
+          <Typography level="h4" textColor="inherit">
             Hướng dẫn tải video
           </Typography>
           <Select
@@ -49,7 +61,7 @@ const ModalInstructDowload = ({ open, setOpen }: IProps) => {
             <Option value="computer">Máy tính</Option>
             <Option value="phone">Điện thoại</Option>
           </Select>
-        </Box>
+        </Alert>
         {selectedDevice === "computer" ? (
           <Box sx={{ marginTop: "12px" }}>
             <Typography level="body-md">

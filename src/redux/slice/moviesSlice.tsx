@@ -19,7 +19,7 @@ import {
   IPagination,
 } from "../../interfaces/movie";
 
-export interface MoviesState {
+interface MoviesState {
   categories: ICategory[];
   countries: ICountry[];
   slideShow: IMovie[];
@@ -94,6 +94,7 @@ export const moviesSlice = createSlice({
       })
       .addCase(getCategories.rejected, (state, action) => {
         state.isLoading = false;
+        state.isError = true;
       })
 
       // lấy danh sách quốc gia
@@ -106,6 +107,7 @@ export const moviesSlice = createSlice({
       })
       .addCase(getCountries.rejected, (state, action) => {
         state.isLoading = false;
+        state.isError = true;
       })
 
       // lấy danh sách slide
@@ -113,11 +115,12 @@ export const moviesSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getSlideShow.fulfilled, (state, action) => {
-        state.slideShow = action.payload.items;
+        state.slideShow = action.payload?.items ?? [];
         state.isLoading = false;
       })
       .addCase(getSlideShow.rejected, (state, action) => {
         state.isLoading = false;
+        state.isError = true;
       })
 
       // lấy dữ liệu phim lẻ
@@ -125,11 +128,12 @@ export const moviesSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getFeatureFilm.fulfilled, (state, action) => {
-        state.featureFilm = action.payload.data.items;
+        state.featureFilm = action.payload?.data?.items ?? [];
         state.isLoading = false;
       })
       .addCase(getFeatureFilm.rejected, (state, action) => {
         state.isLoading = false;
+        state.isError = true;
       })
 
       // lấy dữ liệu phim bộ
@@ -137,11 +141,12 @@ export const moviesSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getTelevisionSeries.fulfilled, (state, action) => {
-        state.televisionSeries = action.payload.data.items;
+        state.televisionSeries = action.payload?.data?.items ?? [];
         state.isLoading = false;
       })
       .addCase(getTelevisionSeries.rejected, (state, action) => {
         state.isLoading = false;
+        state.isError = true;
       })
 
       // lấy dữ liệu phim hoạt hình
@@ -149,11 +154,12 @@ export const moviesSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getCartoon.fulfilled, (state, action) => {
-        state.cartoon = action.payload.data.items;
+        state.cartoon = action.payload?.data?.items ?? [];
         state.isLoading = false;
       })
       .addCase(getCartoon.rejected, (state, action) => {
         state.isLoading = false;
+        state.isError = true;
       })
 
       // lấy dữ liệu tv shows
@@ -161,11 +167,12 @@ export const moviesSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getTvShows.fulfilled, (state, action) => {
-        state.tvShows = action.payload.data.items;
+        state.tvShows = action.payload?.data?.items ?? [];
         state.isLoading = false;
       })
       .addCase(getTvShows.rejected, (state, action) => {
         state.isLoading = false;
+        state.isError = true;
       })
 
       // lấy thông tin phim
@@ -175,42 +182,45 @@ export const moviesSlice = createSlice({
         state.isError = false;
       })
       .addCase(getMovieInfo.fulfilled, (state, action) => {
-        state.movieInfo.info = action.payload?.movie;
-        state.movieInfo.episodes = action.payload.episodes[0]?.server_data;
+        console.log(action.payload)
+        state.movieInfo.info = action.payload?.movie ?? {};
+        state.movieInfo.episodes =
+          action.payload?.episodes[0]?.server_data ?? [];
         state.movieInfo.status = action.payload?.status;
         state.isError = !action.payload?.status;
       })
       .addCase(getMovieInfo.rejected, (state, action) => {
         state.isLoading = false;
+        state.isError = true;
       })
 
       // chi tiết phim
       .addCase(getMovieDetail.pending, (state, action) => {
         state.isLoading = true;
         state.isError = false;
-        state.movieDetail.items = []
+        state.movieDetail.items = [];
       })
       .addCase(getMovieDetail.fulfilled, (state, action) => {
         if (action.payload) {
           const { items, titlePage } = action.payload;
-          const { totalItems, totalPages } = action.payload.params.pagination;
+          const { totalItems, totalPages } = action.payload?.params?.pagination;
           state.movieDetail.items = items;
           state.movieDetail.titlePage = titlePage;
           state.movieDetail.pagination.totalItems = totalItems;
           state.movieDetail.pagination.totalPages = totalPages;
         }
 
-        state.isError = !action.payload;
-        state.isLoading = !action.payload;
+        state.isError = !(action.payload?.items?.length > 0);
+        state.isLoading = false;
       })
       .addCase(getMovieDetail.rejected, (state, action) => {
         state.isLoading = false;
+        state.isError = true;
       })
 
       // tìm kiếm phim
       .addCase(searchMovie.pending, (state, action) => {
         state.isLoading = true;
-        state.isError = false
       })
       .addCase(searchMovie.fulfilled, (state, action) => {
         if (action.payload) {
@@ -220,7 +230,6 @@ export const moviesSlice = createSlice({
           state.searchMovie.pagination.totalItems = totalItems;
           state.searchMovie.pagination.totalPages = totalPages;
           state.isLoading = !action.payload;
-          state.isError = (action.payload.items === 0)
         }
       })
       .addCase(searchMovie.rejected, (state, action) => {

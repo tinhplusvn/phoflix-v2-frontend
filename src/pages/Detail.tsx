@@ -92,7 +92,8 @@ const Detail = () => {
     setCurrentPage(1);
   }, [params]);
 
-  if (isLoading || (totalItems === 0 && totalPages === 0)) {
+
+  if (isLoading && !isError) {
     return <SkeletonPage page="detail" />;
   }
 
@@ -114,31 +115,35 @@ const Detail = () => {
       }}
     >
       <Box>
-        <BreadcrumbsCustom paths={breadcrumbsPaths} />
-        <Alert
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-          }}
-          color="primary"
-        >
-          <Typography startDecorator={<LiveTvRoundedIcon />} level="h4">
-            {`${titlePage} (${totalItems} bộ)`}
-          </Typography>
-          <Typography
-            color="primary"
-            level="title-sm"
-          >{`Trang ${currentPage}`}</Typography>
-        </Alert>
+        {movies.length > 0 && !isLoading && (
+          <>
+            <BreadcrumbsCustom paths={breadcrumbsPaths} />
+            <Alert
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+              }}
+              color="primary"
+            >
+              <Typography startDecorator={<LiveTvRoundedIcon />} level="h4">
+                {`${titlePage} (${totalItems} bộ)`}
+              </Typography>
+              <Typography
+                color="primary"
+                level="title-sm"
+              >{`Trang ${currentPage}`}</Typography>
+            </Alert>
+          </>
+        )}
       </Box>
 
       <MovieList movies={movies} />
 
       <Stack spacing={2} sx={{ marginTop: "24px", alignItems: "center" }}>
         <Pagination
-          defaultPage={currentPage}
+          page={currentPage}
           onChange={handleChange}
           count={totalPages}
           variant="outlined"

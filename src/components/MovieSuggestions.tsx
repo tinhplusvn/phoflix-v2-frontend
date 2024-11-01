@@ -1,17 +1,11 @@
-import {
-  Alert,
-  Box,
-  Button,
-  ButtonGroup,
-  ToggleButtonGroup,
-  Typography,
-} from "@mui/joy";
+import { Alert, Box, Button, ToggleButtonGroup, Typography } from "@mui/joy";
 import { AppDispatch, RootState } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getMovieDetail } from "../redux/asyncThunk/moviesThunk";
 import MovieList from "./MovieList";
 import { ICategory, ICountry } from "../interfaces/movie";
+import BubbleChartIcon from "@mui/icons-material/BubbleChart";
 
 type describe = "the-loai" | "quoc-gia";
 interface IProps {
@@ -47,17 +41,26 @@ const MovieSuggestions = ({ categories, countries }: IProps) => {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "24px",
+      }}
+    >
       <Alert
         color="neutral"
         sx={{
           justifyContent: "space-between",
           flexDirection: {
             xs: "column",
+            md: "row",
           },
         }}
       >
-        <Typography level="title-lg">Gợi ý phim</Typography>
+        <Typography startDecorator={<BubbleChartIcon />} level="title-lg">
+          Gợi ý phim
+        </Typography>
         <Box sx={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
           <ToggleButtonGroup
             value={value}
@@ -67,7 +70,9 @@ const MovieSuggestions = ({ categories, countries }: IProps) => {
           >
             {categories.map((item, index) => (
               <Button
-                onClick={() => handleChangeSuggestion(item.slug as string, "the-loai")}
+                onClick={() =>
+                  handleChangeSuggestion(item.slug as string, "the-loai")
+                }
                 key={index}
                 value={item.slug}
                 disabled={value === item.slug}

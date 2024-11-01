@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Tooltip, Typography } from "@mui/joy";
+import { Box, Button, Chip, IconButton, Tooltip, Typography } from "@mui/joy";
 import { Link, useNavigate } from "react-router-dom";
 
 import "../styles/MovieItem.scss";
@@ -9,6 +9,8 @@ import { useDispatch } from "react-redux";
 import { removeFromViewingHistory } from "../redux/slice/viewingHistorySlice";
 import { unSaveMovie } from "../redux/slice/savedMoviesSlice";
 import { IMovie } from "../interfaces/movie";
+import { useEffect, useState } from "react";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 interface IProps {
   movie: IMovie;
@@ -18,6 +20,16 @@ interface IProps {
 const MovieItem = ({ movie, page }: IProps) => {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
+
+  const [width, setWidth] = useState<number>(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleRemoveFromViewingHisotry = (slug: string) => {
     dispatch(removeFromViewingHistory(slug));
@@ -51,6 +63,7 @@ const MovieItem = ({ movie, page }: IProps) => {
           right: "8px",
           display: "flex",
           flexWrap: "wrap",
+          justifyContent: "end",
           gap: "12px",
         }}
       >
@@ -67,7 +80,12 @@ const MovieItem = ({ movie, page }: IProps) => {
           sx={{
             display: "flex",
             marginTop: "12px",
+            gap: "12px",
             justifyContent: "space-between",
+            flexDirection: {
+              xs: "column",
+              md: "row",
+            },
           }}
         >
           <Button
@@ -93,6 +111,7 @@ const MovieItem = ({ movie, page }: IProps) => {
                     : handleUnSaveMovie(movie.slug as string)
                 }
                 color="danger"
+                size="sm"
               >
                 Xoá
               </Button>
@@ -100,6 +119,26 @@ const MovieItem = ({ movie, page }: IProps) => {
           )}
         </Box>
       </Box>
+      {width < 1024 &&
+        (page === "viewingHistory" || page === "savedMovies") && (
+          <IconButton
+            onClick={() =>
+              page === "viewingHistory"
+                ? handleRemoveFromViewingHisotry(movie.slug as string)
+                : handleUnSaveMovie(movie.slug as string)
+            }
+            sx={{
+              position: "absolute",
+              bottom: "12px",
+              right: "12px",
+            }}
+            color="danger"
+            size="sm"
+            variant="solid"
+          >
+            <DeleteOutlineIcon />
+          </IconButton>
+        )}
     </Box>
   );
 };
