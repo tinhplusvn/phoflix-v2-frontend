@@ -1,7 +1,7 @@
 import { Box, Modal, ModalClose, Sheet } from "@mui/joy";
-import Login from "../Login";
-import Register from "../Register";
-import ForgotPassword from "../ForgotPassword";
+import Login from "../authentication/Login";
+import Register from "../authentication/Register";
+import ForgotPassword from "../authentication/ForgotPassword";
 import { AppDispatch } from "../../redux/store";
 import { useDispatch } from "react-redux";
 import { setType } from "../../redux/slice/systemSlice";

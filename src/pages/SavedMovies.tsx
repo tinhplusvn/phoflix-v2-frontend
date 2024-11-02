@@ -1,7 +1,7 @@
 import { Alert, Box, Button, Typography } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
-import MovieList from "../components/MovieList";
+import MovieList from "../components/movie/MovieList";
 import { useState } from "react";
 import SkeletonPage from "../components/common/SkeletonPage";
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";

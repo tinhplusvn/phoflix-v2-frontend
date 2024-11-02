@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { AppDispatch, RootState } from "../redux/store";
 import { getMovieDetail } from "../redux/asyncThunk/moviesThunk";
 import LiveTvRoundedIcon from "@mui/icons-material/LiveTvRounded";
-import MovieList from "../components/MovieList";
+import MovieList from "../components/movie/MovieList";
 import { Pagination, Stack } from "@mui/material";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 import _ from "lodash";
@@ -91,7 +91,6 @@ const Detail = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [params]);
-
 
   if (isLoading && !isError) {
     return <SkeletonPage page="detail" />;

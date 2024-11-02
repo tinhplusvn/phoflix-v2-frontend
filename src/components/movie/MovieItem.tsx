@@ -1,14 +1,14 @@
 import { Box, Button, Chip, IconButton, Tooltip, Typography } from "@mui/joy";
 import { Link, useNavigate } from "react-router-dom";
 
-import "../styles/MovieItem.scss";
+import "../../styles/MovieItem.scss";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
-import _NavLink from "./common/_NavLink";
-import { AppDispatch } from "../redux/store";
+import _NavLink from "../common/_NavLink";
+import { AppDispatch } from "../../redux/store";
 import { useDispatch } from "react-redux";
-import { removeFromViewingHistory } from "../redux/slice/viewingHistorySlice";
-import { unSaveMovie } from "../redux/slice/savedMoviesSlice";
-import { IMovie } from "../interfaces/movie";
+import { removeFromViewingHistory } from "../../redux/slice/viewingHistorySlice";
+import { unSaveMovie } from "../../redux/slice/savedMoviesSlice";
+import { IMovie } from "../../interfaces/movie";
 import { useEffect, useState } from "react";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 

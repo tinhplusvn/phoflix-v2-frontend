@@ -1,8 +1,8 @@
 import { Box, Grid } from "@mui/joy";
 import MovieItem from "./MovieItem";
-import _NavLink from "./common/_NavLink";
-import SkeletonMovie from "./common/SkeletonMovies";
-import { IMovie } from "../interfaces/movie";
+import _NavLink from "../common/_NavLink";
+import SkeletonMovie from "../common/SkeletonMovies";
+import { IMovie } from "../../interfaces/movie";
 
 interface IProps {
   movies: IMovie[];
@@ -10,7 +10,6 @@ interface IProps {
 }
 
 const MovieList = ({ movies, page }: IProps) => {
-
   if (movies.length === 0) {
     return <SkeletonMovie quantity={18} />;
   }

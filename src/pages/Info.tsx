@@ -21,7 +21,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 
 import "../styles/Info.scss";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
-import MovieSuggestions from "../components/MovieSuggestions";
+import MovieSuggestions from "../components/movie/MovieSuggestions";
 import SkeletonPage from "../components/common/SkeletonPage";
 import { savedMovie, unSaveMovie } from "../redux/slice/savedMoviesSlice";
 import { IMovie } from "../interfaces/movie";

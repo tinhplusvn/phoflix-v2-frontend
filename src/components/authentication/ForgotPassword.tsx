@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../redux/store";
+import { AppDispatch } from "../../redux/store";
 import { Box, Button, Input, Typography } from "@mui/joy";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import KeyIcon from "@mui/icons-material/Key";

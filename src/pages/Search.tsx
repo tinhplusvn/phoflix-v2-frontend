@@ -5,11 +5,11 @@ import { useParams } from "react-router-dom";
 import { AppDispatch, RootState } from "../redux/store";
 import { searchMovie } from "../redux/asyncThunk/moviesThunk";
 import LiveTvRoundedIcon from "@mui/icons-material/LiveTvRounded";
-import MovieList from "../components/MovieList";
+import MovieList from "../components/movie/MovieList";
 import { Pagination, Stack } from "@mui/material";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 import SkeletonPage from "../components/common/SkeletonPage";
-
+import SearchIcon from "@mui/icons-material/Search";
 import searchNotFoundImg from "../images/search-not-found.png";
 
 const Search = () => {
@@ -67,10 +67,14 @@ const Search = () => {
             justifyContent: "space-between",
             alignItems: "center",
             width: "100%",
+            flexDirection: {
+              xs: "column",
+              md: "row",
+            },
           }}
           color="primary"
         >
-          <Typography startDecorator={<LiveTvRoundedIcon />} level="title-lg">
+          <Typography startDecorator={<SearchIcon />} level="title-lg">
             {movies.length > 0
               ? `Tìm kiếm được ${totalItems} bộ phim phù hợp cho từ khoá "${params.keyword}"`
               : `Không tìm thấy phim phù hợp!`}

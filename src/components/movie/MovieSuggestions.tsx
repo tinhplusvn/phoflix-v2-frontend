@@ -1,13 +1,14 @@
-import { Alert, Box, Button, ToggleButtonGroup, Typography } from "@mui/joy";
-import { AppDispatch, RootState } from "../redux/store";
+import { Alert, Box, Button, Option, Select, ToggleButtonGroup, Typography } from "@mui/joy";
+import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getMovieDetail } from "../redux/asyncThunk/moviesThunk";
-import MovieList from "./MovieList";
-import { ICategory, ICountry } from "../interfaces/movie";
+import { getMovieDetail } from "../../redux/asyncThunk/moviesThunk";
+import MovieList from "../movie/MovieList";
+import { ICategory, ICountry } from "../../interfaces/movie";
 import BubbleChartIcon from "@mui/icons-material/BubbleChart";
 
 type describe = "the-loai" | "quoc-gia";
+
 interface IProps {
   categories: ICategory[];
   countries: ICountry[];
@@ -19,6 +20,8 @@ const MovieSuggestions = ({ categories, countries }: IProps) => {
   const [value, setValue] = useState<string | null>(
     categories[0].slug as string
   );
+
+
 
   useEffect(() => {
     dispatch(
@@ -56,12 +59,13 @@ const MovieSuggestions = ({ categories, countries }: IProps) => {
             xs: "column",
             md: "row",
           },
+          gap: "12px",
         }}
       >
         <Typography startDecorator={<BubbleChartIcon />} level="title-lg">
           Gợi ý phim
         </Typography>
-        <Box sx={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+        <Box sx={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
           <ToggleButtonGroup
             value={value}
             onChange={(event, value) => {
@@ -101,6 +105,8 @@ const MovieSuggestions = ({ categories, countries }: IProps) => {
             ))}
           </ToggleButtonGroup>
         </Box>
+
+      
       </Alert>
 
       <MovieList movies={movies.items} />

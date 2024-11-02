@@ -1,10 +1,10 @@
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../redux/store";
+import { AppDispatch } from "../../redux/store";
 import { Box, Button, Divider, Input, Typography } from "@mui/joy";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import { setType } from "../redux/slice/systemSlice";
+import { setType } from "../../redux/slice/systemSlice";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useRef, useState } from "react";
 import _ from "lodash";

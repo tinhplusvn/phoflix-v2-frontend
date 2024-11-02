@@ -19,14 +19,14 @@ import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SkeletonPage from "../components/common/SkeletonPage";
 import { Rating } from "@mui/material";
-import Comments from "../components/Comments";
-import MovieSuggestions from "../components/MovieSuggestions";
+import MovieSuggestions from "../components/movie/MovieSuggestions";
 import { addViewingHistory } from "../redux/slice/viewingHistorySlice";
 import { updateWatchedEpisodes } from "../redux/slice/watchSlice";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 import PollOutlinedIcon from "@mui/icons-material/PollOutlined";
 import SubscriptionsOutlinedIcon from "@mui/icons-material/SubscriptionsOutlined";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
+import CommentSection from "../components/comment/CommentSection";
 
 type Episode = {
   name: string;
@@ -151,12 +151,27 @@ const Watch = () => {
           ></iframe>
         </Box>
 
-        <Alert>
+        <Alert
+          sx={{
+            flexDirection: "column",
+            gap: "12px",
+          }}
+        >
           <Typography startDecorator={<PollOutlinedIcon />} level="title-lg">
             Đánh giá phim
           </Typography>
-          <Rating name="half-rating" defaultValue={0} precision={1} />
-          <Typography level="title-sm">50 lượt đánh giá</Typography>
+          <Box
+            sx={{
+              display: "flex",
+              gap: "12px",
+              justifyContent: "center",
+              flex: "1",
+              alignItems: "center",
+            }}
+          >
+            <Rating name="half-rating" defaultValue={0} precision={1} />
+            <Typography level="title-sm">50 lượt đánh giá</Typography>
+          </Box>
         </Alert>
 
         <Alert
@@ -166,7 +181,7 @@ const Watch = () => {
             startDecorator={<SubscriptionsOutlinedIcon />}
             level="title-lg"
           >
-            Danh sách tập
+            Danh sách tập phim
           </Typography>
           <Box sx={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
             {episodes.map((item: Episode, index: number) => (
@@ -188,7 +203,7 @@ const Watch = () => {
 
         <Divider />
 
-        <Comments />
+        <CommentSection />
 
         <Divider />
         <MovieSuggestions

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import SlideShow from "../components/SlideShow";
+import SlideList from "../components/SlideList";
 import { AppDispatch, RootState } from "../redux/store";
 import { useEffect } from "react";
 import {
@@ -10,7 +10,7 @@ import {
   getTvShows,
 } from "../redux/asyncThunk/moviesThunk";
 import { Box } from "@mui/joy";
-import MovieList from "../components/MovieList";
+import MovieList from "../components/movie/MovieList";
 import LiveTvRoundedIcon from "@mui/icons-material/LiveTvRounded";
 import TitleContainer from "../components/common/TitleContainer";
 
@@ -35,7 +35,7 @@ const Home = () => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-      <SlideShow />
+      <SlideList />
       <Box>
         <TitleContainer
           path="/chi-tiet/danh-sach/phim-le"

@@ -1,10 +1,10 @@
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../redux/store";
+import { AppDispatch } from "../../redux/store";
 import { Box, Button, Input, Typography } from "@mui/joy";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import KeyIcon from "@mui/icons-material/Key";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import { setType } from "../redux/slice/systemSlice";
+import { setType } from "../../redux/slice/systemSlice";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useState } from "react";
 import _ from "lodash";
