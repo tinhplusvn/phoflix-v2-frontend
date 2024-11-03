@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import React, { useEffect } from "react";
 import { scrollToTop } from "../../utils";
 import Footer from "./Footer";
+import ToastContainer from "../ToastContainer";
 
 interface IProps {
   children: React.ReactNode;
@@ -15,27 +16,31 @@ const DefaultLayout = ({ children }: IProps) => {
   useEffect(() => scrollToTop(), [params]);
 
   return (
-    <Box
-      sx={{
-        maxWidth: "100vw",
-        marginTop: "60px",
-        overflow: "hidden",
-      }}
-    >
-      <Navigation />
+    <>
       <Box
         sx={{
-          padding: {
-            xs: "16px",
-            sm: "24px",
-            md: "32px",
-          },
+          maxWidth: "100vw",
+          marginTop: "60px",
+          overflow: "hidden",
         }}
       >
-        {children}
+        <Navigation />
+        <Box
+          sx={{
+            padding: {
+              xs: "16px",
+              sm: "24px",
+              md: "32px",
+            },
+          }}
+        >
+          {children}
+        </Box>
+        <Footer />
       </Box>
-      <Footer/>
-    </Box>
+
+      <ToastContainer />
+    </>
   );
 };
 

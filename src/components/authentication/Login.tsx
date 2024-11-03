@@ -8,6 +8,9 @@ import { setType } from "../../redux/slice/systemSlice";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useRef, useState } from "react";
 import _ from "lodash";
+import { login } from "../../redux/asyncThunk/userThunk";
+import LoadingButton from "../common/LoadingButon";
+import toast from "react-hot-toast";
 
 interface ValueInput {
   email: string;
@@ -19,7 +22,7 @@ interface ValidInput {
   password: boolean;
 }
 
-const Login = () => {
+const Login = ({ setOpen }: any) => {
   const dispatch: AppDispatch = useDispatch();
   const defaultValueLogin: ValueInput = {
     email: "",
@@ -33,14 +36,15 @@ const Login = () => {
   const [isValidInput, setIsValidInput] =
     useState<ValidInput>(defaultValidIput);
   const emailRef = useRef<HTMLInputElement>(null);
+  const [isLogin, setIsLogin] = useState<boolean>(false);
 
   const handleCheckValidInput = (): boolean => {
     let check = true;
     const _isValidInput: ValidInput = _.clone(isValidInput);
     if (valueInput.email === "") {
-        if (emailRef.current) {
-            emailRef.current.focus()
-        }
+      if (emailRef.current) {
+        emailRef.current.focus();
+      }
       _isValidInput.email = false;
       check = false;
     }
@@ -63,8 +67,30 @@ const Login = () => {
     setIsValidInput(_isValidInput);
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const check = handleCheckValidInput();
+
+    if (check) {
+      setIsLogin(true);
+      const res = await dispatch(
+        login({
+          email: valueInput.email,
+          password: valueInput.password,
+        })
+      );
+
+      if (+res.payload.status.EC === 0) {
+        toast.success(res.payload.status.EM);
+        setOpen(false);
+      } else {
+        toast.error(res.payload.status.EM);
+      }
+      setIsLogin(false);
+    }
+  };
+
+  const handleLoginGoogle = () => {
+    window.location.href = `${process.env.REACT_APP_API}/auth/google`;
   };
 
   return (
@@ -109,7 +135,11 @@ const Login = () => {
           </Typography>
         )}
       </Box>
-      <Button onClick={() => handleLogin()}>Đăng nhập</Button>
+      {isLogin ? (
+        <LoadingButton />
+      ) : (
+        <Button onClick={() => handleLogin()}>Đăng nhập</Button>
+      )}
       <Typography
         onClick={() => dispatch(setType("forgot-password"))}
         sx={{
@@ -125,7 +155,12 @@ const Login = () => {
         Quên mật khẩu?
       </Typography>
       <Divider sx={{ margin: "12px 0" }} />
-      <Button variant="soft" color="neutral" startDecorator={<GoogleIcon />}>
+      <Button
+        onClick={() => handleLoginGoogle()}
+        variant="soft"
+        color="neutral"
+        startDecorator={<GoogleIcon />}
+      >
         Đăng nhập với Google
       </Button>
       <Button variant="soft" color="primary" startDecorator={<FacebookIcon />}>

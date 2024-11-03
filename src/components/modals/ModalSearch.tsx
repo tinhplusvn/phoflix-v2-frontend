@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import _ from "lodash";
 import "../../styles/ModalSearch.scss";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 type ModalSearch = {
   open: boolean;
@@ -31,6 +33,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
   const [searchFavorite, setSearchFavorite] = useState<string[]>([]);
   const navigate = useNavigate();
   const searchRef = useRef<HTMLInputElement>(null);
+
 
   useEffect(() => {
     const _searchRecent: string[] =

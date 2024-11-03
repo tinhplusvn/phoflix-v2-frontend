@@ -10,26 +10,27 @@ import {
   Typography,
 } from "@mui/joy";
 import _ from "lodash";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface IProps {
   open: boolean;
   setOpen: (open: boolean) => void;
+  dataUser: any;
 }
 
 interface UserInfo {
   username: string;
   email: string;
-  phoneNumber: string;
+  phone_number: string;
   gender: string;
   address: string;
 }
 
-const ModalEditUserInfo = ({ open, setOpen }: IProps) => {
+const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
   const defaultUserInfo: UserInfo = {
     username: "",
     email: "",
-    phoneNumber: "",
+    phone_number: "",
     gender: "Nam",
     address: "",
   };
@@ -40,6 +41,16 @@ const ModalEditUserInfo = ({ open, setOpen }: IProps) => {
     (_userInfo as any)[type] = value;
     setUserInfo(_userInfo);
   };
+
+  useEffect(() => {
+    setUserInfo({
+      username: dataUser.username,
+      email: dataUser.email,
+      phone_number: dataUser.phone_number,
+      gender: dataUser.gender,
+      address: dataUser.address,
+    });
+  }, [dataUser]);
 
   return (
     <Modal
@@ -95,9 +106,9 @@ const ModalEditUserInfo = ({ open, setOpen }: IProps) => {
             </Typography>
             <Input
               onChange={(e) =>
-                handleOnchangeInput(e.target.value, "phoneNumber")
+                handleOnchangeInput(e.target.value, "phone_number")
               }
-              value={userInfo.phoneNumber}
+              value={userInfo.phone_number}
             />
           </Box>
           <Box>
@@ -108,10 +119,10 @@ const ModalEditUserInfo = ({ open, setOpen }: IProps) => {
               onChange={(event, value) =>
                 handleOnchangeInput(value as string, "gender")
               }
-              defaultValue="male"
+              defaultValue={userInfo.gender}
             >
-              <Option value="male">Nam</Option>
-              <Option value="female">Nữ</Option>
+              <Option value="Nam">Nam</Option>
+              <Option value="Nữ">Nữ</Option>
             </Select>
           </Box>
           <Box>

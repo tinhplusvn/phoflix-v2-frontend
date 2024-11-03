@@ -2,15 +2,28 @@ import { Box, Button, Divider, Grid, Table, Typography } from "@mui/joy";
 import backgroundMovieImg from "../images/background-movie.jpg";
 import HistoryIcon from "@mui/icons-material/History";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalEditUserInfo from "../components/modals/ModalEditUserInfo";
 import ModalAlertDialog from "../components/modals/ModalAlertDialog";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+
+import avatarImg from "../images/avatar.jpg";
+import { useNavigate } from "react-router-dom";
 
 const UserInfo = () => {
   const [openModalEditUserInfo, setOpenModalEditUserInfo] =
     useState<boolean>(false);
   const [openModalAlertDialog, setOpenModalAlertDialog] =
     useState<boolean>(false);
+  const user = useSelector((state: RootState) => state.users.user);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user.refresh_token) {
+      navigate("/");
+    }
+  }, []);
 
   const handleDeleteActivityHistory = () => {};
 
@@ -58,10 +71,7 @@ const UserInfo = () => {
               height: "160px",
             }}
           >
-            <img
-              src="https://img.freepik.com/premium-photo/graphic-designer-digital-avatar-generative-ai_934475-9292.jpg"
-              alt="Ảnh đại diện"
-            />
+            <img src={avatarImg} alt="Ảnh đại diện" />
           </Box>
         </Grid>
         <Grid xs={12} md={4}>
@@ -89,23 +99,27 @@ const UserInfo = () => {
             >
               <Box sx={{ display: "flex", gap: "8px" }}>
                 <Typography level="body-md">Tên:</Typography>
-                <Typography level="body-md">Phở</Typography>
+                <Typography level="body-md">{user.username}</Typography>
               </Box>
               <Box sx={{ display: "flex", gap: "8px" }}>
                 <Typography level="body-md">Email:</Typography>
-                <Typography level="body-md">phohoccode@gmail.com</Typography>
+                <Typography level="body-md">{user.email}</Typography>
               </Box>
               <Box sx={{ display: "flex", gap: "8px" }}>
                 <Typography level="body-md">Số điện thoại:</Typography>
-                <Typography level="body-md">07896593122</Typography>
+                <Typography level="body-md">
+                  {user.phone_number || "Trống"}
+                </Typography>
               </Box>
               <Box sx={{ display: "flex", gap: "8px" }}>
                 <Typography level="body-md">Giới tính:</Typography>
-                <Typography level="body-md">Nam</Typography>
+                <Typography level="body-md">{user.gender}</Typography>
               </Box>
               <Box sx={{ display: "flex", gap: "8px" }}>
                 <Typography level="body-md">Địa chỉ:</Typography>
-                <Typography level="body-md">Việt nam</Typography>
+                <Typography level="body-md">
+                  {user.address || "Trống"}
+                </Typography>
               </Box>
               <Button
                 onClick={() => setOpenModalEditUserInfo(true)}
@@ -187,6 +201,7 @@ const UserInfo = () => {
       <ModalEditUserInfo
         open={openModalEditUserInfo}
         setOpen={setOpenModalEditUserInfo}
+        dataUser={user}
       />
 
       <ModalAlertDialog

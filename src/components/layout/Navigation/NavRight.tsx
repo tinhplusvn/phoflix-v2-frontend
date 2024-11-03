@@ -4,9 +4,9 @@ import ThemeMode from "./ThemeMode";
 
 import _NavLink from "../../common/_NavLink";
 import UserOptions from "./UserOptions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalSearch from "../../modals/ModalSearch";
-import ModalLoginOrRegister from "../../modals/ModalAuthentication";
+import ModalAuthentication from "../../modals/ModalAuthentication";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setOpen } from "../../../redux/slice/systemSlice";
@@ -22,6 +22,8 @@ const NavRight = ({ width }: NavRight) => {
     (state: RootState) => state.system.isOpenModalAuthentication
   );
   const type = useSelector((state: RootState) => state.system.type);
+  const user = useSelector((state: RootState) => state.users.user);
+
 
   const handleSetOpen = (isOpen: boolean) => {
     dispatch(setOpen(isOpen));
@@ -59,19 +61,18 @@ const NavRight = ({ width }: NavRight) => {
 
         <ThemeMode />
 
-        <Button
-          onClick={() => handleSetOpen(true)}
-          variant="solid"
-        >
-          Đăng nhập
-        </Button>
-
-        <UserOptions />
+        {!user.refresh_token ? (
+          <Button onClick={() => handleSetOpen(true)} variant="solid">
+            Đăng nhập
+          </Button>
+        ) : (
+          <UserOptions />
+        )}
       </Box>
 
       <ModalSearch open={openModalSearch} setOpen={setOpenModalSearch} />
 
-      <ModalLoginOrRegister type={type} open={open} setOpen={handleSetOpen} />
+      <ModalAuthentication type={type} open={open} setOpen={handleSetOpen} />
     </>
   );
 };
