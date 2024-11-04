@@ -3,7 +3,6 @@ import { AppDispatch } from "../../redux/store";
 import { Box, Button, Divider, Input, Typography } from "@mui/joy";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import GoogleIcon from "@mui/icons-material/Google";
-import FacebookIcon from "@mui/icons-material/Facebook";
 import { setType } from "../../redux/slice/systemSlice";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useRef, useState } from "react";
@@ -78,13 +77,10 @@ const Login = ({ setOpen }: any) => {
           password: valueInput.password,
         })
       );
-
-      if (+res.payload.status.EC === 0) {
-        toast.success(res.payload.status.EM);
-        setOpen(false);
-      } else {
-        toast.error(res.payload.status.EM);
+      if (+res.payload.EC !== 0) {
+        toast.error(res.payload.EM);
       }
+      console.log(res);
       setIsLogin(false);
     }
   };
@@ -115,7 +111,7 @@ const Login = ({ setOpen }: any) => {
         />
         {!isValidInput.email && (
           <Typography level="title-sm" color="danger" sx={{ marginTop: "8px" }}>
-            Email không được trống!
+            Email không được bỏ trống!
           </Typography>
         )}
       </Box>
@@ -131,7 +127,7 @@ const Login = ({ setOpen }: any) => {
         />
         {!isValidInput.password && (
           <Typography level="title-sm" color="danger" sx={{ marginTop: "8px" }}>
-            Mật khẩu được bỏ trống!
+            Mật khẩu không được bỏ trống!
           </Typography>
         )}
       </Box>
@@ -162,9 +158,6 @@ const Login = ({ setOpen }: any) => {
         startDecorator={<GoogleIcon />}
       >
         Đăng nhập với Google
-      </Button>
-      <Button variant="soft" color="primary" startDecorator={<FacebookIcon />}>
-        Đăng nhập với Facebook
       </Button>
       <Box
         sx={{

@@ -12,13 +12,13 @@ import { useNavigate } from "react-router-dom";
 const UserOptions = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(window.location.pathname)
+  console.log(window.location.pathname);
 
   const handleLogout = () => {
     dispatch(logout());
 
     if (window.location.pathname === "/thong-tin-nguoi-dung") {
-        navigate('/')
+      navigate("/");
     }
   };
 
@@ -34,10 +34,6 @@ const UserOptions = () => {
             path="/thong-tin-nguoi-dung"
             content="Thông tin người dùng"
           />
-        </MenuItem>
-        <MenuItem>
-          <PasswordIcon />
-          Đổi mật khẩu
         </MenuItem>
         <Divider />
         <MenuItem onClick={() => handleLogout()}>

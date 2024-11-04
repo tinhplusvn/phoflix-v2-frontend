@@ -28,6 +28,52 @@ export const login = createAsyncThunk("users/login", async (rawData: any) => {
   }
 });
 
+export const forgotPassword = createAsyncThunk(
+  "users/forgotPassword",
+  async (rawData: any) => {
+    try {
+      const response: any = await axios.post(
+        `${process.env.REACT_APP_API}/auth/forgot-password`,
+        rawData
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  "users/updateUser",
+  async (rawData: any) => {
+    try {
+      const response: any = await axios.post(
+        `${process.env.REACT_APP_API}/auth/update-user`,
+        rawData
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const verifyToken = createAsyncThunk(
+  "users/verifyToken",
+  async (rawData: any) => {
+    try {
+      const response: any = await axios.post(
+        `${process.env.REACT_APP_API}/auth/verify-token`,
+        rawData
+      );
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const logout = createAsyncThunk("users/logout", async () => {
   try {
     const response: any = await axios.get(

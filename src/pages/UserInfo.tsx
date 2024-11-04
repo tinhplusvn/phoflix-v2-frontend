@@ -71,7 +71,7 @@ const UserInfo = () => {
               height: "160px",
             }}
           >
-            <img src={avatarImg} alt="Ảnh đại diện" />
+            <img src={user.img ? user?.avatar : avatarImg} alt="Ảnh đại diện" />
           </Box>
         </Grid>
         <Grid xs={12} md={4}>

@@ -1,7 +1,7 @@
 import { Alert, Option, Select, Typography } from "@mui/joy";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useEffect, useState } from "react";
-import { filterComment } from "../../redux/slice/commentsSlice";
+// import { filterComment } from "../../redux/slice/commentsSlice";
 import { AppDispatch } from "../../redux/store";
 import { useDispatch } from "react-redux";
 
@@ -11,9 +11,9 @@ const CommentFilter = () => {
   const dispatch: AppDispatch = useDispatch();
   const [typeFilter, setTypeFilter] = useState<filter>("latest");
 
-  useEffect(() => {
-    dispatch(filterComment(typeFilter));
-  }, [typeFilter]);
+//   useEffect(() => {
+//     dispatch(filterComment(typeFilter));
+//   }, [typeFilter]);
 
   return (
     <Alert

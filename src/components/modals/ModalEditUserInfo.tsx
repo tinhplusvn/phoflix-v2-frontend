@@ -11,6 +11,11 @@ import {
 } from "@mui/joy";
 import _ from "lodash";
 import { useEffect, useState } from "react";
+import { AppDispatch } from "../../redux/store";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../../redux/asyncThunk/userThunk";
+import LoadingButton from "../common/LoadingButon";
+import toast from "react-hot-toast";
 
 interface IProps {
   open: boolean;
@@ -27,6 +32,8 @@ interface UserInfo {
 }
 
 const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
+  const dispatch: AppDispatch = useDispatch();
+
   const defaultUserInfo: UserInfo = {
     username: "",
     email: "",
@@ -35,6 +42,7 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
     address: "",
   };
   const [userInfo, setUserInfo] = useState<UserInfo>(defaultUserInfo);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleOnchangeInput = (value: string, type: string) => {
     const _userInfo: UserInfo = _.clone(userInfo);
@@ -43,6 +51,7 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
   };
 
   useEffect(() => {
+    console.log(dataUser);
     setUserInfo({
       username: dataUser.username,
       email: dataUser.email,
@@ -51,6 +60,36 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
       address: dataUser.address,
     });
   }, [dataUser]);
+
+  const handleUpdateUser = async () => {
+    const { username, email, gender, address, phone_number } = userInfo;
+    if (!username || !email || !gender || !address || !phone_number) {
+      toast.error("Vui lòng nhập đầy đủ thông tin!");
+      return;
+    }
+
+    setIsLoading(true);
+    const res = await dispatch(
+      updateUser({
+        email: userInfo.email,
+        username: userInfo.username,
+        gender: userInfo.gender,
+        address: userInfo.address,
+        phone_number: userInfo.phone_number,
+        type_account: dataUser.type_account,
+      })
+    );
+
+    console.log(res);
+    if (+res.payload.EC === 0) {
+      setOpen(false);
+      toast.success(res.payload.EM);
+    } else {
+      toast.error(res.payload.EM);
+    }
+
+    setIsLoading(false);
+  };
 
   return (
     <Modal
@@ -88,17 +127,14 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
             </Typography>
             <Input
               onChange={(e) => handleOnchangeInput(e.target.value, "username")}
-              value={userInfo.username}
+              value={userInfo.username || ""}
             />
           </Box>
           <Box>
             <Typography sx={{ marginBottom: "12px" }} level="title-md">
               Email
             </Typography>
-            <Input
-              onChange={(e) => handleOnchangeInput(e.target.value, "email")}
-              value={userInfo.email}
-            />
+            <Input disabled value={userInfo.email || ""} />
           </Box>
           <Box>
             <Typography sx={{ marginBottom: "12px" }} level="title-md">
@@ -108,7 +144,7 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
               onChange={(e) =>
                 handleOnchangeInput(e.target.value, "phone_number")
               }
-              value={userInfo.phone_number}
+              value={userInfo.phone_number || ""}
             />
           </Box>
           <Box>
@@ -131,7 +167,7 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
             </Typography>
             <Input
               onChange={(e) => handleOnchangeInput(e.target.value, "address")}
-              value={userInfo.address}
+              value={userInfo.address || ""}
             />
           </Box>
           <Box
@@ -149,7 +185,11 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
             >
               Huỷ bỏ
             </Button>
-            <Button>Lưu</Button>
+            {isLoading ? (
+              <LoadingButton />
+            ) : (
+              <Button onClick={() => handleUpdateUser()}>Lưu</Button>
+            )}
           </Box>
         </Box>
       </Sheet>

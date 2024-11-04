@@ -1,4 +1,5 @@
 import { Avatar, Box, Button, Divider, Textarea, Typography } from "@mui/joy";
+import { formatDate } from "../../utils";
 
 const CommentItem = ({
   item,
@@ -8,11 +9,17 @@ const CommentItem = ({
   setValueEditComment,
   setIndexEdit,
   setIndexDelete,
+  setIdComment,
   handleSetOpenModalAlertDialog,
   handleSetOpenModalReportComment,
   handleEditComment,
   handSaveEditComment,
 }: any) => {
+  const handleOpenModal = (idComment: string) => {
+    handleSetOpenModalAlertDialog(true);
+    setIdComment(idComment);
+  };
+
   return (
     <li style={{ display: "flex", gap: "12px" }}>
       <Box>
@@ -30,9 +37,14 @@ const CommentItem = ({
         }}
       >
         <Box>
-          <Typography level="title-md" color="primary">
-            {item.name}
-          </Typography>
+          <Box sx={{ display: "flex", gap: "8px", alignItems: "center" }}>
+            <Typography level="title-md" color="primary">
+              {item["user.username"]}
+            </Typography>
+            <Typography level="body-xs" color="neutral">
+              {formatDate(item?.createdAt)}
+            </Typography>
+          </Box>
           {index !== indexEdit ? (
             <Typography
               sx={{
@@ -55,10 +67,7 @@ const CommentItem = ({
         {index !== indexEdit ? (
           <Box sx={{ display: "flex" }}>
             <Button
-              onClick={() => {
-                handleSetOpenModalAlertDialog(true);
-                setIndexDelete(index);
-              }}
+              onClick={() => handleOpenModal(item.id)}
               variant="plain"
               color="danger"
               size="sm"
@@ -93,7 +102,7 @@ const CommentItem = ({
               Huỷ
             </Button>
             <Button
-              onClick={() => handSaveEditComment(index)}
+              onClick={() => handSaveEditComment(item?.id)}
               variant="plain"
               color="primary"
               size="sm"

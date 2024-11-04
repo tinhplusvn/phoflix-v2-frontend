@@ -1,16 +1,21 @@
 import { Box } from "@mui/joy";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import CommentItem from "./CommentItem";
 import {
-  editComment,
-  removeComment,
   setOpenModalAlertDialog,
   setOpenModalReportComment,
 } from "../../redux/slice/commentsSlice";
+import {
+  deleleComment,
+  getCommentList,
+  updateComment,
+} from "../../redux/asyncThunk/commentThunk";
 import ModalAlertDialog from "../modals/ModalAlertDialog";
 import ModalReportComment from "../modals/ModalReportComment";
+import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
 
 const CommentList = () => {
   const commentList = useSelector(
@@ -28,14 +33,26 @@ const CommentList = () => {
   const [indexEdit, setIndexEdit] = useState<number>(-1);
   const [indexDelete, setIndexDelete] = useState<number>(-1);
   const [valueEditComment, setValueEditComment] = useState<string>("");
+  const [idComment, setIdComment] = useState<string>("");
+  const params = useParams();
 
   const handleEditComment = (index: number, content: string) => {
     setIndexEdit(index);
     setValueEditComment(content);
   };
 
-  const handleDeleteComment = () => {
-    dispatch(removeComment(indexDelete));
+  useEffect(() => {
+    console.log(commentList);
+  }, [commentList]);
+
+  const handleDeleteComment = async () => {
+    console.log(idComment);
+    const res = await dispatch(deleleComment(idComment as string));
+
+    if (+res.payload.EC === 0) {
+      toast.success(res.payload.EM);
+      dispatch(getCommentList(params?.slug as string));
+    }
     dispatch(setOpenModalAlertDialog(false));
   };
 
@@ -47,13 +64,17 @@ const CommentList = () => {
     dispatch(setOpenModalReportComment(open));
   };
 
-  const handSaveEditComment = (index: number) => {
-    dispatch(
-      editComment({
+  const handSaveEditComment = async (idComment: string) => {
+    const res = await dispatch(
+      updateComment({
         content: valueEditComment,
-        index,
+        idComment,
       })
     );
+    if (+res.payload.EC === 0) {
+      toast.success(res.payload.EM);
+      dispatch(getCommentList(params?.slug as string));
+    }
     setIndexEdit(-1);
   };
 
@@ -84,6 +105,7 @@ const CommentList = () => {
               handleSetOpenModalAlertDialog={handleSetOpenModalAlertDialog}
               handleSetOpenModalReportComment={handleSetOpenModalReportComment}
               handSaveEditComment={handSaveEditComment}
+              setIdComment={setIdComment}
             />
           ))}
         </ul>

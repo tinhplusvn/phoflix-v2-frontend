@@ -27,6 +27,8 @@ import PollOutlinedIcon from "@mui/icons-material/PollOutlined";
 import SubscriptionsOutlinedIcon from "@mui/icons-material/SubscriptionsOutlined";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 import CommentSection from "../components/comment/CommentSection";
+import { getCommentList } from "../redux/asyncThunk/commentThunk";
+import { addMovieRating, getRatings } from "../redux/asyncThunk/ratingThunk";
 
 type Episode = {
   name: string;
@@ -70,6 +72,7 @@ const Watch = () => {
 
   useEffect(() => {
     dispatch(getMovieInfo(params.slug as string));
+    dispatch(getCommentList(params.slug as string));
   }, []);
 
   useEffect(() => {
@@ -152,29 +155,6 @@ const Watch = () => {
         </Box>
 
         <Alert
-          sx={{
-            flexDirection: "column",
-            gap: "12px",
-          }}
-        >
-          <Typography startDecorator={<PollOutlinedIcon />} level="title-lg">
-            Đánh giá phim
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              gap: "12px",
-              justifyContent: "center",
-              flex: "1",
-              alignItems: "center",
-            }}
-          >
-            <Rating name="half-rating" defaultValue={0} precision={1} />
-            <Typography level="title-sm">50 lượt đánh giá</Typography>
-          </Box>
-        </Alert>
-
-        <Alert
           sx={{ flexDirection: "column", alignItems: "start", gap: "24px" }}
         >
           <Typography
@@ -195,6 +175,8 @@ const Watch = () => {
             ))}
           </Box>
         </Alert>
+
+        <SectionRating />
 
         <SectionLinkM3U8
           link_m3u8={currentEpisode.link_m3u8 as string}
@@ -278,6 +260,67 @@ const SectionLinkM3U8 = ({ link_m3u8, setOpen }: IProps) => {
       >
         {link_m3u8}
       </Typography>
+    </Alert>
+  );
+};
+
+const SectionRating = () => {
+  const [stars, setStars] = useState<number>(0);
+  const params = useParams();
+  const user = useSelector((state: RootState) => state.users.user);
+  const dispatch: AppDispatch = useDispatch();
+  const rating = useSelector((state: RootState) => state.rating);
+
+  useEffect(() => {
+    console.log(rating);
+    dispatch(getRatings(params.slug as string));
+  }, []);
+
+  useEffect(() => {
+    setStars(rating.averageRating);
+  }, [rating]);
+
+  const handleAddRating = (stars: number) => {
+    setStars(stars);
+    dispatch(
+      addMovieRating({
+        user_id: user.id,
+        movie_slug: params.slug,
+        rating: stars,
+      })
+    );
+    dispatch(getRatings(params.slug as string));
+  };
+
+  return (
+    <Alert
+      sx={{
+        flexDirection: "column",
+        gap: "12px",
+      }}
+    >
+      <Typography startDecorator={<PollOutlinedIcon />} level="title-lg">
+        Đánh giá phim
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          gap: "12px",
+          justifyContent: "center",
+          flex: "1",
+          alignItems: "center",
+        }}
+      >
+        <Rating
+          onChange={(event, value) => handleAddRating(value as number)}
+          name="half-rating"
+          value={stars}
+          precision={0.5}
+        />
+        <Typography level="title-sm">
+          {rating.countRating} lượt đánh giá
+        </Typography>
+      </Box>
     </Alert>
   );
 };

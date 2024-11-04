@@ -13,7 +13,6 @@ import { Box } from "@mui/joy";
 import MovieList from "../components/movie/MovieList";
 import LiveTvRoundedIcon from "@mui/icons-material/LiveTvRounded";
 import TitleContainer from "../components/common/TitleContainer";
-import { getUser } from "../redux/asyncThunk/userThunk";
 
 const Home = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -25,7 +24,6 @@ const Home = () => {
   );
   const cartoon = useSelector((state: RootState) => state.movies.cartoon);
   const tvShows = useSelector((state: RootState) => state.movies.tvShows);
-  const user = useSelector((state: RootState) => state.users.user);
 
   useEffect(() => {
     dispatch(getSlideShow());
@@ -35,11 +33,6 @@ const Home = () => {
     dispatch(getTvShows());
   }, []);
 
-  useEffect(() => {
-    if (!user.refresh_token) {
-      dispatch(getUser());
-    }
-  }, [user]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "24px" }}>

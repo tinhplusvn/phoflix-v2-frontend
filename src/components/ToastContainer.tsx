@@ -8,10 +8,6 @@ const ToastContainer = () => {
       toastOptions={{
         className: "",
         duration: 2000,
-        style: {
-          background: "#363636",
-          color: "#fff",
-        },
       }}
     />
   );

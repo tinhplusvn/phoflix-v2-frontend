@@ -7,6 +7,7 @@ import SavedMovies from "../pages/SavedMovies";
 import ViewingHistory from "../pages/ViewingHistory";
 import UserInfo from "../pages/UserInfo";
 import Watch from "../pages/Watch";
+import Authenticate from "../pages/Authenticate";
 
 const publicRoutes = [
   { path: "/", component: Home },
@@ -17,6 +18,7 @@ const publicRoutes = [
   { path: "/phim-da-luu", component: SavedMovies },
   { path: "/lich-su-da-xem", component: ViewingHistory },
   { path: "/thong-tin-nguoi-dung", component: UserInfo },
-  { path: "*", component: NotFound }
+  { path: "/authenticate", component: Authenticate },
+  { path: "*", component: NotFound },
 ];
 export default publicRoutes;

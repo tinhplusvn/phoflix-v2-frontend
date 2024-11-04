@@ -117,7 +117,7 @@ const Register = ({ setOpen }: any) => {
     await dispatch(
       sendOTP({
         email: valueInput.email,
-        type: "REGISTER",
+        type_otp: "REGISTER",
       })
     );
     toast("Đã gữi mã xác thực!");
@@ -145,7 +145,7 @@ const Register = ({ setOpen }: any) => {
         />
         {!isValidInput.username && (
           <Typography level="title-sm" color="danger" sx={{ marginTop: "8px" }}>
-            Tên người dùng không được trống!
+            Tên người dùng không được bỏ trống!
           </Typography>
         )}
       </Box>
@@ -161,7 +161,7 @@ const Register = ({ setOpen }: any) => {
         />
         {!isValidInput.email && (
           <Typography level="title-sm" color="danger" sx={{ marginTop: "8px" }}>
-            Email không được trống!
+            Email không được bỏ trống!
           </Typography>
         )}
       </Box>
@@ -177,7 +177,7 @@ const Register = ({ setOpen }: any) => {
         />
         {!isValidInput.password && (
           <Typography level="title-sm" color="danger" sx={{ marginTop: "8px" }}>
-            Mật khẩu không được trống!
+            Mật khẩu không được bỏ trống!
           </Typography>
         )}
       </Box>
@@ -208,7 +208,7 @@ const Register = ({ setOpen }: any) => {
         </Box>
         {!isValidInput.authCode && (
           <Typography level="title-sm" color="danger" sx={{ marginTop: "8px" }}>
-            Mã xác thực không được trống!
+            Mã xác thực không được bỏ trống!
           </Typography>
         )}
       </Box>

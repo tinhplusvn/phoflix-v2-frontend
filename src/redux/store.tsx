@@ -6,6 +6,7 @@ import watchReducer from "./slice/watchSlice";
 import savedMovieReducer from "./slice/savedMoviesSlice";
 import systemReducer from "./slice/systemSlice";
 import userReducer from './slice/userSlice'
+import ratingReducer  from './slice/ratingsSlice'
 
 export const store = configureStore({
   reducer: {
@@ -15,7 +16,8 @@ export const store = configureStore({
     viewingHistory: viewingHistoryReducer,
     watch: watchReducer,
     savedMovies: savedMovieReducer,
-    users: userReducer
+    users: userReducer,
+    rating: ratingReducer
   },
 });
 

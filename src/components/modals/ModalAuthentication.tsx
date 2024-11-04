@@ -52,7 +52,7 @@ const ModalAuthentication = ({ type, open, setOpen }: IProps) => {
         <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           {type === "login" && <Login setOpen={setOpen} />}
           {type === "register" && <Register setOpen={setOpen} />}
-          {type === "forgot-password" && <ForgotPassword />}
+          {type === "forgot-password" && <ForgotPassword setOpen={setOpen} />}
         </Box>
       </Sheet>
     </Modal>

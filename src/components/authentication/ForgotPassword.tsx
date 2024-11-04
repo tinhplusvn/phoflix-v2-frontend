@@ -1,11 +1,16 @@
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
-import { Box, Button, Input, Typography } from "@mui/joy";
+import { Box, Button, IconButton, Input, Typography } from "@mui/joy";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import KeyIcon from "@mui/icons-material/Key";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useState } from "react";
 import _ from "lodash";
+import { forgotPassword, sendOTP } from "../../redux/asyncThunk/userThunk";
+import LoadingButton from "../common/LoadingButon";
+import toast from "react-hot-toast";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { setType } from "../../redux/slice/systemSlice";
 
 interface ValueInput {
   email: string;
@@ -19,7 +24,7 @@ interface ValidInput {
   authCode: boolean;
 }
 
-const ForgotPassword = () => {
+const ForgotPassword = ({ setOpen }: any) => {
   const dispatch: AppDispatch = useDispatch();
   const defaultValue: ValueInput = {
     email: "",
@@ -34,6 +39,8 @@ const ForgotPassword = () => {
   const [valueInput, setValueInput] = useState<ValueInput>(defaultValue);
   const [isValidInput, setIsValidInput] =
     useState<ValidInput>(defaultValidIput);
+  const [isLoadingSendCode, setIsLoadingSendCode] = useState<boolean>(false);
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
 
   const handleCheckValidInput = (): boolean => {
     let check = true;
@@ -67,19 +74,52 @@ const ForgotPassword = () => {
     setIsValidInput(_isValidInput);
   };
 
-  const handleSubmit = () => {
-    handleCheckValidInput();
+  const handleSubmit = async () => {
+    const check = handleCheckValidInput();
+    if (check) {
+      setIsLoadingSubmit(true);
+      const res = await dispatch(
+        forgotPassword({
+          email: valueInput.email,
+          code: valueInput.authCode,
+          password: valueInput.password,
+          type_otp: "FORGOT_PASSWORD",
+        })
+      );
+
+      console.log(res);
+      if (+res.payload.EC !== 0) {
+        setOpen(false);
+        toast.error(res.payload.EM);
+      }
+      setIsLoadingSubmit(false);
+    }
+  };
+
+  const handleSendOTP = async () => {
+    setIsLoadingSendCode(true);
+    await dispatch(
+      sendOTP({
+        email: valueInput.email,
+        type_otp: "FORGOT_PASSWORD",
+      })
+    );
+    setIsLoadingSendCode(false);
   };
 
   return (
     <>
-      <Typography
-        sx={{ marginBottom: "12px" }}
-        level="title-lg"
-        color="primary"
-      >
-        Quên mật khẩu?
-      </Typography>
+      <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
+        <IconButton onClick={() => dispatch(setType('login'))}>
+          <ArrowBackIcon />
+        </IconButton>
+        <Typography
+          level="title-lg"
+          color="primary"
+        >
+          Quên mật khẩu?
+        </Typography>
+      </Box>
       <Box>
         <Input
           value={valueInput.email}
@@ -122,12 +162,21 @@ const ForgotPassword = () => {
             startDecorator={<KeyIcon />}
             size="md"
             placeholder="Mã xác thực"
-            type="number"
+            type="text" 
           />
 
-          <Button variant="solid" color="neutral">
-            Gửi mã
-          </Button>
+          {isLoadingSendCode ? (
+            <LoadingButton />
+          ) : (
+            <Button
+              disabled={valueInput.email === ""}
+              onClick={() => handleSendOTP()}
+              variant="soft"
+              color="primary"
+            >
+              Gửi mã
+            </Button>
+          )}
         </Box>
         {!isValidInput.authCode && (
           <Typography level="title-sm" color="danger" sx={{ marginTop: "8px" }}>
@@ -136,7 +185,11 @@ const ForgotPassword = () => {
         )}
       </Box>
 
-      <Button onClick={() => handleSubmit()}>Xác nhận</Button>
+      {isLoadingSubmit ? (
+        <LoadingButton />
+      ) : (
+        <Button onClick={() => handleSubmit()}>Xác nhận</Button>
+      )}
     </>
   );
 };
