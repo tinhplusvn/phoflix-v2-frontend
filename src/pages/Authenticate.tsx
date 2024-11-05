@@ -1,23 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import axios from "../custom/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import { verifyToken } from "../redux/asyncThunk/userThunk";
 import toast from "react-hot-toast";
+import { addActivityLog } from "../redux/asyncThunk/activityLogThunk";
 
 const Authenticate = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-//   const user = useSelector((state: RootState) => state.users.user);
-
-//   useEffect(() => {
-//     if (user.access_token) {
-//       navigate("/");
-//     }
-//   }, [user]);
 
   useEffect(() => {
     const token: string = searchParams.get("token") as string;
@@ -34,16 +27,20 @@ const Authenticate = () => {
       })
     );
 
-    console.log(res)
     if (+res.payload.EC === 0) {
-        toast.success(res.payload.EM);
-        navigate('/')
+      toast.success(res.payload.EM);
+      await dispatch(
+        addActivityLog({
+          userId: res.payload?.DT?.id ?? "",
+          action: "Đăng nhập hệ thống!",
+        })
+      );
+      navigate("/");
     } else {
-        toast.error("Đăng nhập thất bại!")
-
+      toast.error("Đăng nhập thất bại!");
     }
 
-    console.log(res)
+    console.log(res);
   };
 
   return <></>;

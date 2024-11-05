@@ -4,6 +4,7 @@ import { getRatings } from "../asyncThunk/ratingThunk";
 const initialState: any = {
   averageRating: 0,
   countRating: 0,
+  ratingWidthUser: 0
 };
 
 export const ratingSlice = createSlice({
@@ -14,9 +15,9 @@ export const ratingSlice = createSlice({
     builder
       .addCase(getRatings.pending, (state) => {})
       .addCase(getRatings.fulfilled, (state, action) => {
-        console.log(action);
-        state.averageRating = action.payload?.DT?.average_rating;
-        state.countRating = action.payload?.DT?.count;
+        state.averageRating = action.payload?.DT?.averageRating ?? 0;
+        state.countRating = action.payload?.DT?.countRating ?? 0;
+        state.ratingWidthUser = action.payload?.DT.ratingWidthUser;
       })
       .addCase(getRatings.rejected, (state) => {});
   },

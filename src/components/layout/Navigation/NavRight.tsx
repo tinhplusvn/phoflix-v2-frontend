@@ -24,7 +24,6 @@ const NavRight = ({ width }: NavRight) => {
   const type = useSelector((state: RootState) => state.system.type);
   const user = useSelector((state: RootState) => state.users.user);
 
-
   const handleSetOpen = (isOpen: boolean) => {
     dispatch(setOpen(isOpen));
   };
@@ -39,18 +38,26 @@ const NavRight = ({ width }: NavRight) => {
                 padding: "8px",
                 justifyContent: "start",
                 minWidth: "160px",
+                borderRadius: "12px",
+                boxShadow:
+                  "rgb(255, 255, 255) 0px 1px 0px inset, rgba(232, 234, 238, 0.4) 0px -1px 0px inset, rgba(223, 226, 231, 0.5) 0px 1px 2px 0px;",
               }}
               onClick={() => setOpenModalSearch(true)}
               variant="outlined"
               color="neutral"
               startDecorator={<SearchIcon color="primary" />}
             >
-              Tìm kiếm phim...
+              Tìm kiếm ...
             </Button>
           </>
         ) : (
           <>
             <IconButton
+              sx={{
+                borderRadius: "12px",
+                boxShadow:
+                  "rgb(255, 255, 255) 0px 1px 0px inset, rgba(232, 234, 238, 0.4) 0px -1px 0px inset, rgba(223, 226, 231, 0.5) 0px 1px 2px 0px;",
+              }}
               onClick={() => setOpenModalSearch(true)}
               variant="outlined"
             >

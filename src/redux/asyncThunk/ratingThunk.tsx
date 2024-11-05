@@ -3,10 +3,11 @@ import axios from "../../custom/axios";
 
 export const getRatings = createAsyncThunk(
   "movies/getRatings",
-  async (movie_slug: string) => {
+  async (rawData: any) => {
     try {
-      const response: any = await axios.get(
-        `${process.env.REACT_APP_API}/rating/get-ratings/${movie_slug}`
+      const response: any = await axios.post(
+        `${process.env.REACT_APP_API}/rating/get-ratings`,
+        rawData
       );
       return response;
     } catch (error) {

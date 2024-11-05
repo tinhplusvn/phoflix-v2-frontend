@@ -16,6 +16,7 @@ import ModalAlertDialog from "../modals/ModalAlertDialog";
 import ModalReportComment from "../modals/ModalReportComment";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
+import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
 
 const CommentList = () => {
   const commentList = useSelector(
@@ -35,23 +36,24 @@ const CommentList = () => {
   const [valueEditComment, setValueEditComment] = useState<string>("");
   const [idComment, setIdComment] = useState<string>("");
   const params = useParams();
+  const user = useSelector((state: RootState) => state.users.user);
+  const movieInfo = useSelector(
+    (state: RootState) => state.movies.movieInfo.info
+  );
 
   const handleEditComment = (index: number, content: string) => {
     setIndexEdit(index);
     setValueEditComment(content);
   };
 
-  useEffect(() => {
-    console.log(commentList);
-  }, [commentList]);
-
   const handleDeleteComment = async () => {
-    console.log(idComment);
     const res = await dispatch(deleleComment(idComment as string));
 
     if (+res.payload.EC === 0) {
       toast.success(res.payload.EM);
-      dispatch(getCommentList(params?.slug as string));
+      await dispatch(
+        getCommentList({ movieSlug: params.slug as string, sortOrder: "DESC" })
+      );
     }
     dispatch(setOpenModalAlertDialog(false));
   };
@@ -73,7 +75,16 @@ const CommentList = () => {
     );
     if (+res.payload.EC === 0) {
       toast.success(res.payload.EM);
-      dispatch(getCommentList(params?.slug as string));
+      await dispatch(
+        getCommentList({ movieSlug: params.slug as string, sortOrder: "DESC" })
+      );
+
+      await dispatch(
+        addActivityLog({
+          userId: user?.id,
+          action: `Sửa bình luận thành "${valueEditComment}" tại phim ${movieInfo.name}"`,
+        })
+      );
     }
     setIndexEdit(-1);
   };

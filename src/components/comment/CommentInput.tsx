@@ -9,6 +9,7 @@ import {
 } from "../../redux/asyncThunk/commentThunk";
 import LoadingButton from "../common/LoadingButon";
 import toast from "react-hot-toast";
+import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
 
 const CommentInput = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -16,6 +17,9 @@ const CommentInput = () => {
   const params = useParams();
   const user = useSelector((state: RootState) => state.users.user);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const movieInfo = useSelector(
+    (state: RootState) => state.movies.movieInfo.info
+  );
 
   const handleAddComment = async () => {
     if (!user.access_token || !user.refresh_token) {
@@ -34,7 +38,16 @@ const CommentInput = () => {
 
     if (+res.payload.EC === 0) {
       toast.success(res.payload.EM);
-      dispatch(getCommentList(params.slug as string));
+      await dispatch(
+        getCommentList({ movieSlug: params.slug as string, sortOrder: "DESC" })
+      );
+
+      await dispatch(
+        addActivityLog({
+          userId: user?.id,
+          action: `Thêm bình luận "${valueComment} tại phim ${movieInfo.name}"`,
+        })
+      );
     }
     setIsLoading(false);
     setValueComment("");

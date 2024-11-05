@@ -1,5 +1,7 @@
 import { Avatar, Box, Button, Divider, Textarea, Typography } from "@mui/joy";
 import { formatDate } from "../../utils";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const CommentItem = ({
   item,
@@ -8,7 +10,6 @@ const CommentItem = ({
   valueEditComment,
   setValueEditComment,
   setIndexEdit,
-  setIndexDelete,
   setIdComment,
   handleSetOpenModalAlertDialog,
   handleSetOpenModalReportComment,
@@ -19,6 +20,8 @@ const CommentItem = ({
     handleSetOpenModalAlertDialog(true);
     setIdComment(idComment);
   };
+  const user = useSelector((state: RootState) => state.users.user);
+
 
   return (
     <li style={{ display: "flex", gap: "12px" }}>
@@ -66,30 +69,36 @@ const CommentItem = ({
         <Divider />
         {index !== indexEdit ? (
           <Box sx={{ display: "flex" }}>
-            <Button
-              onClick={() => handleOpenModal(item.id)}
-              variant="plain"
-              color="danger"
-              size="sm"
-            >
-              Xoá
-            </Button>
-            <Button
-              onClick={() => handleEditComment(index, item.content)}
-              variant="plain"
-              color="primary"
-              size="sm"
-            >
-              Chỉnh sửa
-            </Button>
-            <Button
-              onClick={() => handleSetOpenModalReportComment(true)}
-              variant="plain"
-              color="neutral"
-              size="sm"
-            >
-              Báo cáo
-            </Button>
+            {item?.user_id === user.id && (
+              <>
+                <Button
+                  onClick={() => handleOpenModal(item.id)}
+                  variant="plain"
+                  color="danger"
+                  size="sm"
+                >
+                  Xoá
+                </Button>
+                <Button
+                  onClick={() => handleEditComment(index, item.content)}
+                  variant="plain"
+                  color="primary"
+                  size="sm"
+                >
+                  Chỉnh sửa
+                </Button>
+              </>
+            )}
+            {item?.user_id !== user.id && (
+              <Button
+                onClick={() => handleSetOpenModalReportComment(true)}
+                variant="plain"
+                color="neutral"
+                size="sm"
+              >
+                Báo cáo
+              </Button>
+            )}
           </Box>
         ) : (
           <Box sx={{ display: "flex" }}>
@@ -107,7 +116,7 @@ const CommentItem = ({
               color="primary"
               size="sm"
             >
-              Xác nhận
+              Lưu
             </Button>
           </Box>
         )}

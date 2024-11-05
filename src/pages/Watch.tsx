@@ -2,6 +2,7 @@ import {
   Alert,
   Box,
   Button,
+  Chip,
   Divider,
   IconButton,
   Tooltip,
@@ -29,6 +30,9 @@ import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 import CommentSection from "../components/comment/CommentSection";
 import { getCommentList } from "../redux/asyncThunk/commentThunk";
 import { addMovieRating, getRatings } from "../redux/asyncThunk/ratingThunk";
+import toast from "react-hot-toast";
+import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
+import { addActivityLog } from "../redux/asyncThunk/activityLogThunk";
 
 type Episode = {
   name: string;
@@ -72,7 +76,9 @@ const Watch = () => {
 
   useEffect(() => {
     dispatch(getMovieInfo(params.slug as string));
-    dispatch(getCommentList(params.slug as string));
+    dispatch(
+      getCommentList({ movieSlug: params.slug as string, sortOrder: "DESC" })
+    );
   }, []);
 
   useEffect(() => {
@@ -270,26 +276,45 @@ const SectionRating = () => {
   const user = useSelector((state: RootState) => state.users.user);
   const dispatch: AppDispatch = useDispatch();
   const rating = useSelector((state: RootState) => state.rating);
+  const movieInfo = useSelector(
+    (state: RootState) => state.movies.movieInfo.info
+  );
 
   useEffect(() => {
-    console.log(rating);
-    dispatch(getRatings(params.slug as string));
+    console.log(movieInfo);
+    dispatch(getRatings({ movieSlug: params.slug as string, userId: user.id }));
   }, []);
 
   useEffect(() => {
-    setStars(rating.averageRating);
+    setStars(rating.ratingWidthUser);
   }, [rating]);
 
-  const handleAddRating = (stars: number) => {
+  const handleAddRating = async (stars: number) => {
+    if (!user.access_token || !user.refresh_token) {
+      toast.error("Vui lòng đăng nhập để đánh giá!");
+      return;
+    }
+
     setStars(stars);
-    dispatch(
+    const res = await dispatch(
       addMovieRating({
-        user_id: user.id,
-        movie_slug: params.slug,
+        userId: user.id,
+        movieSlug: params.slug,
         rating: stars,
       })
     );
-    dispatch(getRatings(params.slug as string));
+    if (+res.payload?.EC === 0) {
+      toast.success(res.payload?.EM);
+      await dispatch(
+        getRatings({ movieSlug: params.slug as string, userId: user.id })
+      );
+      await dispatch(addActivityLog({
+        userId: user?.id,
+        action: `Đánh giá ${stars} sao phim ${movieInfo.name}`
+      }));
+    } else {
+      toast.error(res.payload?.EM);
+    }
   };
 
   return (
@@ -299,9 +324,12 @@ const SectionRating = () => {
         gap: "12px",
       }}
     >
-      <Typography startDecorator={<PollOutlinedIcon />} level="title-lg">
-        Đánh giá phim
-      </Typography>
+      <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
+        <Typography startDecorator={<PollOutlinedIcon />} level="title-lg">
+          Đánh giá phim
+        </Typography>
+        <Chip color="primary">{rating.averageRating}/5 sao</Chip>
+      </Box>
       <Box
         sx={{
           display: "flex",
@@ -315,7 +343,7 @@ const SectionRating = () => {
           onChange={(event, value) => handleAddRating(value as number)}
           name="half-rating"
           value={stars}
-          precision={0.5}
+          precision={1}
         />
         <Typography level="title-sm">
           {rating.countRating} lượt đánh giá

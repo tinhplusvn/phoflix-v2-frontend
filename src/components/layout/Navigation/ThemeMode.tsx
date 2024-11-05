@@ -3,23 +3,21 @@ import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import { useColorScheme } from "@mui/joy/styles";
 
-
 const ThemeMode = () => {
-
   return (
     <Dropdown>
-      <MenuButton sx={{ width: "36px", height: "36px" }}>
+      <MenuButton sx={{ width: "36px", height: "36px", borderRadius: "12px" }}>
         <LightModeOutlinedIcon color="primary" />
       </MenuButton>
       <Menu>
-        <MenuItem 
-        
+        <MenuItem
+
         // onClick={() => setMode("light")}
         >
           <LightModeOutlinedIcon />
           Chế độ sáng
         </MenuItem>
-        <MenuItem 
+        <MenuItem
         // onClick={() => setMode("dark")}
         >
           <DarkModeOutlinedIcon />

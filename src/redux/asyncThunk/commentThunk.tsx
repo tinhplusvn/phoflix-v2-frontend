@@ -3,10 +3,11 @@ import axios from "../../custom/axios";
 
 export const getCommentList = createAsyncThunk(
   "movies/getCommentList",
-  async (movie_slug: string) => {
+  async (rawData: any) => {
     try {
+      const { movieSlug, sortOrder } = rawData;
       const response: any = await axios.get(
-        `${process.env.REACT_APP_API}/comment/get-comments/${movie_slug}`
+        `${process.env.REACT_APP_API}/comment/get-comments/${movieSlug}/${sortOrder}`
       );
       return response;
     } catch (error) {
@@ -49,7 +50,7 @@ export const updateComment = createAsyncThunk(
   "movies/updateComment",
   async (rawData: any) => {
     try {
-      const response: any = await axios.post(
+      const response: any = await axios.put(
         `${process.env.REACT_APP_API}/comment/update-comment`,
         rawData
       );

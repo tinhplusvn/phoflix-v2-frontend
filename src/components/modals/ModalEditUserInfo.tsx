@@ -11,11 +11,12 @@ import {
 } from "@mui/joy";
 import _ from "lodash";
 import { useEffect, useState } from "react";
-import { AppDispatch } from "../../redux/store";
-import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../redux/asyncThunk/userThunk";
 import LoadingButton from "../common/LoadingButon";
 import toast from "react-hot-toast";
+import { addActivityLog, getActivityLog } from "../../redux/asyncThunk/activityLogThunk";
 
 interface IProps {
   open: boolean;
@@ -33,6 +34,7 @@ interface UserInfo {
 
 const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
   const dispatch: AppDispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.users.user);
 
   const defaultUserInfo: UserInfo = {
     username: "",
@@ -51,7 +53,6 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
   };
 
   useEffect(() => {
-    console.log(dataUser);
     setUserInfo({
       username: dataUser.username,
       email: dataUser.email,
@@ -80,10 +81,16 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
       })
     );
 
-    console.log(res);
     if (+res.payload.EC === 0) {
       setOpen(false);
       toast.success(res.payload.EM);
+      await dispatch(
+        addActivityLog({
+          userId: user?.id,
+          action: "Cập nhật thông tin người dùng!",
+        })
+      );
+      await dispatch(getActivityLog(user.id as string));
     } else {
       toast.error(res.payload.EM);
     }

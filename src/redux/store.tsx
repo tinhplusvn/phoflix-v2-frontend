@@ -5,8 +5,10 @@ import viewingHistoryReducer from "./slice/viewingHistorySlice";
 import watchReducer from "./slice/watchSlice";
 import savedMovieReducer from "./slice/savedMoviesSlice";
 import systemReducer from "./slice/systemSlice";
-import userReducer from './slice/userSlice'
-import ratingReducer  from './slice/ratingsSlice'
+import userReducer from "./slice/userSlice";
+import ratingReducer from "./slice/ratingsSlice";
+import searchHistoryReducer from "./slice/searchHistorySlice";
+import activityLogReducer from './slice/activityLogSlice'
 
 export const store = configureStore({
   reducer: {
@@ -17,7 +19,9 @@ export const store = configureStore({
     watch: watchReducer,
     savedMovies: savedMovieReducer,
     users: userReducer,
-    rating: ratingReducer
+    rating: ratingReducer,
+    searchHistory: searchHistoryReducer,
+    activityLog: activityLogReducer
   },
 });
 

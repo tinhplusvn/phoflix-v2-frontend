@@ -5,27 +5,42 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useEffect, useState } from "react";
 import ModalEditUserInfo from "../components/modals/ModalEditUserInfo";
 import ModalAlertDialog from "../components/modals/ModalAlertDialog";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
 
 import avatarImg from "../images/avatar.jpg";
 import { useNavigate } from "react-router-dom";
+import {
+  getActivityLog,
+  deleleActivityLog,
+} from "../redux/asyncThunk/activityLogThunk";
+import { formatDate } from "../utils";
 
 const UserInfo = () => {
+  const dispatch: AppDispatch = useDispatch();
   const [openModalEditUserInfo, setOpenModalEditUserInfo] =
     useState<boolean>(false);
   const [openModalAlertDialog, setOpenModalAlertDialog] =
     useState<boolean>(false);
   const user = useSelector((state: RootState) => state.users.user);
   const navigate = useNavigate();
+  const activityList = useSelector(
+    (state: RootState) => state.activityLog.activityList
+  );
 
   useEffect(() => {
     if (!user.refresh_token) {
       navigate("/");
     }
+
+    dispatch(getActivityLog(user.id as string));
   }, []);
 
-  const handleDeleteActivityHistory = () => {};
+  const handleDeleteActivityHistory = async () => {
+    await dispatch(deleleActivityLog());
+    await dispatch(getActivityLog(user.id as string));
+    setOpenModalAlertDialog(false);
+  };
 
   return (
     <>
@@ -152,13 +167,15 @@ const UserInfo = () => {
               >
                 Lịch sử hoạt động
               </Typography>
-              <Button
-                onClick={() => setOpenModalAlertDialog(true)}
-                size="sm"
-                color="danger"
-              >
-                Xoá lịch sử
-              </Button>
+              {activityList.length > 0 && (
+                <Button
+                  onClick={() => setOpenModalAlertDialog(true)}
+                  size="sm"
+                  color="danger"
+                >
+                  Xoá lịch sử
+                </Button>
+              )}
             </Box>
             <Table sx={{ marginTop: "12px" }} aria-label="basic table">
               <thead>
@@ -168,30 +185,20 @@ const UserInfo = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Đăng nhập hệ thống</td>
-                  <td>08:00 AM</td>
-                </tr>
-                <tr>
-                  <td>Tìm kiếm phim "Frozen yoghurt"</td>
-                  <td>08:15 AM</td>
-                </tr>
-                <tr>
-                  <td>Xem trailer phim "Ice cream sandwich"</td>
-                  <td>08:20 AM</td>
-                </tr>
-                <tr>
-                  <td>Thêm "Eclair" vào danh sách yêu thích</td>
-                  <td>08:30 AM</td>
-                </tr>
-                <tr>
-                  <td>Đánh giá phim "Cupcake"</td>
-                  <td>09:00 AM</td>
-                </tr>
-                <tr>
-                  <td>Chia sẻ phim "Gingerbread" với bạn bè</td>
-                  <td>09:15 AM</td>
-                </tr>
+                {activityList.length === 0 && (
+                  <tr>
+                    <td style={{ textAlign: "center" }} colSpan={2}>
+                      Lịch sử hoạt động đang trống!
+                    </td>
+                  </tr>
+                )}
+                {activityList.length > 0 &&
+                  activityList.map((item: any, index: number) => (
+                    <tr key={index}>
+                      <td>{item?.action}</td>
+                      <td>{formatDate(item?.createdAt)}</td>
+                    </tr>
+                  ))}
               </tbody>
             </Table>
           </Box>

@@ -4,16 +4,24 @@ import { useEffect, useState } from "react";
 // import { filterComment } from "../../redux/slice/commentsSlice";
 import { AppDispatch } from "../../redux/store";
 import { useDispatch } from "react-redux";
+import { getCommentList } from "../../redux/asyncThunk/commentThunk";
+import { useParams } from "react-router-dom";
 
-type filter = "latest" | "oldest";
+type filter = "DESC" | "ASC";
 
 const CommentFilter = () => {
   const dispatch: AppDispatch = useDispatch();
-  const [typeFilter, setTypeFilter] = useState<filter>("latest");
+  const [typeFilter, setTypeFilter] = useState<filter>("DESC");
+  const params = useParams();
 
-//   useEffect(() => {
-//     dispatch(filterComment(typeFilter));
-//   }, [typeFilter]);
+  useEffect(() => {
+    dispatch(
+      getCommentList({
+        movieSlug: params.slug as string,
+        sortOrder: typeFilter,
+      })
+    );
+  }, [typeFilter]);
 
   return (
     <Alert
@@ -28,11 +36,11 @@ const CommentFilter = () => {
         Lọc bình luận
       </Typography>
       <Select
-        defaultValue="latest"
+        defaultValue="DESC"
         onChange={(event, value) => setTypeFilter(value as filter)}
       >
-        <Option value="latest">Mới nhất</Option>
-        <Option value="oldest">Cũ nhất</Option>
+        <Option value="DESC">Mới nhất</Option>
+        <Option value="ASC">Cũ nhất</Option>
       </Select>
     </Alert>
   );
