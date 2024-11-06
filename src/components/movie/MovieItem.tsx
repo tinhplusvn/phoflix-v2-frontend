@@ -4,13 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import "../../styles/MovieItem.scss";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import _NavLink from "../common/_NavLink";
-import { AppDispatch } from "../../redux/store";
-import { useDispatch } from "react-redux";
-import { removeFromViewingHistory } from "../../redux/slice/viewingHistorySlice";
-import { unSaveMovie } from "../../redux/slice/savedMoviesSlice";
+import { AppDispatch, RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import { IMovie } from "../../interfaces/movie";
 import { useEffect, useState } from "react";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { deleteMovie, getAllMovies } from "../../redux/asyncThunk/moviesThunk";
+import toast from "react-hot-toast";
 
 interface IProps {
   movie: IMovie;
@@ -20,7 +20,7 @@ interface IProps {
 const MovieItem = ({ movie, page }: IProps) => {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
-
+  const user = useSelector((state: RootState) => state.users.user);
   const [width, setWidth] = useState<number>(window.innerWidth);
 
   useEffect(() => {
@@ -31,12 +31,44 @@ const MovieItem = ({ movie, page }: IProps) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleRemoveFromViewingHisotry = (slug: string) => {
-    dispatch(removeFromViewingHistory(slug));
+  const handleRemoveFromViewingHisotry = async (slug: string) => {
+    const res: any = await dispatch(
+      deleteMovie({
+        userId: user?.id,
+        movieSlug: slug ?? "",
+        type: "watch-movies",
+      })
+    );
+
+    if (+res?.payload.EC === 0) {
+      toast.success(res?.payload.EM);
+      await dispatch(
+        getAllMovies({
+          userId: user.id as string,
+          type: "watch-movies",
+        })
+      );
+    }
   };
 
-  const handleUnSaveMovie = (slug: string) => {
-    dispatch(unSaveMovie(slug));
+  const handleUnSaveMovie = async (slug: string) => {
+    const res: any = await dispatch(
+      deleteMovie({
+        userId: user?.id,
+        movieSlug: slug ?? "",
+        type: "saved-movies",
+      })
+    );
+
+    if (+res?.payload.EC === 0) {
+      toast.success(res?.payload.EM);
+      await dispatch(
+        getAllMovies({
+          userId: user.id as string,
+          type: "saved-movies",
+        })
+      );
+    }
   };
 
   return (

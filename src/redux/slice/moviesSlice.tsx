@@ -10,6 +10,7 @@ import {
   getMovieInfo,
   getMovieDetail,
   searchMovie,
+  getAllMovies,
 } from "../asyncThunk/moviesThunk";
 import {
   ICategory,
@@ -41,6 +42,8 @@ interface MoviesState {
     items: IMovie[];
     pagination: IPagination;
   };
+  savedMovies: any;
+  viewingHistory: any;
   isLoading: boolean;
   isError: boolean;
 }
@@ -72,6 +75,14 @@ const initialState: MoviesState = {
       totalItems: 0,
       totalPages: 0,
     },
+  },
+  savedMovies: {
+    id: "",
+    movies: [],
+  },
+  viewingHistory: {
+    id: "",
+    movies: [],
   },
   isLoading: false,
   isError: false,
@@ -232,6 +243,23 @@ export const moviesSlice = createSlice({
         }
       })
       .addCase(searchMovie.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+
+      .addCase(getAllMovies.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllMovies.fulfilled, (state, action) => {
+        if (action.payload?.data?.type === "saved-movies") {
+          state.savedMovies.id = action.payload?.data?.movies?.[0]._id ?? "";
+          state.savedMovies.movies = action.payload?.data?.movies?.[0]?.movies ?? [];
+        } else {
+          state.viewingHistory.id = action.payload?.data?.movies?.[0]._id ?? "";
+          state.viewingHistory.movies =
+            action.payload?.data?.movies?.[0]?.movies ?? [];
+        }
+      })
+      .addCase(getAllMovies.rejected, (state, action) => {
         state.isLoading = false;
       });
   },

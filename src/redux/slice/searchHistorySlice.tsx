@@ -14,7 +14,6 @@ export const searchHistorySlice = createSlice({
     builder
       .addCase(getSearchHistory.pending, (state) => {})
       .addCase(getSearchHistory.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.searchRecent = action.payload?.DT?.filter(
           (item: any) => item.type === "recent"
         ) ?? [];

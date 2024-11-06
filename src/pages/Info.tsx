@@ -11,7 +11,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getMovieInfo } from "../redux/asyncThunk/moviesThunk";
+import {
+  addMovie,
+  deleteMovie,
+  getAllMovies,
+  getMovieInfo,
+} from "../redux/asyncThunk/moviesThunk";
 import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import BookmarkRemoveOutlinedIcon from "@mui/icons-material/BookmarkRemoveOutlined";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
@@ -23,8 +28,8 @@ import "../styles/Info.scss";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 import MovieSuggestions from "../components/movie/MovieSuggestions";
 import SkeletonPage from "../components/common/SkeletonPage";
-import { savedMovie, unSaveMovie } from "../redux/slice/savedMoviesSlice";
 import { IMovie } from "../interfaces/movie";
+import toast from "react-hot-toast";
 
 const Info = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -32,8 +37,6 @@ const Info = () => {
   const movieInfo: IMovie = useSelector(
     (state: RootState) => state.movies.movieInfo.info
   );
-  const savedMovies = useSelector((state: RootState) => state.savedMovies);
-  const isLoading = useSelector((state: RootState) => state.movies.isLoading);
   const isError = useSelector((state: RootState) => state.movies.isError);
   const status = useSelector(
     (state: RootState) => state.movies.movieInfo.status
@@ -41,22 +44,20 @@ const Info = () => {
   const params = useParams();
   const [isSave, setIsSave] = useState<boolean>(false);
   const breadcrumbsPaths = ["Thông tin phim", movieInfo.name];
+  const user = useSelector((state: RootState) => state.users.user);
 
   useEffect(() => {
-    const isExist: boolean = handleCheckSaveMovie();
-    isExist && setIsSave(true);
+    dispatch(
+      getAllMovies({
+        userId: user.id as string,
+        type: "saved-movies",
+      })
+    );
   }, []);
 
   useEffect(() => {
     dispatch(getMovieInfo(params.slug as string));
   }, [params]);
-
-  const handleCheckSaveMovie = () => {
-    const isExist: boolean = savedMovies.some(
-      (item) => item.slug === params.slug
-    );
-    return isExist;
-  };
 
   if (!status && !isError) {
     return <SkeletonPage page="info" />;
@@ -120,15 +121,53 @@ const SectionCardMovie = ({
   setIsSave,
 }: ISectionCardMovie) => {
   const dispatch: AppDispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.users.user);
+  const params = useParams();
+  const savedMovies = useSelector(
+    (state: RootState) => state.movies.savedMovies.movies
+  );
 
-  const handleSaveMovie = () => {
-    dispatch(savedMovie(movieInfo));
-    setIsSave(!isSave);
+  useEffect(() => {
+    const check = handleCheckSaveMovie();
+    setIsSave(check);
+  }, []);
+
+  const handleCheckSaveMovie = () => {
+    console.log(savedMovies);
+    const isExist: boolean = savedMovies.some(
+      (item: any) => item.slug === params.slug
+    );
+    return isExist;
   };
 
-  const handleUnSaveMovie = () => {
-    dispatch(unSaveMovie(movieInfo.slug));
-    setIsSave(!isSave);
+  const handleSaveMovie = async () => {
+    const res: any = await dispatch(
+      addMovie({
+        userId: user?.id,
+        movieInfo,
+        type: "saved-movies",
+      })
+    );
+
+    if (+res?.payload.EC === 0) {
+      toast.success(res?.payload.EM);
+      setIsSave(!isSave);
+    }
+  };
+
+  const handleUnSaveMovie = async () => {
+    const res: any = await dispatch(
+      deleteMovie({
+        userId: user?.id,
+        movieSlug: movieInfo?.slug ?? "",
+        type: "saved-movies",
+      })
+    );
+
+    if (+res?.payload.EC === 0) {
+      toast.success(res?.payload.EM);
+      setIsSave(!isSave);
+    }
   };
 
   return (
@@ -182,7 +221,7 @@ const SectionInfoMovie = ({ movieInfo }: any) => {
           justifyContent: "center",
         }}
       >
-        <Typography level="h3" color="primary">
+        <Typography level="h4" color="primary">
           {movieInfo.name}
         </Typography>
         <Typography level="title-lg">{movieInfo.origin_name}</Typography>
@@ -251,7 +290,7 @@ const SectionInfoMovie = ({ movieInfo }: any) => {
           describe="quoc-gia"
           canPress={true}
           type="many"
-          label="Quốc gia"
+          label="Quốc gia:"
           value={movieInfo.country}
         />
       </Alert>

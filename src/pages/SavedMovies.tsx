@@ -2,22 +2,51 @@ import { Alert, Box, Button, Typography } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import MovieList from "../components/movie/MovieList";
-import { useState } from "react";
-import SkeletonPage from "../components/common/SkeletonPage";
-import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
+import { useEffect, useState } from "react";
 import ModalAlertDialog from "../components/modals/ModalAlertDialog";
 import BookmarkAddedRoundedIcon from "@mui/icons-material/BookmarkAddedRounded";
-import { clearSavedMovies } from "../redux/slice/savedMoviesSlice";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
+import { deleteAllMovie, getAllMovies } from "../redux/asyncThunk/moviesThunk";
+import toast from "react-hot-toast";
 
 const SavedMovie = () => {
-  const savedMovies = useSelector((state: RootState) => state.savedMovies);
+  const savedMovies = useSelector(
+    (state: RootState) => state.movies.savedMovies.movies
+  );
+  const user = useSelector((state: RootState) => state.users.user);
   const dispatch: AppDispatch = useDispatch();
   const [open, setOpen] = useState<boolean>(false);
   const breadcrumbsPaths = ["Phim đã lưu"];
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleClearSavedMovie = () => {
-    dispatch(clearSavedMovies());
+  useEffect(() => {
+    dispatch(
+      getAllMovies({
+        userId: user.id as string,
+        type: "saved-movies",
+      })
+    );
+  }, []);
+
+ 
+  const handleClearSavedMovie = async () => {
+    const res: any = await dispatch(
+      deleteAllMovie({
+        userId: user.id as string,
+        type: "saved-movies",
+      })
+    );
+
+    if (+res.payload.EC === 0) {
+      toast.success(res.payload.EM);
+      await dispatch(
+        getAllMovies({
+          userId: user.id as string,
+          type: "saved-movies",
+        })
+      );
+      setOpen(false)
+    }
   };
 
   if (savedMovies.length === 0) {

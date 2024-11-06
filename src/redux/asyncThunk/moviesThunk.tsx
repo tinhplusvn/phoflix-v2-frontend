@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { delay } from "../../utils";
+import axios from "../../custom/axios";
+import { ResponseMovies } from "../../interfaces/movie";
 
 export const getCategories = createAsyncThunk(
   "movies/getCategories",
@@ -146,6 +147,82 @@ export const searchMovie = createAsyncThunk(
       const response = await fetch(baseApi);
       const data = await response.json();
       return data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const saveMovie = createAsyncThunk(
+  "movies/saveMovie",
+  async (rawData: any) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API}/movies/save-movie`,
+        rawData
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const getAllMovies = createAsyncThunk(
+  "movies/getAllMovies",
+  async (rawData: any) => {
+    try {
+      const { userId, type } = rawData;
+      const response = await axios.get(
+        `${process.env.REACT_APP_API}/movies/get-all-movies?type=${type}&userId=${userId}`
+      );
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const addMovie = createAsyncThunk(
+  "movies/addMovie",
+  async (rawData: any) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API}/movies/add-movie`,
+        rawData
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const deleteMovie = createAsyncThunk(
+  "movies/deleteMovie",
+  async (rawData: any) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API}/movies/delete-movie`,
+        rawData
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const deleteAllMovie = createAsyncThunk(
+  "movies/deleteAllMovie",
+  async (rawData: any) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API}/movies/delete-all-movie`,
+        rawData
+      );
+      return response;
     } catch (error) {
       console.log(error);
     }

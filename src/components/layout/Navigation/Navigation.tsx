@@ -15,11 +15,13 @@ import { AppDispatch } from "../../../redux/store";
 
 import _Drawer from "./_Drawer";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Navigation = () => {
   const [open, setOpen] = useState<boolean>(false);
   const dispatch: AppDispatch = useDispatch();
   const [width, setWidth] = useState<number>(window.innerWidth);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => {
@@ -40,7 +42,7 @@ const Navigation = () => {
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {width < 1200 && (
             <IconButton
-              sx={{ marginRight: "12px" }}
+              sx={{ marginRight: "12px", borderRadius: "12px" }}
               variant="outlined"
               color="primary"
               onClick={() => setOpen(true)}
@@ -54,9 +56,19 @@ const Navigation = () => {
               <Typography
                 color="primary"
                 level="title-md"
-                sx={{ marginRight: "12px" }}
+                variant="outlined"
+                onClick={() => navigate("/")}
+                sx={{
+                  marginRight: "12px",
+                  cursor: "pointer",
+                  "&:hover": {
+                    color: "#fff",
+                    backgroundColor: "#0b6bcb",
+                    transition: ".3s",
+                  },
+                }}
               >
-                <_NavLink path="/" content="PHOFLIX-V2" />
+                PHOFLIX-V2
               </Typography>
               <NavLeft />
             </>

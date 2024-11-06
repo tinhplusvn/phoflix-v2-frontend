@@ -42,7 +42,6 @@ const NavLeft = () => {
 
       <NavListItem data={countries} describe="quoc-gia" title="Quốc gia" />
 
-      <Year />
 
       <Dropdown>
         <MenuButton variant="plain">

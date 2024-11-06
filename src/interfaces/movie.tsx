@@ -38,10 +38,15 @@ export interface IPagination {
 }
 
 export interface IEpisodes {
-    name:string,
-    slug:string,
-    filename:string,
-    link_embed:string,
-    link_m3u8:string
+  name: string;
+  slug: string;
+  filename: string;
+  link_embed: string;
+  link_m3u8: string;
 }
 
+export interface ResponseMovies {
+  DT: { movies: IMovie[] };
+  EC: string;
+  EM: string;
+}

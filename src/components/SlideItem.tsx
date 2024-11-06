@@ -7,11 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { IMovie } from "../interfaces/movie";
 
 interface IProps {
-    item:IMovie,
-    key:number
+  item: IMovie;
+  key: number;
 }
 
-const SlideItem = ({ item }: IProps ) => {
+const SlideItem = ({ item }: IProps) => {
   const navigate = useNavigate();
   const [width, setWidth] = useState<number>(window.innerWidth);
 
@@ -30,6 +30,7 @@ const SlideItem = ({ item }: IProps ) => {
         position: "absolute",
         bottom: `${width > 1024 ? "48px" : "32px"}`,
         left: `${width > 1024 ? "48px" : "24px"}`,
+        right: `${width > 1024 ? "unset" : "24px"}`,
         backdropFilter: `${width > 1024 ? "blur(8px)" : "unset"}`,
         backgroundColor: `${
           width > 1024 ? "rgba(255, 255, 255, 0.3)" : "unset"
@@ -46,11 +47,12 @@ const SlideItem = ({ item }: IProps ) => {
       {width > 1024 && (
         <Box
           sx={{
-            width: "160px",
+            flexShrink: 0,
+            width: "120px",
             height: "160px",
             overflow: "hidden",
             borderRadius: "12px",
-            border: '1px solid #aaa'
+            border: "1px solid #aaa",
           }}
         >
           <img
@@ -66,6 +68,7 @@ const SlideItem = ({ item }: IProps ) => {
           flexDirection: "column",
           gap: "12px",
           width: "100%",
+          overflow: 'hidden'
         }}
       >
         <Typography
@@ -74,7 +77,7 @@ const SlideItem = ({ item }: IProps ) => {
             whiteSpace: "nowrap",
             overflow: "hidden",
             textOverflow: "ellipsis",
-            maxWidth: "280px",
+            maxWidth: "100%",
           }}
           color="primary"
           level="title-lg"
@@ -89,7 +92,7 @@ const SlideItem = ({ item }: IProps ) => {
               whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
-              maxWidth: "280px",
+              maxWidth: "100%",
             }}
             level="title-md"
           >
@@ -116,7 +119,12 @@ const SlideItem = ({ item }: IProps ) => {
             Chi tiết
           </Button>
         </Box>
-        <Chip size="sm" sx={{ marginTop: "12px" }} variant="soft" color="primary">
+        <Chip
+          size="sm"
+          sx={{ marginTop: "12px" }}
+          variant="soft"
+          color="primary"
+        >
           Năm phát hành {item.year}
         </Chip>
       </Box>

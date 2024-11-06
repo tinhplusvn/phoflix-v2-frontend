@@ -11,7 +11,7 @@ import {
 import { AppDispatch, RootState } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getMovieInfo } from "../redux/asyncThunk/moviesThunk";
+import { addMovie, getMovieInfo } from "../redux/asyncThunk/moviesThunk";
 import { useParams } from "react-router-dom";
 import { copyText, scrollToTop } from "../utils";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -21,7 +21,6 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SkeletonPage from "../components/common/SkeletonPage";
 import { Rating } from "@mui/material";
 import MovieSuggestions from "../components/movie/MovieSuggestions";
-import { addViewingHistory } from "../redux/slice/viewingHistorySlice";
 import { updateWatchedEpisodes } from "../redux/slice/watchSlice";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 import PollOutlinedIcon from "@mui/icons-material/PollOutlined";
@@ -92,11 +91,7 @@ const Watch = () => {
     }
   }, [episodes, movieInfo]);
 
-  useEffect(() => {
-    if (movieInfo.slug) {
-      dispatch(addViewingHistory(movieInfo));
-    }
-  }, [params, movieInfo]);
+
 
   const handleGetCurrentEpisodes = () => {
     const objCurrentEpisodes: any = watchedEpisodes.find(
@@ -281,8 +276,14 @@ const SectionRating = () => {
   );
 
   useEffect(() => {
-    console.log(movieInfo);
     dispatch(getRatings({ movieSlug: params.slug as string, userId: user.id }));
+    dispatch(
+      addMovie({
+        userId: user?.id,
+        movieInfo,
+        type: "watch-movies",
+      })
+    );
   }, []);
 
   useEffect(() => {

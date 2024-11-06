@@ -1,6 +1,7 @@
 import {
   Alert,
   Box,
+  Divider,
   Modal,
   ModalClose,
   Option,
@@ -32,7 +33,7 @@ const ModalInstructDowload = ({ open, setOpen }: IProps) => {
       <Sheet
         variant="outlined"
         sx={{
-          width: { xs: "90%", md: "50%" },
+          width: { xs: "90%", md: "600px" },
           borderRadius: "md",
           padding: {
             xs: "16px",
@@ -42,26 +43,17 @@ const ModalInstructDowload = ({ open, setOpen }: IProps) => {
         }}
       >
         <ModalClose variant="plain" sx={{ m: 1 }} />
-        <Alert
-          sx={{
-            display: "flex",
-            gap: "12px",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginTop: "48px",
-          }}
+        <Typography level="title-lg" color="primary">
+          Hướng dẫn tải video
+        </Typography>
+        <Select
+          sx={{ margin: "16px 0" }}
+          defaultValue={selectedDevice}
+          onChange={(event, value) => setSelectedDeivce(value)}
         >
-          <Typography level="h4" textColor="inherit">
-            Hướng dẫn tải video
-          </Typography>
-          <Select
-            defaultValue={selectedDevice}
-            onChange={(event, value) => setSelectedDeivce(value)}
-          >
-            <Option value="computer">Máy tính</Option>
-            <Option value="phone">Điện thoại</Option>
-          </Select>
-        </Alert>
+          <Option value="computer">Máy tính</Option>
+          <Option value="phone">Điện thoại</Option>
+        </Select>
         {selectedDevice === "computer" ? (
           <Box sx={{ marginTop: "12px" }}>
             <Typography level="body-md">

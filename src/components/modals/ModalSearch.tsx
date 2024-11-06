@@ -107,8 +107,8 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
     await dispatch(getSearchHistory(user.id as string));
   };
 
-  const handleRemoveSearch = async (idSearchHistory: string) => {
-    await dispatch(deletSearchHistory(idSearchHistory));
+  const handleRemoveSearch = async (item: any) => {
+    await dispatch(deletSearchHistory(item));
     await dispatch(getSearchHistory(user.id as string));
   };
 
@@ -179,6 +179,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
                         alignItems: "center",
                         gap: "12px",
                         flex: "1",
+                        height: "100%",
                       }}
                     >
                       <HistoryIcon />
@@ -196,7 +197,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
                       </IconButton>
                       <IconButton
                         title="Xoá"
-                        onClick={() => handleRemoveSearch(item.id)}
+                        onClick={() => handleRemoveSearch(item)}
                         color="primary"
                       >
                         <ClearIcon />
@@ -222,6 +223,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
                         alignItems: "center",
                         gap: "12px",
                         flex: "1",
+                        height: "100%",
                       }}
                     >
                       <StarBorderIcon />

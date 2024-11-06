@@ -17,6 +17,7 @@ axiosRetry(instance, {
   },
 });
 
+
 instance.interceptors.response.use(
   function (response) {
     return response && response.data ? response.data : response;
@@ -28,5 +29,6 @@ instance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 
 export default instance;

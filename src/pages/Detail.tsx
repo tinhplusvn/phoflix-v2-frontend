@@ -126,7 +126,10 @@ const Detail = () => {
               }}
               color="primary"
             >
-              <Typography startDecorator={<LiveTvRoundedIcon />} level="h4">
+              <Typography
+                startDecorator={<LiveTvRoundedIcon />}
+                level="title-lg"
+              >
                 {`${titlePage} (${totalItems} bộ)`}
               </Typography>
               <Typography
@@ -142,6 +145,7 @@ const Detail = () => {
 
       <Stack spacing={2} sx={{ marginTop: "24px", alignItems: "center" }}>
         <Pagination
+          color="primary"
           page={currentPage}
           onChange={handleChange}
           count={totalPages}

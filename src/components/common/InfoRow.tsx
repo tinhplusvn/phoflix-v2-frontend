@@ -18,7 +18,7 @@ const InfoRow = ({ label, value, type, canPress, describe }: IProps) => (
 
     {type === "many" && Array.isArray(value) ? (
       value.map((item, index) => (
-        <Chip key={index} variant="solid" color="neutral">
+        <Chip key={index} variant="solid" color="primary">
           {typeof item === "object" && canPress ? (
             <Link
               style={{ textDecoration: "none", color: "inherit" }}

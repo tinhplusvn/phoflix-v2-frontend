@@ -6,19 +6,46 @@ import { useEffect, useState } from "react";
 import SkeletonPage from "../components/common/SkeletonPage";
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
 import ModalAlertDialog from "../components/modals/ModalAlertDialog";
-import { clearViewingHistory } from "../redux/slice/viewingHistorySlice";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
+import { deleteAllMovie, getAllMovies } from "../redux/asyncThunk/moviesThunk";
+import toast from "react-hot-toast";
 
 const ViewingHistory = () => {
   const viewingHistory = useSelector(
-    (state: RootState) => state.viewingHistory
+    (state: RootState) => state.movies.viewingHistory.movies
   );
   const dispatch: AppDispatch = useDispatch();
   const [open, setOpen] = useState<boolean>(false);
   const breadcrumbsPaths = ["Lịch sử đã xem"];
+  const user = useSelector((state: RootState) => state.users.user);
 
-  const handleClearViewingHistory = () => {
-    dispatch(clearViewingHistory());
+  useEffect(() => {
+    dispatch(
+      getAllMovies({
+        userId: user.id as string,
+        type: "watch-movies",
+      })
+    );
+  }, []);
+
+  const handleClearViewingHistory = async () => {
+    const res: any = await dispatch(
+      deleteAllMovie({
+        userId: user.id as string,
+        type: "watch-movies",
+      })
+    );
+
+    if (+res.payload.EC === 0) {
+      toast.success(res.payload.EM);
+      await dispatch(
+        getAllMovies({
+          userId: user.id as string,
+          type: "watch-movies",
+        })
+      );
+      setOpen(false)
+    }
   };
 
   if (viewingHistory.length === 0) {

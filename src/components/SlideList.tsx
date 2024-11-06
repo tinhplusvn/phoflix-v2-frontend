@@ -24,7 +24,7 @@ const SlideShow = () => {
       <Swiper
         centeredSlides={true}
         autoplay={{
-          delay: 6000,
+          delay: 600000,
           disableOnInteraction: false,
         }}
         pagination={{

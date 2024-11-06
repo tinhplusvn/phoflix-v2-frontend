@@ -1,9 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import moviesReducer from "./slice/moviesSlice";
 import commentReducer from "./slice/commentsSlice";
-import viewingHistoryReducer from "./slice/viewingHistorySlice";
 import watchReducer from "./slice/watchSlice";
-import savedMovieReducer from "./slice/savedMoviesSlice";
 import systemReducer from "./slice/systemSlice";
 import userReducer from "./slice/userSlice";
 import ratingReducer from "./slice/ratingsSlice";
@@ -15,9 +13,7 @@ export const store = configureStore({
     system: systemReducer,
     movies: moviesReducer,
     comments: commentReducer,
-    viewingHistory: viewingHistoryReducer,
     watch: watchReducer,
-    savedMovies: savedMovieReducer,
     users: userReducer,
     rating: ratingReducer,
     searchHistory: searchHistoryReducer,

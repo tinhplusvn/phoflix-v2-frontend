@@ -29,7 +29,7 @@ const UserOptions = () => {
           height: "36px",
           borderRadius: "12px",
           boxShadow:
-            "rgb(255, 255, 255) 0px 1px 0px inset, rgba(232, 234, 238, 0.4) 0px -1px 0px inset, rgba(223, 226, 231, 0.5) 0px 1px 2px 0px;",
+            "rgb(255, 255, 255) 0px 0px 0px inset, rgba(232, 234, 238, 0.4) 0px -1px 0px inset, rgba(223, 226, 231, 0.5) 0px 1px 2px 0px;",
         }}
       >
         <AccountCircleIcon color="primary" />

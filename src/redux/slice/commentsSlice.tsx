@@ -41,15 +41,12 @@ export const commentsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-
       .addCase(getCommentList.pending, (state, action) => {
         state.isLoading = false;
       })
-
       .addCase(getCommentList.fulfilled, (state, action) => {
         state.commentList = action.payload?.DT ?? [];
       })
-
       .addCase(getCommentList.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
