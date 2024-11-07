@@ -136,6 +136,11 @@ const SectionCardMovie = ({
   }, []);
 
   const handleSaveMovie = async () => {
+    if (!user.access_token || !user.refresh_token) {
+      toast.error("Vui lòng đăng nhập để lưu phim!");
+      return;
+    }
+
     setIsLoading(true);
     const res: any = await dispatch(
       addMovie({
