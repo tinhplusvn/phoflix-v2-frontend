@@ -22,7 +22,7 @@ export interface User {
 }
 
 const initialState: any = {
-  user: JSON.parse(localStorage.getItem("user") as string) ?? {},
+  user: {},
   isLoading: false,
   isError: false,
 };
