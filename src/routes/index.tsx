@@ -4,7 +4,7 @@ import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
 import Info from "../pages/Info";
 import SavedMovies from "../pages/SavedMovies";
-import ViewingHistory from "../pages/ViewingHistory";
+import ViewingHistory from "../pages/WatchHistory";
 import UserInfo from "../pages/UserInfo";
 import Watch from "../pages/Watch";
 import Authenticate from "../pages/Authenticate";

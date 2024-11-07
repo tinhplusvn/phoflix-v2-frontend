@@ -24,7 +24,7 @@ const initialState: IComments = {
     modalAlertDialog: false,
     modalReportComment: false,
   },
-  isLoading: false,
+  isLoading: true,
   isError: false,
 };
 
@@ -41,11 +41,10 @@ export const commentsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getCommentList.pending, (state, action) => {
-        state.isLoading = false;
-      })
+      .addCase(getCommentList.pending, (state, action) => {})
       .addCase(getCommentList.fulfilled, (state, action) => {
         state.commentList = action.payload?.DT ?? [];
+        state.isLoading = !action.payload?.DT;
       })
       .addCase(getCommentList.rejected, (state, action) => {
         state.isLoading = false;

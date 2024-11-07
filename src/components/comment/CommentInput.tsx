@@ -7,7 +7,6 @@ import {
   addComment,
   getCommentList,
 } from "../../redux/asyncThunk/commentThunk";
-import LoadingButton from "../common/LoadingButon";
 import toast from "react-hot-toast";
 import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
 
@@ -37,7 +36,6 @@ const CommentInput = () => {
     );
 
     if (+res.payload.EC === 0) {
-      toast.success(res.payload.EM);
       await dispatch(
         getCommentList({ movieSlug: params.slug as string, sortOrder: "DESC" })
       );
@@ -50,6 +48,7 @@ const CommentInput = () => {
       );
     }
     setIsLoading(false);
+    toast.success(res.payload.EM);
     setValueComment("");
   };
 
@@ -69,18 +68,16 @@ const CommentInput = () => {
         minRows={3}
         placeholder="Nhập bình luận của bạn..."
       />
-      {isLoading ? (
-        <LoadingButton />
-      ) : (
-        <Button
-          onClick={() => handleAddComment()}
-          disabled={valueComment === ""}
-          color="primary"
-          variant="solid"
-        >
-          Bình luận
-        </Button>
-      )}
+
+      <Button
+        loading={isLoading}
+        onClick={() => handleAddComment()}
+        disabled={valueComment === ""}
+        color="primary"
+        variant="solid"
+      >
+        Bình luận
+      </Button>
     </Box>
   );
 };

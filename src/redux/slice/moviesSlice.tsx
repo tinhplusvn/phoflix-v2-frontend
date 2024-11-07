@@ -43,7 +43,7 @@ interface MoviesState {
     pagination: IPagination;
   };
   savedMovies: any;
-  viewingHistory: any;
+  watchHistory: any;
   isLoading: boolean;
   isError: boolean;
 }
@@ -77,11 +77,9 @@ const initialState: MoviesState = {
     },
   },
   savedMovies: {
-    id: "",
     movies: [],
   },
-  viewingHistory: {
-    id: "",
+  watchHistory: {
     movies: [],
   },
   isLoading: false,
@@ -246,22 +244,16 @@ export const moviesSlice = createSlice({
         state.isLoading = false;
       })
 
-      .addCase(getAllMovies.pending, (state, action) => {
-        state.isLoading = true;
-      })
+      // danh sách phim đã lưu và lịch sử xem
+      .addCase(getAllMovies.pending, (state, action) => {})
       .addCase(getAllMovies.fulfilled, (state, action) => {
         if (action.payload?.data?.type === "saved-movies") {
-          state.savedMovies.id = action.payload?.data?.movies?.[0]._id ?? "";
-          state.savedMovies.movies = action.payload?.data?.movies?.[0]?.movies ?? [];
+          state.savedMovies.movies = action.payload?.data?.movies ?? [];
         } else {
-          state.viewingHistory.id = action.payload?.data?.movies?.[0]._id ?? "";
-          state.viewingHistory.movies =
-            action.payload?.data?.movies?.[0]?.movies ?? [];
+          state.watchHistory.movies = action.payload?.data?.movies ?? [];
         }
       })
-      .addCase(getAllMovies.rejected, (state, action) => {
-        state.isLoading = false;
-      });
+      .addCase(getAllMovies.rejected, (state, action) => {});
   },
 });
 

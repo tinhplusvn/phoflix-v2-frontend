@@ -47,16 +47,16 @@ const Info = () => {
   const user = useSelector((state: RootState) => state.users.user);
 
   useEffect(() => {
-    dispatch(
-      getAllMovies({
-        userId: user.id as string,
-        type: "saved-movies",
-      })
-    );
-  }, []);
-
-  useEffect(() => {
-    dispatch(getMovieInfo(params.slug as string));
+    const handleInit = async () => {
+      await dispatch(
+        getAllMovies({
+          userId: user.id as string,
+          type: "saved-movies",
+        })
+      );
+      await dispatch(getMovieInfo(params.slug as string));
+    };
+    handleInit();
   }, [params]);
 
   if (!status && !isError) {
@@ -126,21 +126,17 @@ const SectionCardMovie = ({
   const savedMovies = useSelector(
     (state: RootState) => state.movies.savedMovies.movies
   );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const check = handleCheckSaveMovie();
-    setIsSave(check);
-  }, []);
-
-  const handleCheckSaveMovie = () => {
-    console.log(savedMovies);
     const isExist: boolean = savedMovies.some(
       (item: any) => item.slug === params.slug
     );
-    return isExist;
-  };
+    setIsSave(isExist);
+  }, []);
 
   const handleSaveMovie = async () => {
+    setIsLoading(true);
     const res: any = await dispatch(
       addMovie({
         userId: user?.id,
@@ -153,9 +149,11 @@ const SectionCardMovie = ({
       toast.success(res?.payload.EM);
       setIsSave(!isSave);
     }
+    setIsLoading(false);
   };
 
   const handleUnSaveMovie = async () => {
+    setIsLoading(true);
     const res: any = await dispatch(
       deleteMovie({
         userId: user?.id,
@@ -168,6 +166,7 @@ const SectionCardMovie = ({
       toast.success(res?.payload.EM);
       setIsSave(!isSave);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -187,6 +186,7 @@ const SectionCardMovie = ({
         {isSave ? (
           <Tooltip title="Xoá khỏi danh sách" variant="soft" color="danger">
             <IconButton
+              loading={isLoading}
               onClick={() => handleUnSaveMovie()}
               variant="solid"
               color="danger"
@@ -197,6 +197,7 @@ const SectionCardMovie = ({
         ) : (
           <Tooltip title="Thêm vào danh sách" variant="soft" color="primary">
             <IconButton
+              loading={isLoading}
               onClick={() => handleSaveMovie()}
               variant="solid"
               color="neutral"

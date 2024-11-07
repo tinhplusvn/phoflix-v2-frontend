@@ -7,48 +7,91 @@ import SkeletonPage from "../components/common/SkeletonPage";
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
 import ModalAlertDialog from "../components/modals/ModalAlertDialog";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
-import { deleteAllMovie, getAllMovies } from "../redux/asyncThunk/moviesThunk";
+import {
+  deleteAllMovie,
+  deleteMovie,
+  getAllMovies,
+} from "../redux/asyncThunk/moviesThunk";
 import toast from "react-hot-toast";
 
-const ViewingHistory = () => {
-  const viewingHistory = useSelector(
-    (state: RootState) => state.movies.viewingHistory.movies
+type TypeDelete = "watch-history" | "saved-movies";
+
+const WatchHistory = () => {
+  const watchHistory = useSelector(
+    (state: RootState) => state.movies.watchHistory.movies
   );
   const dispatch: AppDispatch = useDispatch();
-  const [open, setOpen] = useState<boolean>(false);
-  const breadcrumbsPaths = ["Lịch sử đã xem"];
   const user = useSelector((state: RootState) => state.users.user);
+  const [open, setOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
+  const breadcrumbsPaths = ["Lịch sử đã xem"];
 
   useEffect(() => {
-    dispatch(
-      getAllMovies({
-        userId: user.id as string,
-        type: "watch-movies",
-      })
-    );
-  }, []);
-
-  const handleClearViewingHistory = async () => {
-    const res: any = await dispatch(
-      deleteAllMovie({
-        userId: user.id as string,
-        type: "watch-movies",
-      })
-    );
-
-    if (+res.payload.EC === 0) {
-      toast.success(res.payload.EM);
+    const hanldeInit = async () => {
+      setIsLoading(true);
       await dispatch(
         getAllMovies({
           userId: user.id as string,
-          type: "watch-movies",
+          type: "watch-history",
         })
       );
-      setOpen(false)
+      setIsLoading(false);
+    };
+
+    hanldeInit();
+  }, []);
+
+  const handleDeleteMovie = async (slug: string, type: string) => {
+    const res: any = await dispatch(
+      deleteMovie({
+        userId: user?.id,
+        movieSlug: slug ?? "",
+        type,
+      })
+    );
+
+    if (+res?.payload.EC === 0) {
+      await dispatch(
+        getAllMovies({
+          userId: user.id as string,
+          type: "watch-history",
+        })
+      );
+      toast.success(res?.payload.EM);
     }
   };
 
-  if (viewingHistory.length === 0) {
+  const handleDeleteAll = async () => {
+    setIsLoadingButton(true);
+    const res: any = await dispatch(
+      deleteAllMovie({
+        userId: user.id as string,
+        type: "watch-history",
+      })
+    );
+
+    setIsLoadingButton(false);
+
+    if (+res.payload.EC === 0) {
+      toast.success(res.payload.EM);
+      setOpen(false);
+      setIsLoading(true);
+      await dispatch(
+        getAllMovies({
+          userId: user.id as string,
+          type: "watch-history",
+        })
+      );
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return <SkeletonPage page="watch-history" />;
+  }
+
+  if (!isLoading && watchHistory.length === 0) {
     return (
       <Typography level="title-lg" color="primary">
         Lịch sử xem trống!
@@ -82,13 +125,18 @@ const ViewingHistory = () => {
             Xoá lịch sử
           </Button>
         </Alert>
-        <MovieList movies={viewingHistory} page="viewingHistory" />
+        <MovieList
+          movies={watchHistory}
+          page="watchHistory"
+          handleDeleteMovie={handleDeleteMovie}
+        />
       </Box>
 
       <ModalAlertDialog
+        isLoading={isLoadingButton}
         open={open}
         setOpen={setOpen}
-        handleSubmit={handleClearViewingHistory}
+        handleSubmit={handleDeleteAll}
         title="Xoá lịch sử đã xem"
         content="Lịch sử đã xem gần đây của bạn sẽ bị xoá vĩnh viễn?"
       />
@@ -96,4 +144,4 @@ const ViewingHistory = () => {
   );
 };
 
-export default ViewingHistory;
+export default WatchHistory;

@@ -1,4 +1,13 @@
-import { Box, Button, Divider, Grid, Table, Typography } from "@mui/joy";
+import {
+  AspectRatio,
+  Box,
+  Button,
+  Divider,
+  Grid,
+  Skeleton,
+  Table,
+  Typography,
+} from "@mui/joy";
 import backgroundMovieImg from "../images/background-movie.jpg";
 import HistoryIcon from "@mui/icons-material/History";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -15,6 +24,8 @@ import {
   deleleActivityLog,
 } from "../redux/asyncThunk/activityLogThunk";
 import { formatDate } from "../utils";
+import SkeletonActivityLog from "../components/common/SkeletonActivityLog";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 
 const UserInfo = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -27,19 +38,28 @@ const UserInfo = () => {
   const activityList = useSelector(
     (state: RootState) => state.activityLog.activityList
   );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
 
   useEffect(() => {
     if (!user.refresh_token) {
       navigate("/");
     }
 
-    dispatch(getActivityLog(user.id as string));
+    const handleInit = async () => {
+      setIsLoading(true);
+      await dispatch(getActivityLog(user.id as string));
+      setIsLoading(false);
+    };
+    handleInit();
   }, []);
 
   const handleDeleteActivityHistory = async () => {
+    setIsLoadingButton(true);
     await dispatch(deleleActivityLog());
     await dispatch(getActivityLog(user.id as string));
     setOpenModalAlertDialog(false);
+    setIsLoadingButton(false);
   };
 
   return (
@@ -95,6 +115,9 @@ const UserInfo = () => {
               border: "1px solid #ccc",
               padding: "16px",
               borderRadius: "12px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "12px",
             }}
           >
             <Typography
@@ -104,104 +127,111 @@ const UserInfo = () => {
             >
               Thông tin người dùng
             </Typography>
-            <Box
-              sx={{
-                marginTop: "12px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "4px",
-              }}
+
+            <Table sx={{ marginTop: "12px" }} aria-label="basic table">
+              <tbody>
+                <tr>
+                  <td style={{ fontWeight: "bold" }}>Tên:</td>
+                  <td style={{ wordWrap: "break-word" }}>{user.username}</td>
+                </tr>
+                <tr>
+                  <td style={{ fontWeight: "bold" }}>Email:</td>
+                  <td style={{ wordWrap: "break-word" }}>{user.email}</td>
+                </tr>
+                <tr>
+                  <td style={{ fontWeight: "bold" }}>Số điện thoại:</td>
+                  <td style={{ wordWrap: "break-word" }}>
+                    {user.phone_number ?? "Trống"}
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ fontWeight: "bold" }}>Giới tính:</td>
+                  <td style={{ wordWrap: "break-word" }}>{user.gender ?? 'Trống'}</td>
+                </tr>
+                <tr>
+                  <td style={{ fontWeight: "bold" }}>Địa chỉ:</td>
+                  <td style={{ wordWrap: "break-word" }}>
+                    {user.address ?? "Trống"}
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
+
+            <Button
+              onClick={() => setOpenModalEditUserInfo(true)}
+              startDecorator={<EditNoteIcon />}
+              sx={{ marginLeft: "auto" }}
             >
-              <Box sx={{ display: "flex", gap: "8px" }}>
-                <Typography level="body-md">Tên:</Typography>
-                <Typography level="body-md">{user.username}</Typography>
-              </Box>
-              <Box sx={{ display: "flex", gap: "8px" }}>
-                <Typography level="body-md">Email:</Typography>
-                <Typography level="body-md">{user.email}</Typography>
-              </Box>
-              <Box sx={{ display: "flex", gap: "8px" }}>
-                <Typography level="body-md">Số điện thoại:</Typography>
-                <Typography level="body-md">
-                  {user.phone_number || "Trống"}
-                </Typography>
-              </Box>
-              <Box sx={{ display: "flex", gap: "8px" }}>
-                <Typography level="body-md">Giới tính:</Typography>
-                <Typography level="body-md">{user.gender}</Typography>
-              </Box>
-              <Box sx={{ display: "flex", gap: "8px" }}>
-                <Typography level="body-md">Địa chỉ:</Typography>
-                <Typography level="body-md">
-                  {user.address || "Trống"}
-                </Typography>
-              </Box>
-              <Button
-                onClick={() => setOpenModalEditUserInfo(true)}
-                sx={{ marginTop: "12px" }}
-              >
-                Chỉnh sửa thông tin
-              </Button>
-            </Box>
+              Chỉnh sửa thông tin
+            </Button>
           </Box>
         </Grid>
         <Grid xs={12} md={8}>
-          <Box
-            sx={{
-              border: "1px solid #ccc",
-              padding: "16px",
-              borderRadius: "12px",
-            }}
-          >
+          {isLoading && <SkeletonActivityLog />}
+          {!isLoading && (
             <Box
               sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
+                border: "1px solid #ccc",
+                padding: "16px",
+                borderRadius: "12px",
               }}
             >
-              <Typography
-                startDecorator={<HistoryIcon />}
-                level="title-lg"
-                color="primary"
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
               >
-                Lịch sử hoạt động
-              </Typography>
-              {activityList.length > 0 && (
-                <Button
-                  onClick={() => setOpenModalAlertDialog(true)}
-                  size="sm"
-                  color="danger"
+                <Typography
+                  startDecorator={<HistoryIcon />}
+                  level="title-lg"
+                  color="primary"
                 >
-                  Xoá lịch sử
-                </Button>
-              )}
-            </Box>
-            <Table sx={{ marginTop: "12px" }} aria-label="basic table">
-              <thead>
-                <tr>
-                  <th style={{ width: "75%" }}>Tên hoạt động</th>
-                  <th style={{ width: "25%" }}>Thời gian</th>
-                </tr>
-              </thead>
-              <tbody>
-                {activityList.length === 0 && (
-                  <tr>
-                    <td style={{ textAlign: "center" }} colSpan={2}>
-                      Lịch sử hoạt động đang trống!
-                    </td>
-                  </tr>
+                  Lịch sử hoạt động
+                </Typography>
+                {activityList.length > 0 && (
+                  <Button
+                    onClick={() => setOpenModalAlertDialog(true)}
+                    size="sm"
+                    color="danger"
+                  >
+                    Xoá lịch sử
+                  </Button>
                 )}
-                {activityList.length > 0 &&
-                  activityList.map((item: any, index: number) => (
-                    <tr key={index}>
-                      <td>{item?.action}</td>
-                      <td>{formatDate(item?.createdAt)}</td>
+              </Box>
+              <Table sx={{ marginTop: "12px" }} aria-label="basic table">
+                <thead>
+                  <tr>
+                    <th style={{ width: "80%" }}>Tên hoạt động</th>
+                    <th style={{ width: "20%" }}>Thời gian</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {activityList.length === 0 && (
+                    <tr>
+                      <td style={{ textAlign: "center" }} colSpan={2}>
+                        <Typography
+                          sx={{ marginTop: "12px" }}
+                          level="title-lg"
+                          color="primary"
+                        >
+                          Lịch sử hoạt động đang trống!
+                        </Typography>
+                      </td>
                     </tr>
-                  ))}
-              </tbody>
-            </Table>
-          </Box>
+                  )}
+                  {activityList.length > 0 &&
+                    activityList.map((item: any, index: number) => (
+                      <tr key={index}>
+                        <td>{item?.action}</td>
+                        <td>{formatDate(item?.createdAt)}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </Table>
+            </Box>
+          )}
         </Grid>
       </Grid>
 
@@ -212,6 +242,7 @@ const UserInfo = () => {
       />
 
       <ModalAlertDialog
+        isLoading={isLoadingButton}
         open={openModalAlertDialog}
         title="Xoá lịch sử hoạt động"
         content="Lịch sử hoạt động của bạn sẽ bị xoá!"

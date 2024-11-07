@@ -8,7 +8,7 @@ const SkeletonPage = ({ page }: { page: string }) => {
     <>
       {(page === "detail" ||
         page === "search" ||
-        page === "viewing-history" ||
+        page === "watch-history" ||
         page === "saved-movies") && (
         <Box sx={{ display: "flex", gap: "24px", flexDirection: "column" }}>
           <Skeleton variant="text" level="h4" width="50%" />

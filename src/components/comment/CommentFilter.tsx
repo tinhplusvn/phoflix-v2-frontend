@@ -1,27 +1,19 @@
 import { Alert, Option, Select, Typography } from "@mui/joy";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useEffect, useState } from "react";
-// import { filterComment } from "../../redux/slice/commentsSlice";
-import { AppDispatch } from "../../redux/store";
-import { useDispatch } from "react-redux";
-import { getCommentList } from "../../redux/asyncThunk/commentThunk";
-import { useParams } from "react-router-dom";
 
 type filter = "DESC" | "ASC";
 
-const CommentFilter = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const [typeFilter, setTypeFilter] = useState<filter>("DESC");
-  const params = useParams();
+const CommentFilter = ({ handleGetAllComment }: any) => {
+  const [typeFilter, setTypeFilter] = useState<filter>(() => {
+    return JSON.parse(localStorage.getItem("filter-comments") as filter) ?? 'DESC';
+  });
 
-  useEffect(() => {
-    dispatch(
-      getCommentList({
-        movieSlug: params.slug as string,
-        sortOrder: typeFilter,
-      })
-    );
-  }, [typeFilter]);
+  const handleChangeFilter = (type: filter) => {
+    handleGetAllComment(type);
+    setTypeFilter(type);
+    localStorage.setItem("filter-comments", JSON.stringify(type));
+  };
 
   return (
     <Alert
@@ -36,8 +28,8 @@ const CommentFilter = () => {
         Lọc bình luận
       </Typography>
       <Select
-        defaultValue="DESC"
-        onChange={(event, value) => setTypeFilter(value as filter)}
+        value={typeFilter}
+        onChange={(event, value) => handleChangeFilter(value as filter)}
       >
         <Option value="DESC">Mới nhất</Option>
         <Option value="ASC">Cũ nhất</Option>

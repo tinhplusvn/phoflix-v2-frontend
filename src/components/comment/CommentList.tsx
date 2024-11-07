@@ -30,16 +30,15 @@ const CommentList = () => {
   const openModalReportComment = useSelector(
     (state: RootState) => state.comments.openModal.modalReportComment
   );
-
-  const [indexEdit, setIndexEdit] = useState<number>(-1);
-  const [indexDelete, setIndexDelete] = useState<number>(-1);
-  const [valueEditComment, setValueEditComment] = useState<string>("");
-  const [idComment, setIdComment] = useState<string>("");
-  const params = useParams();
   const user = useSelector((state: RootState) => state.users.user);
   const movieInfo = useSelector(
     (state: RootState) => state.movies.movieInfo.info
   );
+  const [indexEdit, setIndexEdit] = useState<number>(-1);
+  const [valueEditComment, setValueEditComment] = useState<string>("");
+  const [idComment, setIdComment] = useState<string>("");
+  const params = useParams();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleEditComment = (index: number, content: string) => {
     setIndexEdit(index);
@@ -47,15 +46,17 @@ const CommentList = () => {
   };
 
   const handleDeleteComment = async () => {
+    setIsLoading(true);
     const res = await dispatch(deleleComment(idComment as string));
 
     if (+res.payload.EC === 0) {
-      toast.success(res.payload.EM);
       await dispatch(
         getCommentList({ movieSlug: params.slug as string, sortOrder: "DESC" })
       );
+      toast.success(res.payload.EM);
     }
     dispatch(setOpenModalAlertDialog(false));
+    setIsLoading(false);
   };
 
   const handleSetOpenModalAlertDialog = (open: boolean) => {
@@ -67,6 +68,7 @@ const CommentList = () => {
   };
 
   const handSaveEditComment = async (idComment: string) => {
+    setIsLoading(true);
     const res = await dispatch(
       updateComment({
         content: valueEditComment,
@@ -74,7 +76,6 @@ const CommentList = () => {
       })
     );
     if (+res.payload.EC === 0) {
-      toast.success(res.payload.EM);
       await dispatch(
         getCommentList({ movieSlug: params.slug as string, sortOrder: "DESC" })
       );
@@ -85,9 +86,12 @@ const CommentList = () => {
           action: `Sửa bình luận thành "${valueEditComment}" tại phim ${movieInfo.name}"`,
         })
       );
+      toast.success(res.payload.EM);
     }
     setIndexEdit(-1);
+    setIsLoading(false);
   };
+
 
   return (
     <>
@@ -106,10 +110,9 @@ const CommentList = () => {
               key={index}
               index={index}
               item={item}
+              isLoading={isLoading}
               indexEdit={indexEdit}
-              indexDelete={indexDelete}
               valueEditComment={valueEditComment}
-              setIndexDelete={setIndexDelete}
               setIndexEdit={setIndexEdit}
               setValueEditComment={setValueEditComment}
               handleEditComment={handleEditComment}
@@ -123,6 +126,7 @@ const CommentList = () => {
       </Box>
 
       <ModalAlertDialog
+        isLoading={isLoading}
         handleSubmit={handleDeleteComment}
         open={openModalAlertDiaLog}
         setOpen={handleSetOpenModalAlertDialog}

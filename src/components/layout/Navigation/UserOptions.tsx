@@ -1,11 +1,10 @@
 import { Divider, Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
 import PersonIcon from "@mui/icons-material/Person";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import PasswordIcon from "@mui/icons-material/Password";
 import LogoutIcon from "@mui/icons-material/Logout";
 import _NavLink from "../../common/_NavLink";
-import { AppDispatch, RootState } from "../../../redux/store";
-import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
+import { useDispatch } from "react-redux";
 import { logout } from "../../../redux/asyncThunk/userThunk";
 import { useNavigate } from "react-router-dom";
 

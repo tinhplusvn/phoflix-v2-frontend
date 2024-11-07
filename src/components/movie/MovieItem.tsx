@@ -15,13 +15,13 @@ import toast from "react-hot-toast";
 interface IProps {
   movie: IMovie;
   page: string;
+  handleDeleteMovie?: (slug: string, type: string) => void;
 }
 
-const MovieItem = ({ movie, page }: IProps) => {
+const MovieItem = ({ movie, page, handleDeleteMovie }: IProps) => {
   const navigate = useNavigate();
-  const dispatch: AppDispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.users.user);
   const [width, setWidth] = useState<number>(window.innerWidth);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -31,44 +31,10 @@ const MovieItem = ({ movie, page }: IProps) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleRemoveFromViewingHisotry = async (slug: string) => {
-    const res: any = await dispatch(
-      deleteMovie({
-        userId: user?.id,
-        movieSlug: slug ?? "",
-        type: "watch-movies",
-      })
-    );
-
-    if (+res?.payload.EC === 0) {
-      toast.success(res?.payload.EM);
-      await dispatch(
-        getAllMovies({
-          userId: user.id as string,
-          type: "watch-movies",
-        })
-      );
-    }
-  };
-
-  const handleUnSaveMovie = async (slug: string) => {
-    const res: any = await dispatch(
-      deleteMovie({
-        userId: user?.id,
-        movieSlug: slug ?? "",
-        type: "saved-movies",
-      })
-    );
-
-    if (+res?.payload.EC === 0) {
-      toast.success(res?.payload.EM);
-      await dispatch(
-        getAllMovies({
-          userId: user.id as string,
-          type: "saved-movies",
-        })
-      );
-    }
+  const deleteMovie = async (slug: string, type: string) => {
+    setIsLoading(true);
+    handleDeleteMovie && (await handleDeleteMovie(slug, type));
+    setIsLoading(false);
   };
 
   return (
@@ -130,17 +96,19 @@ const MovieItem = ({ movie, page }: IProps) => {
           >
             Xem ngay
           </Button>
-          {(page === "viewingHistory" || page === "savedMovies") && (
+          {(page === "watchHistory" || page === "savedMovies") && (
             <Tooltip
               title={
-                page === "viewingHistory" ? "Xoá khỏi lịch sử" : "Bỏ lưu phim"
+                page === "watchHistory" ? "Xoá khỏi lịch sử" : "Bỏ lưu phim"
               }
             >
               <Button
+                loading={isLoading}
                 onClick={() =>
-                  page === "viewingHistory"
-                    ? handleRemoveFromViewingHisotry(movie.slug as string)
-                    : handleUnSaveMovie(movie.slug as string)
+                  handleDeleteMovie &&
+                  (page === "watchHistory"
+                    ? deleteMovie(movie.slug as string, "watch-history")
+                    : deleteMovie(movie.slug as string, "saved-movies"))
                 }
                 color="danger"
                 size="sm"
@@ -154,10 +122,12 @@ const MovieItem = ({ movie, page }: IProps) => {
       {width < 1024 &&
         (page === "viewingHistory" || page === "savedMovies") && (
           <IconButton
+            loading={isLoading}
             onClick={() =>
-              page === "viewingHistory"
-                ? handleRemoveFromViewingHisotry(movie.slug as string)
-                : handleUnSaveMovie(movie.slug as string)
+              handleDeleteMovie &&
+              (page === "viewingHistory"
+                ? deleteMovie(movie.slug as string, "watch-history")
+                : deleteMovie(movie.slug as string, "saved-movies"))
             }
             sx={{
               position: "absolute",

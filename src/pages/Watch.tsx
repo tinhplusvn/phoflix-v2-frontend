@@ -1,10 +1,12 @@
 import {
   Alert,
+  AspectRatio,
   Box,
   Button,
   Chip,
   Divider,
   IconButton,
+  Skeleton,
   Tooltip,
   Typography,
 } from "@mui/joy";
@@ -27,10 +29,8 @@ import PollOutlinedIcon from "@mui/icons-material/PollOutlined";
 import SubscriptionsOutlinedIcon from "@mui/icons-material/SubscriptionsOutlined";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 import CommentSection from "../components/comment/CommentSection";
-import { getCommentList } from "../redux/asyncThunk/commentThunk";
 import { addMovieRating, getRatings } from "../redux/asyncThunk/ratingThunk";
 import toast from "react-hot-toast";
-import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
 import { addActivityLog } from "../redux/asyncThunk/activityLogThunk";
 
 type Episode = {
@@ -44,6 +44,8 @@ type Episode = {
 type TypeCopy = "not-copy" | "copied";
 
 const Watch = () => {
+  const user = useSelector((state: RootState) => state.users.user);
+
   const dispatch: AppDispatch = useDispatch();
   const movieInfo = useSelector(
     (state: RootState) => state.movies.movieInfo.info
@@ -76,7 +78,11 @@ const Watch = () => {
   useEffect(() => {
     dispatch(getMovieInfo(params.slug as string));
     dispatch(
-      getCommentList({ movieSlug: params.slug as string, sortOrder: "DESC" })
+      addMovie({
+        userId: user?.id,
+        movieInfo,
+        type: "watch-history",
+      })
     );
   }, []);
 
@@ -90,8 +96,6 @@ const Watch = () => {
       }
     }
   }, [episodes, movieInfo]);
-
-
 
   const handleGetCurrentEpisodes = () => {
     const objCurrentEpisodes: any = watchedEpisodes.find(
@@ -167,6 +171,7 @@ const Watch = () => {
           <Box sx={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
             {episodes.map((item: Episode, index: number) => (
               <Button
+                sx={{ flex: "auto" }}
                 key={index}
                 variant={item.slug === currentEpisode.slug ? "solid" : "soft"}
                 onClick={() => handleChangeEpisode(item)}
@@ -274,16 +279,17 @@ const SectionRating = () => {
   const movieInfo = useSelector(
     (state: RootState) => state.movies.movieInfo.info
   );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    dispatch(getRatings({ movieSlug: params.slug as string, userId: user.id }));
-    dispatch(
-      addMovie({
-        userId: user?.id,
-        movieInfo,
-        type: "watch-movies",
-      })
-    );
+    const handleInit = async () => {
+      setIsLoading(true);
+      await dispatch(
+        getRatings({ movieSlug: params.slug as string, userId: user.id })
+      );
+      setIsLoading(false);
+    };
+    handleInit();
   }, []);
 
   useEffect(() => {
@@ -296,6 +302,7 @@ const SectionRating = () => {
       return;
     }
 
+    setIsLoading(true);
     setStars(stars);
     const res = await dispatch(
       addMovieRating({
@@ -304,19 +311,32 @@ const SectionRating = () => {
         rating: stars,
       })
     );
+
     if (+res.payload?.EC === 0) {
-      toast.success(res.payload?.EM);
       await dispatch(
         getRatings({ movieSlug: params.slug as string, userId: user.id })
       );
-      await dispatch(addActivityLog({
-        userId: user?.id,
-        action: `Đánh giá ${stars} sao phim ${movieInfo.name}`
-      }));
+      await dispatch(
+        addActivityLog({
+          userId: user?.id,
+          action: `Đánh giá ${stars} sao phim ${movieInfo.name}`,
+        })
+      );
+      toast.success(res.payload?.EM);
     } else {
       toast.error(res.payload?.EM);
     }
+    setIsLoading(false);
   };
+
+  if (isLoading) {
+    return (
+      <p>
+        <Skeleton variant="text" level="h1" />
+        <Skeleton variant="text" level="h2" />
+      </p>
+    );
+  }
 
   return (
     <Alert

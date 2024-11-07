@@ -7,9 +7,10 @@ import { IMovie } from "../../interfaces/movie";
 interface IProps {
   movies: IMovie[];
   page?: string;
+  handleDeleteMovie?: (slug: string, type: string) => void;
 }
 
-const MovieList = ({ movies, page }: IProps) => {
+const MovieList = ({ movies, page, handleDeleteMovie }: IProps) => {
   if (movies.length === 0) {
     return <SkeletonMovie quantity={18} />;
   }
@@ -20,7 +21,11 @@ const MovieList = ({ movies, page }: IProps) => {
         {movies.length > 0 &&
           movies.map((movie: IMovie, index) => (
             <Grid xs={6} sm={4} lg={2} md={3} key={index}>
-              <MovieItem movie={movie} page={page as string} />
+              <MovieItem
+                movie={movie}
+                page={page as string}
+                handleDeleteMovie={handleDeleteMovie}
+              />
             </Grid>
           ))}
       </Grid>

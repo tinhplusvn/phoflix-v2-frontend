@@ -1,12 +1,37 @@
-import { Avatar, Box, Button, Divider, Textarea, Typography } from "@mui/joy";
+import {
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  Textarea,
+  Tooltip,
+  Typography,
+} from "@mui/joy";
 import { formatDate } from "../../utils";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { Link, useNavigate } from "react-router-dom";
+
+interface CommentItem {
+  item: any;
+  index: number;
+  indexEdit: number;
+  isLoading: boolean;
+  valueEditComment: string;
+  setValueEditComment: (content: string) => void;
+  setIndexEdit: (index: number) => void;
+  setIdComment: (id: string) => void;
+  handleSetOpenModalAlertDialog: (open: boolean) => void;
+  handleSetOpenModalReportComment: (open: boolean) => void;
+  handleEditComment: (index: number, content: string) => void;
+  handSaveEditComment: (idComment: string) => void;
+}
 
 const CommentItem = ({
   item,
   index,
   indexEdit,
+  isLoading,
   valueEditComment,
   setValueEditComment,
   setIndexEdit,
@@ -15,13 +40,12 @@ const CommentItem = ({
   handleSetOpenModalReportComment,
   handleEditComment,
   handSaveEditComment,
-}: any) => {
+}: CommentItem) => {
   const handleOpenModal = (idComment: string) => {
     handleSetOpenModalAlertDialog(true);
     setIdComment(idComment);
   };
   const user = useSelector((state: RootState) => state.users.user);
-
 
   return (
     <li style={{ display: "flex", gap: "12px" }}>
@@ -41,9 +65,22 @@ const CommentItem = ({
       >
         <Box>
           <Box sx={{ display: "flex", gap: "8px", alignItems: "center" }}>
-            <Typography level="title-md" color="primary">
-              {item["user.username"]}
-            </Typography>
+            <Tooltip
+              title="Chuyển đến trang thông tin người dùng"
+              placement="top"
+            >
+              <Typography
+                sx={{
+                  cursor: "pointer",
+                }}
+                level="title-md"
+                color="primary"
+              >
+                <Link style={{ all: "unset" }} to="/thong-tin-nguoi-dung">
+                  {item["user.username"]}
+                </Link>
+              </Typography>
+            </Tooltip>
             <Typography level="body-xs" color="neutral">
               {formatDate(item?.createdAt)}
             </Typography>
@@ -111,6 +148,7 @@ const CommentItem = ({
               Huỷ
             </Button>
             <Button
+              loading={isLoading}
               onClick={() => handSaveEditComment(item?.id)}
               variant="plain"
               color="primary"

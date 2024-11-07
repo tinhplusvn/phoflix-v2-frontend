@@ -68,7 +68,7 @@ const NavRight = ({ width }: NavRight) => {
 
         <ThemeMode />
 
-        {!user.refresh_token ? (
+        {!user?.refresh_token ? (
           <Button onClick={() => handleSetOpen(true)} variant="solid">
             Đăng nhập
           </Button>

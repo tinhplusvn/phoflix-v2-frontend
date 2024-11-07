@@ -14,6 +14,7 @@ interface IProps {
   content: string;
   setOpen: (open: boolean) => void;
   handleSubmit: () => void;
+  isLoading?: boolean;
 }
 
 const ModalAlertDialog = ({
@@ -22,6 +23,7 @@ const ModalAlertDialog = ({
   handleSubmit,
   title,
   content,
+  isLoading,
 }: IProps) => {
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
@@ -30,7 +32,12 @@ const ModalAlertDialog = ({
         <Divider />
         <DialogContent>{content}</DialogContent>
         <DialogActions>
-          <Button variant="solid" color="danger" onClick={handleSubmit}>
+          <Button
+            loading={isLoading}
+            variant="solid"
+            color="danger"
+            onClick={handleSubmit}
+          >
             Xác nhận
           </Button>
           <Button
