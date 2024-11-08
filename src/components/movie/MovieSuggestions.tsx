@@ -25,7 +25,7 @@ const MovieSuggestions = ({ categories, countries }: IProps) => {
     dispatch(
       getMovieDetail({
         describe: "the-loai",
-        slug: categories[0].slug,
+        slug: categories[0].slug as string,
         page: 1,
       })
     );

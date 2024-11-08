@@ -32,6 +32,9 @@ const Detail = () => {
   const titlePage = useSelector(
     (state: RootState) => state.movies.movieDetail.titlePage
   );
+  const titleHead = useSelector(
+    (state: RootState) => state.movies.movieDetail.titleHead
+  );
   const isLoading = useSelector((state: RootState) => state.movies.isLoading);
   const isError = useSelector((state: RootState) => state.movies.isError);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -49,6 +52,12 @@ const Detail = () => {
     "tv-shows": "Tv shows",
   });
   const [breadcrumbsPaths, setBreadcrumbsPaths] = useState<string[]>([]);
+
+  useEffect(() => {
+    console.log(movies);
+    console.log(titlePage);
+    document.title = titleHead;
+  }, [titleHead]);
 
   useEffect(() => {
     const categoryMapping = Object.fromEntries(
@@ -81,8 +90,8 @@ const Detail = () => {
   useEffect(() => {
     dispatch(
       getMovieDetail({
-        describe: params.describe,
-        slug: params.slug,
+        describe: params.describe as string,
+        slug: params.slug as string,
         page: currentPage,
       })
     );

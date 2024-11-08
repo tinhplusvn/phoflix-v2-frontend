@@ -1,9 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../custom/axios";
+import {
+  iForgotPassword,
+  ILogin,
+  IRegister,
+  ISendOTP,
+  IUpdateUser,
+  IVerifyToken,
+} from "../../interfaces/user";
 
 export const register = createAsyncThunk(
   "users/register",
-  async (rawData: any) => {
+  async (rawData: IRegister) => {
     try {
       const response: any = await axios.post(
         `${process.env.REACT_APP_API}/auth/register`,
@@ -16,21 +24,24 @@ export const register = createAsyncThunk(
   }
 );
 
-export const login = createAsyncThunk("users/login", async (rawData: any) => {
-  try {
-    const response: any = await axios.post(
-      `${process.env.REACT_APP_API}/auth/login`,
-      rawData
-    );
-    return response;
-  } catch (error) {
-    console.log(error);
+export const login = createAsyncThunk(
+  "users/login",
+  async (rawData: ILogin) => {
+    try {
+      const response: any = await axios.post(
+        `${process.env.REACT_APP_API}/auth/login`,
+        rawData
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
 
 export const forgotPassword = createAsyncThunk(
   "users/forgotPassword",
-  async (rawData: any) => {
+  async (rawData: iForgotPassword) => {
     try {
       const response: any = await axios.post(
         `${process.env.REACT_APP_API}/auth/forgot-password`,
@@ -45,7 +56,7 @@ export const forgotPassword = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "users/updateUser",
-  async (rawData: any) => {
+  async (rawData: IUpdateUser) => {
     try {
       const response: any = await axios.post(
         `${process.env.REACT_APP_API}/auth/update-user`,
@@ -60,13 +71,12 @@ export const updateUser = createAsyncThunk(
 
 export const verifyToken = createAsyncThunk(
   "users/verifyToken",
-  async (rawData: any) => {
+  async (rawData: IVerifyToken) => {
     try {
       const response: any = await axios.post(
         `${process.env.REACT_APP_API}/auth/verify-token`,
         rawData
       );
-      console.log(response);
       return response;
     } catch (error) {
       console.log(error);
@@ -98,13 +108,13 @@ export const getUser = createAsyncThunk("users/getUser", async () => {
 
 export const sendOTP = createAsyncThunk(
   "users/sendOtp",
-  async (rawData: any) => {
+  async (rawData: ISendOTP) => {
     try {
-      const response = await axios.post(
+      const response: any = await axios.post(
         `${process.env.REACT_APP_API}/auth/send-otp`,
         rawData
       );
-      console.log(response);
+      return response;
     } catch (error) {
       console.log(error);
     }

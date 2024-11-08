@@ -45,8 +45,36 @@ export interface IEpisodes {
   link_m3u8: string;
 }
 
-export interface ResponseMovies {
-  DT: { movies: IMovie[] };
-  EC: string;
-  EM: string;
+export interface IGetMovieDetail {
+  describe: string;
+  slug: string;
+  page: number;
 }
+
+export interface ISearchMovie {
+  keyword: string;
+  page: number;
+}
+
+export interface IAddMovie {
+  userId: string;
+  movieInfo: IMovie;
+  type: string;
+}
+
+export interface IGetAllMovies {
+  userId: string;
+  type: string;
+}
+
+export interface IDeleteAllMovie {
+  userId: string;
+  type: string;
+}
+
+export interface IDeleteMovie {
+  userId: string;
+  movieSlug: string;
+  type: string;
+} 
+

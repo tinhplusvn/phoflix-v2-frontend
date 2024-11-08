@@ -68,7 +68,7 @@ const SlideItem = ({ item }: IProps) => {
           flexDirection: "column",
           gap: "12px",
           width: "100%",
-          overflow: 'hidden'
+          overflow: "hidden",
         }}
       >
         <Typography
@@ -78,8 +78,9 @@ const SlideItem = ({ item }: IProps) => {
             overflow: "hidden",
             textOverflow: "ellipsis",
             maxWidth: "100%",
+            textShadow: "2px 2px #00000080",
+            color: "#fff",
           }}
-          color="primary"
           level="title-lg"
         >
           {item.name}
@@ -94,6 +95,7 @@ const SlideItem = ({ item }: IProps) => {
               textOverflow: "ellipsis",
               maxWidth: "100%",
             }}
+            color="primary"
             level="title-md"
           >
             {item.origin_name}

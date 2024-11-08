@@ -16,7 +16,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../redux/asyncThunk/userThunk";
 import LoadingButton from "../common/LoadingButon";
 import toast from "react-hot-toast";
-import { addActivityLog, getActivityLog } from "../../redux/asyncThunk/activityLogThunk";
+import {
+  addActivityLog,
+  getActivityLog,
+} from "../../redux/asyncThunk/activityLogThunk";
 
 interface IProps {
   open: boolean;
@@ -195,7 +198,12 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
             {isLoading ? (
               <LoadingButton />
             ) : (
-              <Button onClick={() => handleUpdateUser()}>Lưu</Button>
+              <Button
+                onKeyDown={(e) => e.code === "Enter" && handleUpdateUser()}
+                onClick={() => handleUpdateUser()}
+              >
+                Lưu
+              </Button>
             )}
           </Box>
         </Box>

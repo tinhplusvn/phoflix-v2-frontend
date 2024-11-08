@@ -7,15 +7,16 @@ const instance = axios.create({
 });
 
 // tự động gọi api khi lỗi
-// axiosRetry(instance, {
-//   retries: 0,
-//   retryCondition: (error) => {
-//     return error?.response?.status === 401;
-//   },
-//   retryDelay: (retryCount, error) => {
-//     return retryCount * 500;
-//   },
-// });
+axiosRetry(instance, {
+  retries: 3,
+  retryCondition: (error) => {
+    console.log(error.response?.status)
+    return error?.response?.status === 401;
+  },
+  retryDelay: (retryCount, error) => {
+    return retryCount * 500;
+  },
+});
 
 
 instance.interceptors.response.use(

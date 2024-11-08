@@ -77,13 +77,16 @@ const Watch = () => {
 
   useEffect(() => {
     dispatch(getMovieInfo(params.slug as string));
-    dispatch(
-      addMovie({
-        userId: user?.id,
-        movieInfo,
-        type: "watch-history",
-      })
-    );
+
+    if (user?.access_token || user?.refresh_token) {
+      dispatch(
+        addMovie({
+          userId: user?.id,
+          movieInfo,
+          type: "watch-history",
+        })
+      );
+    }
   }, []);
 
   useEffect(() => {
@@ -289,7 +292,9 @@ const SectionRating = () => {
       );
       setIsLoading(false);
     };
-    handleInit();
+    if (user?.access_token || user?.refresh_token) {
+      handleInit();
+    }
   }, []);
 
   useEffect(() => {
@@ -307,7 +312,7 @@ const SectionRating = () => {
     const res = await dispatch(
       addMovieRating({
         userId: user.id,
-        movieSlug: params.slug,
+        movieSlug: params.slug as string,
         rating: stars,
       })
     );
@@ -329,15 +334,6 @@ const SectionRating = () => {
     setIsLoading(false);
   };
 
-  if (isLoading) {
-    return (
-      <p>
-        <Skeleton variant="text" level="h1" />
-        <Skeleton variant="text" level="h2" />
-      </p>
-    );
-  }
-
   return (
     <Alert
       sx={{
@@ -345,11 +341,21 @@ const SectionRating = () => {
         gap: "12px",
       }}
     >
-      <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
+      <Box
+        sx={{
+          display: "flex",
+          gap: "12px",
+          alignItems: "center",
+        }}
+      >
         <Typography startDecorator={<PollOutlinedIcon />} level="title-lg">
           Đánh giá phim
         </Typography>
-        <Chip color="primary">{rating.averageRating}/5 sao</Chip>
+        {isLoading ? (
+          <Skeleton variant="text" level="body-xs" width={50} height={20} />
+        ) : (
+          <Chip color="primary">{rating.averageRating}/5 sao</Chip>
+        )}
       </Box>
       <Box
         sx={{
@@ -366,9 +372,13 @@ const SectionRating = () => {
           value={stars}
           precision={1}
         />
-        <Typography level="title-sm">
-          {rating.countRating} lượt đánh giá
-        </Typography>
+        {isLoading ? (
+          <Skeleton variant="text" level="body-xs" width={100} height={20} />
+        ) : (
+          <Typography level="title-sm" color="neutral">
+            {rating.countRating} lượt đánh giá
+          </Typography>
+        )}
       </Box>
     </Alert>
   );

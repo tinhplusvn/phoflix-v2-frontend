@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../custom/axios";
+import { IAddActivityLog } from "../../interfaces/activityLog";
 
 export const getActivityLog = createAsyncThunk(
   "movies/getActivityLog",
@@ -17,7 +18,7 @@ export const getActivityLog = createAsyncThunk(
 
 export const addActivityLog = createAsyncThunk(
   "movies/addActivityLog",
-  async (rawData: any) => {
+  async (rawData: IAddActivityLog) => {
     try {
       const response: any = await axios.post(
         `${process.env.REACT_APP_API}/activity-log/add-activity-log`,

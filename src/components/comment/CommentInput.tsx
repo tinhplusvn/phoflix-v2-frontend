@@ -29,8 +29,8 @@ const CommentInput = () => {
     setIsLoading(true);
     const res = await dispatch(
       addComment({
-        user_id: user.id,
-        movie_slug: params.slug,
+        userId: user.id,
+        movieSlug: params.slug as string,
         content: valueComment,
       })
     );

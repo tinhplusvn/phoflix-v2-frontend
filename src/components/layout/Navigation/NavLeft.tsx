@@ -11,6 +11,7 @@ import { RootState } from "../../../redux/store";
 const NavLeft = () => {
   const categories = useSelector((state: RootState) => state.movies.categories);
   const countries = useSelector((state: RootState) => state.movies.countries);
+  const user = useSelector((state: RootState) => state.users.user);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -37,28 +38,27 @@ const NavLeft = () => {
           </MenuItem>
         </Menu>
       </Dropdown>
-
       <NavListItem data={categories} describe="the-loai" title="Thể loại" />
-
       <NavListItem data={countries} describe="quoc-gia" title="Quốc gia" />
-
-
-      <Dropdown>
-        <MenuButton variant="plain">
-          Tuỳ chọn
-          <KeyboardArrowDownIcon />
-        </MenuButton>
-        <Menu>
-          <MenuItem>
-            <HistoryIcon />
-            <_NavLink path="/lich-su-da-xem" content="Lịch sử đã xem" />
-          </MenuItem>
-          <MenuItem>
-            <BookmarkBorderIcon />
-            <_NavLink path="/phim-da-luu" content="Phim đã lưu" />
-          </MenuItem>
-        </Menu>
-      </Dropdown>
+      
+      {(user.access_token || user?.refresh_token) && (
+        <Dropdown>
+          <MenuButton variant="plain">
+            Tuỳ chọn
+            <KeyboardArrowDownIcon />
+          </MenuButton>
+          <Menu>
+            <MenuItem>
+              <HistoryIcon />
+              <_NavLink path="/lich-su-da-xem" content="Lịch sử đã xem" />
+            </MenuItem>
+            <MenuItem>
+              <BookmarkBorderIcon />
+              <_NavLink path="/phim-da-luu" content="Phim đã lưu" />
+            </MenuItem>
+          </Menu>
+        </Dropdown>
+      )}
     </Box>
   );
 };

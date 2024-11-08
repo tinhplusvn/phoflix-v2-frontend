@@ -7,6 +7,10 @@ const SkeletonActivityLog = () => {
       <Skeleton variant="text" level="h4" sx={{ width: "100%" }} />
       <Skeleton variant="text" level="h4" sx={{ width: "100%" }} />
       <Skeleton variant="text" level="h4" sx={{ width: "100%" }} />
+      <Skeleton variant="text" level="h4" sx={{ width: "100%" }} />
+      <Skeleton variant="text" level="h4" sx={{ width: "100%" }} />
+      <Skeleton variant="text" level="h4" sx={{ width: "100%" }} />
+      <Skeleton variant="text" level="h4" sx={{ width: "100%" }} />
     </Box>
   );
 };

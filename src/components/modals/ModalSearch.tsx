@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import {
   addSearchHistory,
-  deletSearchHistory,
+  deleteSearchHistory,
   getSearchHistory,
 } from "../../redux/asyncThunk/searchHistoryThunk";
 import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
@@ -57,8 +57,10 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
       setIsLoading(false);
     };
 
-    handleInit();
-  }, []);
+    if (user?.access_token || user?.refresh_token) {
+      handleInit();
+    }
+  }, [user]);
 
   useEffect(() => {
     if (searchRef.current) {
@@ -71,10 +73,9 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
   const handleSearchInput = async (actions: actions) => {
     if (searchValue !== "") {
       setIsLoadingButton(true);
-      navigate(`/tim-kiem/${searchValue}`);
       await dispatch(
         addSearchHistory({
-          userId: user.id,
+          userId: user.id as string,
           type: "recent",
           keyword: searchValue,
         })
@@ -86,6 +87,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
           action: `Tìm kiếm từ khoá "${searchValue}"`,
         })
       );
+      navigate(`/tim-kiem/${searchValue}`);
       setSearchValue("");
       setOpen(false);
       setIsLoadingButton(false);
@@ -94,6 +96,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
 
   const handleSearchFromSearchList = async (value: string) => {
     navigate(`/tim-kiem/${value}`);
+    setOpen(false);
     await dispatch(
       addActivityLog({
         userId: user?.id,
@@ -101,7 +104,6 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
       })
     );
     setSearchValue("");
-    setOpen(false);
   };
 
   const handleFavouriteSearchHistory = async (
@@ -123,7 +125,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
 
   const handleRemoveSearch = async (item: any) => {
     setIsLoading(true);
-    await dispatch(deletSearchHistory(item));
+    await dispatch(deleteSearchHistory(item));
     await dispatch(getSearchHistory(user.id as string));
     setIsLoading(false);
   };

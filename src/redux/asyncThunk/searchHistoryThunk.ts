@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../custom/axios";
+import { IAddSearchHistory } from "../../interfaces/searchHistory";
 
 export const getSearchHistory = createAsyncThunk(
   "movies/getSearchHistory",
@@ -17,7 +18,7 @@ export const getSearchHistory = createAsyncThunk(
 
 export const addSearchHistory = createAsyncThunk(
   "movies/addSearchHistory",
-  async (rawData: any) => {
+  async (rawData: IAddSearchHistory) => {
     try {
       const response: any = await axios.post(
         `${process.env.REACT_APP_API}/search-history/add-search-history`,
@@ -30,7 +31,7 @@ export const addSearchHistory = createAsyncThunk(
   }
 );
 
-export const deletSearchHistory = createAsyncThunk(
+export const deleteSearchHistory = createAsyncThunk(
   "movies/deletSearchHistory",
   async (idSearchHistory: string) => {
     try {

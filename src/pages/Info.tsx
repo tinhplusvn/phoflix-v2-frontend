@@ -162,7 +162,7 @@ const SectionCardMovie = ({
     const res: any = await dispatch(
       deleteMovie({
         userId: user?.id,
-        movieSlug: movieInfo?.slug ?? "",
+        movieSlug: movieInfo?.slug as string,
         type: "saved-movies",
       })
     );

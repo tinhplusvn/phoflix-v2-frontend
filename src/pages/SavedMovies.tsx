@@ -26,6 +26,10 @@ const SavedMovie = () => {
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
 
   useEffect(() => {
+    document.title = "Phim Đã Lưu Của Bạn - Xem Lại Mọi Lúc, Mọi Nơi!";
+  }, []);
+
+  useEffect(() => {
     const handleInit = async () => {
       setIsLoading(true);
       await dispatch(
@@ -37,8 +41,10 @@ const SavedMovie = () => {
       setIsLoading(false);
     };
 
-    handleInit();
-  }, []);
+    if (user?.access_token || user?.refresh_token) {
+      handleInit();
+    }
+  }, [user]);
 
   const handleDeleteMovie = async (slug: string, type: string) => {
     const res: any = await dispatch(
@@ -61,7 +67,7 @@ const SavedMovie = () => {
   };
 
   const handleDeleteAll = async () => {
-    setIsLoadingButton(true)
+    setIsLoadingButton(true);
     const res: any = await dispatch(
       deleteAllMovie({
         userId: user.id as string,
@@ -69,7 +75,7 @@ const SavedMovie = () => {
       })
     );
 
-    setIsLoadingButton(false)
+    setIsLoadingButton(false);
 
     if (+res.payload.EC === 0) {
       toast.success(res.payload.EM);

@@ -87,7 +87,6 @@ const ForgotPassword = ({ setOpen }: any) => {
         })
       );
 
-      console.log(res);
       if (+res.payload.EC !== 0) {
         setOpen(false);
         toast.error(res.payload.EM);

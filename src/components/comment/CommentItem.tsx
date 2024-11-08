@@ -76,9 +76,9 @@ const CommentItem = ({
                 level="title-md"
                 color="primary"
               >
-                <Link style={{ all: "unset" }} to="/thong-tin-nguoi-dung">
-                  {item["user.username"]}
-                </Link>
+                {/* <Link style={{ all: "unset" }} to="/thong-tin-nguoi-dung">
+                </Link> */}
+                {item["user.username"]}
               </Typography>
             </Tooltip>
             <Typography level="body-xs" color="neutral">

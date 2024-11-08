@@ -2,6 +2,8 @@ import { Alert, Button, Typography } from "@mui/joy";
 import { useNavigate } from "react-router-dom";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import React from "react";
+import { useMediaQuery } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 interface IProps {
   path: string;
@@ -11,6 +13,8 @@ interface IProps {
 
 const TitleContainer = ({ path, content, icon }: IProps) => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <Alert
@@ -20,10 +24,14 @@ const TitleContainer = ({ path, content, icon }: IProps) => {
         margin: "24px 0",
       }}
     >
-      <Typography startDecorator={icon} color="neutral" level="h3">
+      <Typography
+        startDecorator={icon}
+        color="neutral"
+        level={isMobile ? "title-lg" : "h3"}
+      >
         {content}
       </Typography>
-      <Button variant="outlined" onClick={() => navigate(path)}>
+      <Button size="sm" variant="outlined" onClick={() => navigate(path)}>
         Xem thêm
         <ChevronRightRoundedIcon />
       </Button>

@@ -11,13 +11,12 @@ import { useEffect, useState } from "react";
 import { getCommentList } from "../../redux/asyncThunk/commentThunk";
 import { useParams } from "react-router-dom";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import toast from "react-hot-toast";
 
 type filter = "DESC" | "ASC";
 
 const CommentSection = () => {
   const dispatch: AppDispatch = useDispatch();
-
+  const user = useSelector((state: RootState) => state.users.user);
   const commentList: any = useSelector(
     (state: RootState) => state.comments.commentList
   );

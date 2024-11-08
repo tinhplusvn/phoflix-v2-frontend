@@ -1,11 +1,36 @@
-import { Box, Button, FormControl, FormLabel, Modal, ModalClose, Radio, RadioGroup, Sheet, Typography } from "@mui/joy";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Modal,
+  ModalClose,
+  Radio,
+  RadioGroup,
+  Sheet,
+  Typography,
+} from "@mui/joy";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 type IProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
 };
 
+type reportingReason = "SCAM" | "SPAM" | "OFFENSIVE_CONTENT";
+
 const ModalReportComment = ({ open, setOpen }: IProps) => {
+  const [reportingReason, setReportingReason] =
+    useState<reportingReason>("SPAM");
+  const handleReport = () => {
+    toast("Đang phát triển!");
+  };
+
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setReportingReason(event.target.value as reportingReason);
+  };
+
   return (
     <Modal
       open={open}
@@ -38,10 +63,18 @@ const ModalReportComment = ({ open, setOpen }: IProps) => {
         >
           <FormControl>
             <FormLabel>Lý do báo cáo?</FormLabel>
-            <RadioGroup defaultValue="1" name="radio-buttons-group">
-              <Radio value="1" label="Spam" size="md" />
-              <Radio value="2" label="Nội dung xúc phạm" size="md" />
-              <Radio value="3" label="Lừa đảo" size="md" /> 
+            <RadioGroup
+              onChange={(event) => handleRadioChange(event)}
+              value={reportingReason}
+              name="radio-buttons-group"
+            >
+              <Radio value="SPAM" label="Spam" size="md" />
+              <Radio
+                value="OFFENSIVE_CONTENT"
+                label="Nội dung xúc phạm"
+                size="md"
+              />
+              <Radio value="SCAM" label="Lừa đảo" size="md" />
             </RadioGroup>
           </FormControl>
           <Box
@@ -59,7 +92,7 @@ const ModalReportComment = ({ open, setOpen }: IProps) => {
             >
               Huỷ bỏ
             </Button>
-            <Button>Báo cáo</Button>
+            <Button onClick={() => handleReport()}>Báo cáo</Button>
           </Box>
         </Box>
       </Sheet>

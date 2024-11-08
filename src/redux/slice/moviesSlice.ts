@@ -30,17 +30,20 @@ interface MoviesState {
   tvShows: IMovie[];
   movieInfo: {
     info: IMovie;
+    titleHead: string;
     episodes: IEpisodes[];
     status: string | boolean;
   };
   movieDetail: {
     items: IMovie[];
+    titleHead: string;
     titlePage: string;
     pagination: IPagination;
   };
   searchMovie: {
     items: IMovie[];
     pagination: IPagination;
+    titleHead: string;
   };
   savedMovies: any;
   watchHistory: any;
@@ -58,12 +61,14 @@ const initialState: MoviesState = {
   tvShows: [],
   movieInfo: {
     info: {},
+    titleHead: "",
     episodes: [],
     status: false,
   },
   movieDetail: {
     items: [],
     titlePage: "",
+    titleHead: "",
     pagination: {
       totalItems: 0,
       totalPages: 0,
@@ -75,6 +80,7 @@ const initialState: MoviesState = {
       totalItems: 0,
       totalPages: 0,
     },
+    titleHead: "",
   },
   savedMovies: {
     movies: [],
@@ -211,9 +217,11 @@ export const moviesSlice = createSlice({
       .addCase(getMovieDetail.fulfilled, (state, action) => {
         if (action.payload) {
           const { items, titlePage } = action.payload;
+          const titleHead = action.payload?.seoOnPage?.titleHead ?? "Chi tiết phim";
           const { totalItems, totalPages } = action.payload?.params?.pagination;
           state.movieDetail.items = items;
           state.movieDetail.titlePage = titlePage;
+          state.movieDetail.titleHead = titleHead;
           state.movieDetail.pagination.totalItems = totalItems;
           state.movieDetail.pagination.totalPages = totalPages;
         }
@@ -234,7 +242,9 @@ export const moviesSlice = createSlice({
         if (action.payload) {
           const { items } = action.payload;
           const { totalItems, totalPages } = action.payload.params.pagination;
+          const titleHead = action.payload?.seoOnPage?.titleHead;
           state.searchMovie.items = items;
+          state.searchMovie.titleHead = titleHead
           state.searchMovie.pagination.totalItems = totalItems;
           state.searchMovie.pagination.totalPages = totalPages;
           state.isLoading = !action.payload;

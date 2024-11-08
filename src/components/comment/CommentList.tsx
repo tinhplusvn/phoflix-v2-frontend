@@ -17,6 +17,7 @@ import ModalReportComment from "../modals/ModalReportComment";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
+import { IDeleteComment } from "../../interfaces/comments";
 
 const CommentList = () => {
   const commentList = useSelector(

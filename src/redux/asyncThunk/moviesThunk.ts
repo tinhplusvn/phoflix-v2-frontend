@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../custom/axios";
-import { ResponseMovies } from "../../interfaces/movie";
+import { IGetMovieDetail } from "../../interfaces/movie";
+import { IAddMovie, IDeleteAllMovie, IDeleteMovie, IGetAllMovies, ISearchMovie } from "../../interfaces/movie";
 
 export const getCategories = createAsyncThunk(
   "movies/getCategories",
@@ -119,7 +120,7 @@ export const getMovieInfo = createAsyncThunk(
 
 export const getMovieDetail = createAsyncThunk(
   "movies/getMovieDetail",
-  async (rawData: any) => {
+  async (rawData: IGetMovieDetail) => {
     let { describe, slug, page } = rawData;
     try {
       const baseApi = `${process.env.REACT_APP_API_BASE}/${describe}/${slug}`;
@@ -139,11 +140,11 @@ export const getMovieDetail = createAsyncThunk(
 
 export const searchMovie = createAsyncThunk(
   "movies/searchMovie",
-  async (rawData: any) => {
+  async (rawData: ISearchMovie) => {
     const { keyword, page } = rawData;
 
     try {
-      const baseApi = `${process.env.REACT_APP_API_TIM_KIEM}?keyword=${keyword}&limit=24&page=${page}`;
+      const baseApi: string = `${process.env.REACT_APP_API_TIM_KIEM}?keyword=${keyword}&limit=24&page=${page}`;
       const response = await fetch(baseApi);
       const data = await response.json();
       return data.data;
@@ -153,24 +154,10 @@ export const searchMovie = createAsyncThunk(
   }
 );
 
-export const saveMovie = createAsyncThunk(
-  "movies/saveMovie",
-  async (rawData: any) => {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API}/movies/save-movie`,
-        rawData
-      );
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-);
 
 export const getAllMovies = createAsyncThunk(
   "movies/getAllMovies",
-  async (rawData: any) => {
+  async (rawData: IGetAllMovies) => {
     try {
       const { userId, type } = rawData;
       const response = await axios.get(
@@ -186,7 +173,7 @@ export const getAllMovies = createAsyncThunk(
 
 export const addMovie = createAsyncThunk(
   "movies/addMovie",
-  async (rawData: any) => {
+  async (rawData: IAddMovie) => {
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API}/movies/add-movie`,
@@ -201,7 +188,7 @@ export const addMovie = createAsyncThunk(
 
 export const deleteMovie = createAsyncThunk(
   "movies/deleteMovie",
-  async (rawData: any) => {
+  async (rawData: IDeleteMovie) => {
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API}/movies/delete-movie`,
@@ -216,7 +203,7 @@ export const deleteMovie = createAsyncThunk(
 
 export const deleteAllMovie = createAsyncThunk(
   "movies/deleteAllMovie",
-  async (rawData: any) => {
+  async (rawData: IDeleteAllMovie) => {
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API}/movies/delete-all-movie`,

@@ -1,9 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../custom/axios";
+import { IAddMovieRating, IGetRatings } from "../../interfaces/rating";
 
 export const getRatings = createAsyncThunk(
   "movies/getRatings",
-  async (rawData: any) => {
+  async (rawData: IGetRatings) => {
     try {
       const response: any = await axios.post(
         `${process.env.REACT_APP_API}/rating/get-ratings`,
@@ -18,7 +19,7 @@ export const getRatings = createAsyncThunk(
 
 export const addMovieRating = createAsyncThunk(
   "movies/addMovieRating",
-  async (rawData: any) => {
+  async (rawData: IAddMovieRating) => {
     try {
       const response: any = await axios.post(
         `${process.env.REACT_APP_API}/rating/add-rating`,

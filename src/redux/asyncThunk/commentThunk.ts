@@ -1,9 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../custom/axios";
+import { IAddComment, IDeleteComment, IGetCommentList, IUpdateComment } from "../../interfaces/comments";
+
 
 export const getCommentList = createAsyncThunk(
   "movies/getCommentList",
-  async (rawData: any) => {
+  async (rawData: IGetCommentList) => {
     try {
       const { movieSlug, sortOrder } = rawData;
       const response: any = await axios.get(
@@ -18,7 +20,7 @@ export const getCommentList = createAsyncThunk(
 
 export const addComment = createAsyncThunk(
   "movies/addComment",
-  async (rawData: any) => {
+  async (rawData: IAddComment) => {
     try {
       const response: any = await axios.post(
         `${process.env.REACT_APP_API}/comment/add-comment`,
@@ -48,7 +50,7 @@ export const deleleComment = createAsyncThunk(
 
 export const updateComment = createAsyncThunk(
   "movies/updateComment",
-  async (rawData: any) => {
+  async (rawData: IUpdateComment) => {
     try {
       const response: any = await axios.put(
         `${process.env.REACT_APP_API}/comment/update-comment`,

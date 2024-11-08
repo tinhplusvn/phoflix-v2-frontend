@@ -53,7 +53,6 @@ export const userSlice = createSlice({
       console.log(action.payload);
       if (+action.payload?.EC === 0) {
         state.user = action.payload?.DT;
-        localStorage.setItem("user", JSON.stringify(action.payload?.DT));
       }
       state.isLoading = false;
     });
@@ -67,7 +66,6 @@ export const userSlice = createSlice({
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.user = {};
-      localStorage.removeItem("user");
       state.isLoading = false;
     });
     builder.addCase(logout.rejected, (state, action) => {
@@ -79,8 +77,7 @@ export const userSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getUser.fulfilled, (state, action) => {
-      state.user = action.payload;
-      localStorage.setItem("user", JSON.stringify(action.payload));
+      state.user = action.payload?.DT ?? {};
       state.isLoading = false;
     });
     builder.addCase(getUser.rejected, (state, action) => {
@@ -95,7 +92,6 @@ export const userSlice = createSlice({
       console.log(action.payload);
       if (+action.payload.EC === 0) {
         state.user = action.payload.DT;
-        localStorage.setItem("user", JSON.stringify(action.payload.DT));
       }
       state.isLoading = false;
     });

@@ -2,10 +2,9 @@ import { Box, Modal, ModalClose, Sheet } from "@mui/joy";
 import Login from "../authentication/Login";
 import Register from "../authentication/Register";
 import ForgotPassword from "../authentication/ForgotPassword";
-import { AppDispatch, RootState } from "../../redux/store";
-import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { useDispatch } from "react-redux";
 import { setType } from "../../redux/slice/systemSlice";
-import { useEffect } from "react";
 
 interface IProps {
   type: string;

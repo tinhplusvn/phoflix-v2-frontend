@@ -1,7 +1,7 @@
 import { Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import { useColorScheme } from "@mui/joy/styles";
+import toast from "react-hot-toast";
 
 const ThemeMode = () => {
   return (
@@ -10,16 +10,11 @@ const ThemeMode = () => {
         <LightModeOutlinedIcon color="primary" />
       </MenuButton>
       <Menu>
-        <MenuItem
-
-        // onClick={() => setMode("light")}
-        >
+        <MenuItem onClick={() => toast("Đang phát triển!")}>
           <LightModeOutlinedIcon />
           Chế độ sáng
         </MenuItem>
-        <MenuItem
-        // onClick={() => setMode("dark")}
-        >
+        <MenuItem onClick={() => toast("Đang phát triển!")}>
           <DarkModeOutlinedIcon />
           Chế độ tối
         </MenuItem>

@@ -1,17 +1,11 @@
 import { Box, Button, Chip, IconButton, Tooltip, Typography } from "@mui/joy";
 import { Link, useNavigate } from "react-router-dom";
-
 import "../../styles/MovieItem.scss";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import _NavLink from "../common/_NavLink";
-import { AppDispatch, RootState } from "../../redux/store";
-import { useDispatch, useSelector } from "react-redux";
 import { IMovie } from "../../interfaces/movie";
 import { useEffect, useState } from "react";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { deleteMovie, getAllMovies } from "../../redux/asyncThunk/moviesThunk";
-import toast from "react-hot-toast";
-
 interface IProps {
   movie: IMovie;
   page: string;
@@ -47,9 +41,13 @@ const MovieItem = ({ movie, page, handleDeleteMovie }: IProps) => {
             objectFit: "cover",
           }}
           src={
-            (movie.poster_url as string).includes("https://phimimg.com/")
-              ? movie.poster_url
-              : `https://phimimg.com/${movie.poster_url}`
+            (movie?.poster_url as string)?.includes(
+              process.env.REACT_APP_API_HINH_ANH as string
+            )
+              ? movie?.poster_url
+              : `${process.env.REACT_APP_API_HINH_ANH as string}/${
+                  movie?.poster_url
+                }`
           }
           alt={movie.name}
         />
@@ -73,7 +71,15 @@ const MovieItem = ({ movie, page, handleDeleteMovie }: IProps) => {
         </Chip>
       </Box>
       <Box className="movie-item-info">
-        <Typography level="title-md">{movie.name}</Typography>
+        <Typography
+          level="title-md"
+          sx={{
+            color: "#fff",
+            textShadow: "2px 2px #00000080",
+          }}
+        >
+          {movie.name}
+        </Typography>
         <Box
           sx={{
             display: "flex",
@@ -82,7 +88,7 @@ const MovieItem = ({ movie, page, handleDeleteMovie }: IProps) => {
             justifyContent: "space-between",
             flexDirection: {
               xs: "column",
-              md: "row",
+              sm: "row",
             },
           }}
         >

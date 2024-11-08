@@ -28,7 +28,11 @@ const WatchHistory = () => {
   const breadcrumbsPaths = ["Lịch sử đã xem"];
 
   useEffect(() => {
-    const hanldeInit = async () => {
+    document.title = "Nhật Ký Xem Phim - Theo Dõi Hành Trình Giải Trí Của Bạn!";
+  }, []);
+
+  useEffect(() => {
+    const handleInit = async () => {
       setIsLoading(true);
       await dispatch(
         getAllMovies({
@@ -39,8 +43,10 @@ const WatchHistory = () => {
       setIsLoading(false);
     };
 
-    hanldeInit();
-  }, []);
+    if (user?.access_token || user?.refresh_token) {
+      handleInit();
+    }
+  }, [user]);
 
   const handleDeleteMovie = async (slug: string, type: string) => {
     const res: any = await dispatch(

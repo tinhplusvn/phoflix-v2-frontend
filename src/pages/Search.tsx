@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { AppDispatch, RootState } from "../redux/store";
 import { searchMovie } from "../redux/asyncThunk/moviesThunk";
-import LiveTvRoundedIcon from "@mui/icons-material/LiveTvRounded";
 import MovieList from "../components/movie/MovieList";
 import { Pagination, Stack } from "@mui/material";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 import SkeletonPage from "../components/common/SkeletonPage";
 import SearchIcon from "@mui/icons-material/Search";
 import searchNotFoundImg from "../images/search-not-found.png";
+import { scrollToTop } from "../utils";
 
 const Search = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -23,14 +23,21 @@ const Search = () => {
   const totalPages = useSelector(
     (state: RootState) => state.movies.searchMovie.pagination.totalPages
   );
-
+  const titleHead = useSelector(
+    (state: RootState) => state.movies.searchMovie.titleHead
+  );
   const isLoading = useSelector((state: RootState) => state.movies.isLoading);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const params = useParams();
   const breadcrumbsPaths = ["Tìm kiếm", params.keyword as string];
 
+  useEffect(() => {
+    document.title = titleHead;
+  }, [titleHead]);
+
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
+    scrollToTop();
   };
 
   useEffect(() => {

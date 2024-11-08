@@ -42,7 +42,7 @@ const UserInfo = () => {
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!user.refresh_token) {
+    if (!user?.refresh_token || !user?.access_token) {
       navigate("/");
     }
 
@@ -106,7 +106,7 @@ const UserInfo = () => {
               height: "160px",
             }}
           >
-            <img src={user.img ? user?.avatar : avatarImg} alt="Ảnh đại diện" />
+            <img src={avatarImg} alt="Ảnh đại diện" />
           </Box>
         </Grid>
         <Grid xs={12} md={4}>
@@ -146,7 +146,9 @@ const UserInfo = () => {
                 </tr>
                 <tr>
                   <td style={{ fontWeight: "bold" }}>Giới tính:</td>
-                  <td style={{ wordWrap: "break-word" }}>{user.gender ?? 'Trống'}</td>
+                  <td style={{ wordWrap: "break-word" }}>
+                    {user.gender ?? "Trống"}
+                  </td>
                 </tr>
                 <tr>
                   <td style={{ fontWeight: "bold" }}>Địa chỉ:</td>
@@ -160,7 +162,12 @@ const UserInfo = () => {
             <Button
               onClick={() => setOpenModalEditUserInfo(true)}
               startDecorator={<EditNoteIcon />}
-              sx={{ marginLeft: "auto" }}
+              sx={{
+                marginLeft: {
+                  xs: "unset",
+                  md: "auto",
+                },
+              }}
             >
               Chỉnh sửa thông tin
             </Button>
@@ -203,8 +210,8 @@ const UserInfo = () => {
               <Table sx={{ marginTop: "12px" }} aria-label="basic table">
                 <thead>
                   <tr>
-                    <th style={{ width: "80%" }}>Tên hoạt động</th>
-                    <th style={{ width: "20%" }}>Thời gian</th>
+                    <th style={{ width: "75%" }}>Tên hoạt động</th>
+                    <th style={{ width: "25%" }}>Thời gian</th>
                   </tr>
                 </thead>
                 <tbody>
