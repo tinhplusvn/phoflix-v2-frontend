@@ -26,6 +26,7 @@ import {
 } from "../../redux/asyncThunk/searchHistoryThunk";
 import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
 import SkeletonModalSearch from "../common/SkeletonModalSearch";
+import { IUser } from "../../interfaces/user";
 
 type ModalSearch = {
   open: boolean;
@@ -40,7 +41,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const searchRef = useRef<HTMLInputElement>(null);
-  const user = useSelector((state: RootState) => state.users.user);
+  const user: IUser = useSelector((state: RootState) => state.users.user);
   const searchRecent = useSelector(
     (state: RootState) => state.searchHistory.searchRecent
   );
@@ -53,7 +54,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
   useEffect(() => {
     const handleInit = async () => {
       setIsLoading(true);
-      await dispatch(getSearchHistory(user.id as string));
+      await dispatch(getSearchHistory(user?.id as string));
       setIsLoading(false);
     };
 
@@ -75,15 +76,15 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
       setIsLoadingButton(true);
       await dispatch(
         addSearchHistory({
-          userId: user.id as string,
+          userId: user?.id as string,
           type: "recent",
           keyword: searchValue,
         })
       );
-      await dispatch(getSearchHistory(user.id as string));
+      await dispatch(getSearchHistory(user?.id as string));
       await dispatch(
         addActivityLog({
-          userId: user?.id,
+          userId: user?.id as string,
           action: `Tìm kiếm từ khoá "${searchValue}"`,
         })
       );
@@ -99,7 +100,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
     setOpen(false);
     await dispatch(
       addActivityLog({
-        userId: user?.id,
+        userId: user?.id as string,
         action: `Tìm kiếm từ khoá "${value}"`,
       })
     );
@@ -113,20 +114,20 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
     setIsLoading(true);
     await dispatch(
       addSearchHistory({
-        userId: user.id,
+        userId: user?.id as string,
         type: "favourite",
         keyword,
         idSearchHistory,
       })
     );
-    await dispatch(getSearchHistory(user.id as string));
+    await dispatch(getSearchHistory(user?.id as string));
     setIsLoading(false);
   };
 
   const handleRemoveSearch = async (item: any) => {
     setIsLoading(true);
     await dispatch(deleteSearchHistory(item));
-    await dispatch(getSearchHistory(user.id as string));
+    await dispatch(getSearchHistory(user?.id as string));
     setIsLoading(false);
   };
 

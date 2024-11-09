@@ -95,16 +95,30 @@ export const logout = createAsyncThunk("users/logout", async () => {
   }
 });
 
-export const getUser = createAsyncThunk("users/getUser", async () => {
+export const getUserAccount = createAsyncThunk("users/getUser", async () => {
   try {
     const response: any = await axios.get(
-      `${process.env.REACT_APP_API}/auth/user`
+      `${process.env.REACT_APP_API}/auth/user-account`
     );
     return response;
   } catch (error) {
     console.log(error);
   }
 });
+
+export const getAnotherUserInfo = createAsyncThunk(
+  "users/getAnotherUserInfo",
+  async (userId: string) => {
+    try {
+      const response: any = await axios.get(
+        `${process.env.REACT_APP_API}/auth/another-user-account?userId=${userId}`
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 
 export const sendOTP = createAsyncThunk(
   "users/sendOtp",

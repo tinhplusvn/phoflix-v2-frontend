@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
+import { IUser } from "../../../interfaces/user";
 
 type _Drawer = {
   open: boolean;
@@ -26,9 +27,10 @@ type _Drawer = {
 const _Drawer = ({ open, setOpen }: _Drawer) => {
   const categories = useSelector((state: RootState) => state.movies.categories);
   const countries = useSelector((state: RootState) => state.movies.countries);
+  const user: IUser = useSelector((state: RootState) => state.users.user);
   const navigate = useNavigate();
   const params = useParams();
-  
+
   useEffect(() => setOpen(false), [params]);
 
   return (
@@ -116,19 +118,23 @@ const _Drawer = ({ open, setOpen }: _Drawer) => {
             </Accordion>
           </AccordionGroup>
         </List>
-        <Divider />
-        <List>
-          <ListItem>
-            <ListItemButton>
-              <_NavLink path="/lich-su-da-xem" content="Lịch sử đã xem" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton>
-              <_NavLink path="/phim-da-luu" content="Phim đã lưu" />
-            </ListItemButton>
-          </ListItem>
-        </List>
+        {(user?.access_token || user?.refresh_token) && (
+          <Box>
+            <Divider />
+            <List>
+              <ListItem>
+                <ListItemButton>
+                  <_NavLink path="/lich-su-da-xem" content="Lịch sử đã xem" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton>
+                  <_NavLink path="/phim-da-luu" content="Phim đã lưu" />
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </Box>
+        )}
       </Box>
     </Drawer>
   );

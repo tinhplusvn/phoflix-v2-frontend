@@ -11,6 +11,7 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setOpen } from "../../../redux/slice/systemSlice";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import { IUser } from "../../../interfaces/user";
 
 type NavRight = {
   width: number;
@@ -23,7 +24,7 @@ const NavRight = ({ width }: NavRight) => {
     (state: RootState) => state.system.isOpenModalAuthentication
   );
   const type = useSelector((state: RootState) => state.system.type);
-  const user = useSelector((state: RootState) => state.users.user);
+  const user: IUser = useSelector((state: RootState) => state.users.user);
 
   const handleSetOpen = (isOpen: boolean) => {
     dispatch(setOpen(isOpen));
@@ -74,17 +75,17 @@ const NavRight = ({ width }: NavRight) => {
           target="_blank"
         >
           <Tooltip title="Mã nguồn dự án">
-              <IconButton
-                color="primary"
-                sx={{
-                  border: "1px solid #cdd7e1",
-                  borderRadius: "12px",
-                  boxShadow:
-                    "rgb(255, 255, 255) 0px 0px 0px inset, rgba(232, 234, 238, 0.4) 0px -1px 0px inset, rgba(223, 226, 231, 0.5) 0px 1px 2px 0px;",
-                }}
-              >
-                <GitHubIcon />
-              </IconButton>
+            <IconButton
+              color="primary"
+              sx={{
+                border: "1px solid #cdd7e1",
+                borderRadius: "12px",
+                boxShadow:
+                  "rgb(255, 255, 255) 0px 0px 0px inset, rgba(232, 234, 238, 0.4) 0px -1px 0px inset, rgba(223, 226, 231, 0.5) 0px 1px 2px 0px;",
+              }}
+            >
+              <GitHubIcon />
+            </IconButton>
           </Tooltip>
         </Link>
 

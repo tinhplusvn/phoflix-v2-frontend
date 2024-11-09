@@ -13,7 +13,6 @@ export const ratingSlice = createSlice({
     builder
       .addCase(getActivityLog.pending, (state) => {})
       .addCase(getActivityLog.fulfilled, (state, action) => {
-        console.log(action.payload)
         state.activityList = action.payload?.DT ?? []
       })
       .addCase(getActivityLog.rejected, (state) => {});

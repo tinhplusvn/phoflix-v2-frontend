@@ -38,7 +38,7 @@ const Login = ({ setOpen }: any) => {
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
   const handleCheckValidInput = (): boolean => {
-    let check = true;
+    let check: boolean = true;
     const _isValidInput: ValidInput = _.clone(isValidInput);
     if (valueInput.email === "") {
       if (emailRef.current) {
@@ -67,20 +67,19 @@ const Login = ({ setOpen }: any) => {
   };
 
   const handleLogin = async () => {
-    const check = handleCheckValidInput();
+    const check: boolean = handleCheckValidInput();
 
     if (check) {
       setIsLogin(true);
-      const res = await dispatch(
+      const res: any = await dispatch(
         login({
           email: valueInput.email,
           password: valueInput.password,
         })
       );
-      if (+res.payload.EC !== 0) {
+      if (+res.payload?.EC !== 0) {
         toast.error(res.payload.EM);
       }
-      console.log(res);
       setIsLogin(false);
     }
   };
@@ -131,11 +130,11 @@ const Login = ({ setOpen }: any) => {
           </Typography>
         )}
       </Box>
-      {isLogin ? (
-        <LoadingButton />
-      ) : (
-        <Button onClick={() => handleLogin()}>Đăng nhập</Button>
-      )}
+
+      <Button loading={isLogin} onClick={() => handleLogin()}>
+        Đăng nhập
+      </Button>
+
       <Typography
         onClick={() => dispatch(setType("forgot-password"))}
         sx={{

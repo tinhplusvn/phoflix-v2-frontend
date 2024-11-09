@@ -7,11 +7,12 @@ import Year from "./Year";
 import NavListItem from "./NavListItem";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { IUser } from "../../../interfaces/user";
 
 const NavLeft = () => {
   const categories = useSelector((state: RootState) => state.movies.categories);
   const countries = useSelector((state: RootState) => state.movies.countries);
-  const user = useSelector((state: RootState) => state.users.user);
+  const user: IUser = useSelector((state: RootState) => state.users.user);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -40,7 +41,7 @@ const NavLeft = () => {
       </Dropdown>
       <NavListItem data={categories} describe="the-loai" title="Thể loại" />
       <NavListItem data={countries} describe="quoc-gia" title="Quốc gia" />
-      
+
       {(user.access_token || user?.refresh_token) && (
         <Dropdown>
           <MenuButton variant="plain">

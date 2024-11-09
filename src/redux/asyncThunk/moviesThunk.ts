@@ -163,7 +163,6 @@ export const getAllMovies = createAsyncThunk(
       const response = await axios.get(
         `${process.env.REACT_APP_API}/movies/get-all-movies?type=${type}&userId=${userId}`
       );
-      console.log(response);
       return response;
     } catch (error) {
       console.log(error);

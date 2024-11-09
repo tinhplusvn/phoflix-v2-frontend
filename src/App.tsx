@@ -1,27 +1,39 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import publicRoutes from "./routes";
 import DefaultLayout from "./components/layout/DefaultLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "./redux/store";
 import { useEffect } from "react";
-import { getUser } from "./redux/asyncThunk/userThunk";
+import { getUserAccount } from "./redux/asyncThunk/userThunk";
 import toast from "react-hot-toast";
+import { useMediaQuery } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { setIsMobile, setWidth } from "./redux/slice/systemSlice";
+import { IUser } from "./interfaces/user";
 
 function App() {
-  const user = useSelector((state: RootState) => state.users.user);
+  const user: IUser = useSelector((state: RootState) => state.users.user);
   const dispatch: AppDispatch = useDispatch();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  useEffect(() => {
+    const handleResize = () => {
+      dispatch(setWidth(window.innerWidth));
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    dispatch(setIsMobile(isMobile));
+  }, [isMobile]);
 
   useEffect(() => {
     const handleInit = async () => {
-      const res: any = await dispatch(getUser());
+      const res: any = await dispatch(getUserAccount());
       if (+res.payload?.EC !== 0) {
         toast.error(res.payload?.EM);
-      } else {
-        toast.success(res.payload?.EM);
       }
     };
 

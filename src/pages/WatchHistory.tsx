@@ -13,6 +13,7 @@ import {
   getAllMovies,
 } from "../redux/asyncThunk/moviesThunk";
 import toast from "react-hot-toast";
+import { IUser } from "../interfaces/user";
 
 type TypeDelete = "watch-history" | "saved-movies";
 
@@ -21,7 +22,7 @@ const WatchHistory = () => {
     (state: RootState) => state.movies.watchHistory.movies
   );
   const dispatch: AppDispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.users.user);
+  const user: IUser = useSelector((state: RootState) => state.users.user);
   const [open, setOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
@@ -36,7 +37,7 @@ const WatchHistory = () => {
       setIsLoading(true);
       await dispatch(
         getAllMovies({
-          userId: user.id as string,
+          userId: user?.id as string,
           type: "watch-history",
         })
       );
@@ -51,7 +52,7 @@ const WatchHistory = () => {
   const handleDeleteMovie = async (slug: string, type: string) => {
     const res: any = await dispatch(
       deleteMovie({
-        userId: user?.id,
+        userId: user?.id as string,
         movieSlug: slug ?? "",
         type,
       })
@@ -60,7 +61,7 @@ const WatchHistory = () => {
     if (+res?.payload.EC === 0) {
       await dispatch(
         getAllMovies({
-          userId: user.id as string,
+          userId: user?.id as string,
           type: "watch-history",
         })
       );
@@ -72,20 +73,20 @@ const WatchHistory = () => {
     setIsLoadingButton(true);
     const res: any = await dispatch(
       deleteAllMovie({
-        userId: user.id as string,
+        userId: user?.id as string,
         type: "watch-history",
       })
     );
 
     setIsLoadingButton(false);
 
-    if (+res.payload.EC === 0) {
+    if (+res.payload?.EC === 0) {
       toast.success(res.payload.EM);
       setOpen(false);
       setIsLoading(true);
       await dispatch(
         getAllMovies({
-          userId: user.id as string,
+          userId: user?.id as string,
           type: "watch-history",
         })
       );

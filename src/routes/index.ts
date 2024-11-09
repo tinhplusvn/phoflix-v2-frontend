@@ -8,6 +8,7 @@ import ViewingHistory from "../pages/WatchHistory";
 import UserInfo from "../pages/UserInfo";
 import Watch from "../pages/Watch";
 import Authenticate from "../pages/Authenticate";
+import AnotherUserInfo from "../pages/AnotherUserInfo";
 
 const publicRoutes = [
   { path: "/", component: Home },
@@ -18,6 +19,7 @@ const publicRoutes = [
   { path: "/phim-da-luu", component: SavedMovies },
   { path: "/lich-su-da-xem", component: ViewingHistory },
   { path: "/thong-tin-nguoi-dung", component: UserInfo },
+  { path: "/xem-thong-tin/:id", component: AnotherUserInfo },
   { path: "/authenticate", component: Authenticate },
   { path: "*", component: NotFound },
 ];

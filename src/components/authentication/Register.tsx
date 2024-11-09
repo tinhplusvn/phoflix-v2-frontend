@@ -11,6 +11,7 @@ import _ from "lodash";
 import { register, sendOTP } from "../../redux/asyncThunk/userThunk";
 import LoadingButton from "../common/LoadingButon";
 import toast from "react-hot-toast";
+import { validateEmail } from "../../utils";
 
 interface ValueInput {
   username: string;
@@ -26,7 +27,11 @@ interface ValidInput {
   authCode: boolean;
 }
 
-const Register = ({ setOpen }: any) => {
+interface IProps {
+  setOpen: (open: boolean) => void;
+}
+
+const Register = ({ setOpen }: IProps) => {
   const dispatch: AppDispatch = useDispatch();
   const defaultValueRegister: ValueInput = {
     email: "",
@@ -48,7 +53,7 @@ const Register = ({ setOpen }: any) => {
   const [isLoadingRegister, setIsLoadingRegister] = useState<boolean>(false);
 
   const handleCheckValidInput = (): boolean => {
-    let check = true;
+    let check: boolean = true;
     const _isValidInput: ValidInput = _.clone(isValidInput);
 
     if (valueInput.username === "") {
@@ -85,11 +90,11 @@ const Register = ({ setOpen }: any) => {
   };
 
   const handleRegister = async () => {
-    const check = handleCheckValidInput();
+    const check: boolean = handleCheckValidInput();
 
     if (check) {
       setIsLoadingRegister(true);
-      const res = await dispatch(
+      const res: any = await dispatch(
         register({
           email: valueInput.email,
           username: valueInput.username,
@@ -99,9 +104,8 @@ const Register = ({ setOpen }: any) => {
           type_otp: "REGISTER",
         })
       );
-      console.log(res);
 
-      if (+res.payload.EC === 0) {
+      if (+res.payload?.EC === 0) {
         toast.success(res.payload.EM);
         setOpen(false);
       } else {
@@ -113,14 +117,23 @@ const Register = ({ setOpen }: any) => {
   };
 
   const handleSendOTP = async () => {
+    if (!validateEmail(valueInput.email)) {
+      return toast.error("Email không hợp lệ!");
+    }
+
     setIsLoadingSendCode(true);
-    await dispatch(
+    const res: any = await dispatch(
       sendOTP({
         email: valueInput.email,
         type_otp: "REGISTER",
       })
     );
-    toast("Đã gữi mã xác thực!");
+
+    if (+res.payload?.EC === 0) {
+      toast.success(res.payload?.EM);
+    } else {
+      toast.error(res.payload?.EM);
+    }
     setIsLoadingSendCode(false);
   };
 
@@ -193,18 +206,16 @@ const Register = ({ setOpen }: any) => {
             placeholder="Mã xác thực"
             type="number"
           />
-          {isLoadingSendCode ? (
-            <LoadingButton />
-          ) : (
-            <Button
-              disabled={valueInput.email === ""}
-              onClick={() => handleSendOTP()}
-              variant="soft"
-              color="primary"
-            >
-              Gửi mã
-            </Button>
-          )}
+
+          <Button
+            loading={isLoadingSendCode}
+            disabled={valueInput.email === ""}
+            onClick={() => handleSendOTP()}
+            variant="soft"
+            color="primary"
+          >
+            Gửi mã
+          </Button>
         </Box>
         {!isValidInput.authCode && (
           <Typography level="title-sm" color="danger" sx={{ marginTop: "8px" }}>
@@ -212,11 +223,10 @@ const Register = ({ setOpen }: any) => {
           </Typography>
         )}
       </Box>
-      {isLoadingRegister ? (
-        <LoadingButton />
-      ) : (
-        <Button onClick={() => handleRegister()}>Đăng ký</Button>
-      )}
+
+      <Button loading={isLoadingRegister} onClick={() => handleRegister()}>
+        Đăng ký
+      </Button>
 
       <Box
         sx={{

@@ -10,17 +10,16 @@ import {
   Typography,
 } from "@mui/joy";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 type IProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
 };
 
-type selectedDevice = "computer" | "phone" | null;
-
 const ModalInstructDowload = ({ open, setOpen }: IProps) => {
-  const [selectedDevice, setSelectedDeivce] =
-    useState<selectedDevice>("computer");
+  const isMobile = useSelector((state: RootState) => state.system.isMobile);
 
   return (
     <Modal
@@ -46,15 +45,7 @@ const ModalInstructDowload = ({ open, setOpen }: IProps) => {
         <Typography level="title-lg" color="primary">
           Hướng dẫn tải video
         </Typography>
-        <Select
-          sx={{ margin: "16px 0" }}
-          defaultValue={selectedDevice}
-          onChange={(event, value) => setSelectedDeivce(value)}
-        >
-          <Option value="computer">Máy tính</Option>
-          <Option value="phone">Điện thoại</Option>
-        </Select>
-        {selectedDevice === "computer" ? (
+        {!isMobile ? (
           <Box sx={{ marginTop: "12px" }}>
             <Typography level="body-md">
               1. Nếu bạn chưa có, tải và cài đặt VLC Media Player từ trang chủ:

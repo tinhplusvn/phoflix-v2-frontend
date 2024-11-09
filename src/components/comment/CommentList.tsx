@@ -17,7 +17,7 @@ import ModalReportComment from "../modals/ModalReportComment";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
-import { IDeleteComment } from "../../interfaces/comments";
+import { IUser } from "../../interfaces/user";
 
 const CommentList = () => {
   const commentList = useSelector(
@@ -31,7 +31,7 @@ const CommentList = () => {
   const openModalReportComment = useSelector(
     (state: RootState) => state.comments.openModal.modalReportComment
   );
-  const user = useSelector((state: RootState) => state.users.user);
+  const user: IUser = useSelector((state: RootState) => state.users.user);
   const movieInfo = useSelector(
     (state: RootState) => state.movies.movieInfo.info
   );
@@ -50,7 +50,7 @@ const CommentList = () => {
     setIsLoading(true);
     const res = await dispatch(deleleComment(idComment as string));
 
-    if (+res.payload.EC === 0) {
+    if (+res.payload?.EC === 0) {
       await dispatch(
         getCommentList({ movieSlug: params.slug as string, sortOrder: "DESC" })
       );
@@ -76,14 +76,14 @@ const CommentList = () => {
         idComment,
       })
     );
-    if (+res.payload.EC === 0) {
+    if (+res.payload?.EC === 0) {
       await dispatch(
         getCommentList({ movieSlug: params.slug as string, sortOrder: "DESC" })
       );
 
       await dispatch(
         addActivityLog({
-          userId: user?.id,
+          userId: user?.id as string,
           action: `Sửa bình luận thành "${valueEditComment}" tại phim ${movieInfo.name}"`,
         })
       );
@@ -92,7 +92,6 @@ const CommentList = () => {
     setIndexEdit(-1);
     setIsLoading(false);
   };
-
 
   return (
     <>
@@ -136,6 +135,8 @@ const CommentList = () => {
       />
 
       <ModalReportComment
+        idComment={idComment}
+        setIdComment={setIdComment}
         open={openModalReportComment}
         setOpen={handleSetOpenModalReportComment}
       />

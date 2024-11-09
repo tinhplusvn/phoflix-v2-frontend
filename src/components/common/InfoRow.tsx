@@ -1,6 +1,5 @@
 import { Box, Chip, Typography } from "@mui/joy";
 import { Link } from "react-router-dom";
-import { ICategory, ICountry } from "../../interfaces/movie";
 
 type IProps = {
   label: string;
@@ -18,7 +17,11 @@ const InfoRow = ({ label, value, type, canPress, describe }: IProps) => (
 
     {type === "many" && Array.isArray(value) ? (
       value.map((item, index) => (
-        <Chip key={index} variant="solid" color="primary">
+        <Chip
+          key={index}
+          variant={`${canPress ? "solid" : "soft"}`}
+          color={`${canPress ? "primary" : "neutral"}`}
+        >
           {typeof item === "object" && canPress ? (
             <Link
               style={{ textDecoration: "none", color: "inherit" }}

@@ -30,7 +30,7 @@ const DefaultLayout = ({ children }: IProps) => {
             padding: {
               xs: "16px",
               sm: "24px",
-              md: "32px",
+              lg: "32px",
             },
           }}
         >

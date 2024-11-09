@@ -11,6 +11,7 @@ import LoadingButton from "../common/LoadingButon";
 import toast from "react-hot-toast";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { setType } from "../../redux/slice/systemSlice";
+import { validateEmail } from "../../utils";
 
 interface ValueInput {
   email: string;
@@ -75,10 +76,10 @@ const ForgotPassword = ({ setOpen }: any) => {
   };
 
   const handleSubmit = async () => {
-    const check = handleCheckValidInput();
+    const check: boolean = handleCheckValidInput();
     if (check) {
       setIsLoadingSubmit(true);
-      const res = await dispatch(
+      const res: any = await dispatch(
         forgotPassword({
           email: valueInput.email,
           code: valueInput.authCode,
@@ -87,35 +88,42 @@ const ForgotPassword = ({ setOpen }: any) => {
         })
       );
 
-      if (+res.payload.EC !== 0) {
-        setOpen(false);
-        toast.error(res.payload.EM);
+      if (+res.payload?.EC === 0) {
+        toast.success(res.payload?.EM);
+      } else {
+        toast.error(res.payload?.EM);
       }
+      setOpen(false);
       setIsLoadingSubmit(false);
+      dispatch(setType("login"));
     }
   };
 
   const handleSendOTP = async () => {
+    if (!validateEmail(valueInput.email)) {
+      return toast.error("Email không hợp lệ!");
+    }
+
     setIsLoadingSendCode(true);
-    await dispatch(
+    const res: any = await dispatch(
       sendOTP({
         email: valueInput.email,
         type_otp: "FORGOT_PASSWORD",
       })
     );
+    if (+res.payload?.EC === 0) {
+      toast.success(res.payload?.EM);
+    }
     setIsLoadingSendCode(false);
   };
 
   return (
     <>
       <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
-        <IconButton onClick={() => dispatch(setType('login'))}>
+        <IconButton onClick={() => dispatch(setType("login"))}>
           <ArrowBackIcon />
         </IconButton>
-        <Typography
-          level="title-lg"
-          color="primary"
-        >
+        <Typography level="title-lg" color="primary">
           Quên mật khẩu?
         </Typography>
       </Box>
@@ -161,21 +169,18 @@ const ForgotPassword = ({ setOpen }: any) => {
             startDecorator={<KeyIcon />}
             size="md"
             placeholder="Mã xác thực"
-            type="text" 
+            type="text"
           />
 
-          {isLoadingSendCode ? (
-            <LoadingButton />
-          ) : (
-            <Button
-              disabled={valueInput.email === ""}
-              onClick={() => handleSendOTP()}
-              variant="soft"
-              color="primary"
-            >
-              Gửi mã
-            </Button>
-          )}
+          <Button
+            loading={isLoadingSendCode}
+            disabled={valueInput.email === ""}
+            onClick={() => handleSendOTP()}
+            variant="soft"
+            color="primary"
+          >
+            Gửi mã
+          </Button>
         </Box>
         {!isValidInput.authCode && (
           <Typography level="title-sm" color="danger" sx={{ marginTop: "8px" }}>
@@ -184,11 +189,9 @@ const ForgotPassword = ({ setOpen }: any) => {
         )}
       </Box>
 
-      {isLoadingSubmit ? (
-        <LoadingButton />
-      ) : (
-        <Button onClick={() => handleSubmit()}>Xác nhận</Button>
-      )}
+      <Button loading={isLoadingSubmit} onClick={() => handleSubmit()}>
+        Xác nhận
+      </Button>
     </>
   );
 };

@@ -1,3 +1,18 @@
+export interface IUser {
+  id?: string;
+  username?: string;
+  email?: string;
+  phone_number?: string;
+  gender?: string;
+  address?: string;
+  isLock?: boolean;
+  type_account?: string;
+  refresh_token?: string;
+  access_token?: string;
+  avatar?: string;
+  createdAt?: string;
+}
+
 export interface ILogin {
   email: string;
   password: string;

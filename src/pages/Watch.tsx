@@ -32,6 +32,7 @@ import CommentSection from "../components/comment/CommentSection";
 import { addMovieRating, getRatings } from "../redux/asyncThunk/ratingThunk";
 import toast from "react-hot-toast";
 import { addActivityLog } from "../redux/asyncThunk/activityLogThunk";
+import { IUser } from "../interfaces/user";
 
 type Episode = {
   name: string;
@@ -44,7 +45,7 @@ type Episode = {
 type TypeCopy = "not-copy" | "copied";
 
 const Watch = () => {
-  const user = useSelector((state: RootState) => state.users.user);
+  const user: IUser = useSelector((state: RootState) => state.users.user);
 
   const dispatch: AppDispatch = useDispatch();
   const movieInfo = useSelector(
@@ -77,17 +78,21 @@ const Watch = () => {
 
   useEffect(() => {
     dispatch(getMovieInfo(params.slug as string));
-
-    if (user?.access_token || user?.refresh_token) {
-      dispatch(
-        addMovie({
-          userId: user?.id,
-          movieInfo,
-          type: "watch-history",
-        })
-      );
-    }
   }, []);
+
+  useEffect(() => {
+    if (user?.access_token || user?.refresh_token) {
+      if (movieInfo?.slug) {
+        dispatch(
+          addMovie({
+            userId: user?.id as string,
+            movieInfo,
+            type: "watch-history",
+          })
+        );
+      }
+    }
+  }, [user, movieInfo]);
 
   useEffect(() => {
     const currentEpisode = handleGetCurrentEpisodes();
@@ -276,7 +281,7 @@ const SectionLinkM3U8 = ({ link_m3u8, setOpen }: IProps) => {
 const SectionRating = () => {
   const [stars, setStars] = useState<number>(0);
   const params = useParams();
-  const user = useSelector((state: RootState) => state.users.user);
+  const user: IUser = useSelector((state: RootState) => state.users.user);
   const dispatch: AppDispatch = useDispatch();
   const rating = useSelector((state: RootState) => state.rating);
   const movieInfo = useSelector(
@@ -288,14 +293,17 @@ const SectionRating = () => {
     const handleInit = async () => {
       setIsLoading(true);
       await dispatch(
-        getRatings({ movieSlug: params.slug as string, userId: user.id })
+        getRatings({
+          movieSlug: params.slug as string,
+          userId: user?.id as string,
+        })
       );
       setIsLoading(false);
     };
     if (user?.access_token || user?.refresh_token) {
       handleInit();
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     setStars(rating.ratingWidthUser);
@@ -311,7 +319,7 @@ const SectionRating = () => {
     setStars(stars);
     const res = await dispatch(
       addMovieRating({
-        userId: user.id,
+        userId: user?.id as string,
         movieSlug: params.slug as string,
         rating: stars,
       })
@@ -319,11 +327,14 @@ const SectionRating = () => {
 
     if (+res.payload?.EC === 0) {
       await dispatch(
-        getRatings({ movieSlug: params.slug as string, userId: user.id })
+        getRatings({
+          movieSlug: params.slug as string,
+          userId: user?.id as string,
+        })
       );
       await dispatch(
         addActivityLog({
-          userId: user?.id,
+          userId: user?.id as string,
           action: `Đánh giá ${stars} sao phim ${movieInfo.name}`,
         })
       );

@@ -11,25 +11,17 @@ import {
   getCategories,
   getCountries,
 } from "../../../redux/asyncThunk/moviesThunk";
-import { AppDispatch } from "../../../redux/store";
+import { AppDispatch, RootState } from "../../../redux/store";
 
 import _Drawer from "./_Drawer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const Navigation = () => {
   const [open, setOpen] = useState<boolean>(false);
   const dispatch: AppDispatch = useDispatch();
-  const [width, setWidth] = useState<number>(window.innerWidth);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const width = useSelector((state: RootState) => state.system.width);
 
   useEffect(() => {
     dispatch(getCategories());

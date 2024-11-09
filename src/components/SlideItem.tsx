@@ -2,9 +2,10 @@ import { Box, Button, Chip, Typography } from "@mui/joy";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import _NavLink from "./common/_NavLink";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IMovie } from "../interfaces/movie";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 interface IProps {
   item: IMovie;
@@ -13,30 +14,21 @@ interface IProps {
 
 const SlideItem = ({ item }: IProps) => {
   const navigate = useNavigate();
-  const [width, setWidth] = useState<number>(window.innerWidth);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const width: number = useSelector((state: RootState) => state?.system?.width);
+  const isLargeScreen: boolean = width > 1024;
 
   return (
     <Box
       sx={{
         display: "flex",
         position: "absolute",
-        bottom: `${width > 1024 ? "48px" : "32px"}`,
-        left: `${width > 1024 ? "48px" : "24px"}`,
-        right: `${width > 1024 ? "unset" : "24px"}`,
-        backdropFilter: `${width > 1024 ? "blur(8px)" : "unset"}`,
-        backgroundColor: `${
-          width > 1024 ? "rgba(255, 255, 255, 0.3)" : "unset"
-        } `,
-        border: `${width > 1024 ? "1px solid #aaa" : "unset"}`,
-        padding: `${width > 1024 ? "16px" : "0"}`,
+        bottom: isLargeScreen ? "48px" : "32px",
+        left: isLargeScreen ? "48px" : "24px",
+        right: !isLargeScreen ? "24px" : "unset",
+        backdropFilter: isLargeScreen ? "blur(8px)" : "unset",
+        backgroundColor: isLargeScreen ? "rgba(255, 255, 255, 0.3)" : "unset",
+        border: isLargeScreen ? "1px solid #aaa" : "unset",
+        padding: isLargeScreen ? "16px" : "0",
         borderRadius: "12px",
         gap: "24px",
         maxHeight: "200px",
@@ -44,7 +36,7 @@ const SlideItem = ({ item }: IProps) => {
         maxWidth: "640px",
       }}
     >
-      {width > 1024 && (
+      {isLargeScreen && (
         <Box
           sx={{
             flexShrink: 0,
@@ -56,9 +48,10 @@ const SlideItem = ({ item }: IProps) => {
           }}
         >
           <img
+            loading="lazy"
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            src={item.poster_url}
-            alt={item.name}
+            src={item?.poster_url}
+            alt={item?.name}
           />
         </Box>
       )}
@@ -83,9 +76,9 @@ const SlideItem = ({ item }: IProps) => {
           }}
           level="title-lg"
         >
-          {item.name}
+          {item?.name}
         </Typography>
-        {width > 1024 && (
+        {isLargeScreen && (
           <Typography
             sx={{
               color: "#000",
@@ -98,13 +91,13 @@ const SlideItem = ({ item }: IProps) => {
             color="primary"
             level="title-md"
           >
-            {item.origin_name}
+            {item?.origin_name}
           </Typography>
         )}
         <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
           <Button
-            onClick={() => navigate(`/dang-xem/${item.slug}`)}
-            size={`${width > 1024 ? "md" : "sm"}`}
+            onClick={() => navigate(`/dang-xem/${item?.slug}`)}
+            size={isLargeScreen ? "md" : "sm"}
             color="primary"
             variant="solid"
             startDecorator={<PlayArrowRoundedIcon />}
@@ -112,8 +105,8 @@ const SlideItem = ({ item }: IProps) => {
             Xem ngay
           </Button>
           <Button
-            onClick={() => navigate(`/thong-tin/${item.slug}`)}
-            size={`${width > 1024 ? "md" : "sm"}`}
+            onClick={() => navigate(`/thong-tin/${item?.slug}`)}
+            size={isLargeScreen ? "md" : "sm"}
             color="neutral"
             variant="soft"
             startDecorator={<InfoOutlinedIcon />}
@@ -127,7 +120,7 @@ const SlideItem = ({ item }: IProps) => {
           variant="soft"
           color="primary"
         >
-          Năm phát hành {item.year}
+          Năm phát hành {item?.year}
         </Chip>
       </Box>
     </Box>

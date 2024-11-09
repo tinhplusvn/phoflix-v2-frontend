@@ -6,6 +6,8 @@ import _NavLink from "../common/_NavLink";
 import { IMovie } from "../../interfaces/movie";
 import { useEffect, useState } from "react";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 interface IProps {
   movie: IMovie;
   page: string;
@@ -14,20 +16,14 @@ interface IProps {
 
 const MovieItem = ({ movie, page, handleDeleteMovie }: IProps) => {
   const navigate = useNavigate();
-  const [width, setWidth] = useState<number>(window.innerWidth);
+  const width = useSelector((state: RootState) => state.system.width);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const deleteMovie = async (slug: string, type: string) => {
     setIsLoading(true);
-    handleDeleteMovie && (await handleDeleteMovie(slug, type));
+    if (handleDeleteMovie) {
+      await handleDeleteMovie(slug, type);
+    }
     setIsLoading(false);
   };
 
@@ -35,6 +31,7 @@ const MovieItem = ({ movie, page, handleDeleteMovie }: IProps) => {
     <Box className="movie-item">
       <Link to={`/thong-tin/${movie.slug}`}>
         <img
+          loading="lazy"
           style={{
             width: "100%",
             height: "100%",
@@ -125,28 +122,27 @@ const MovieItem = ({ movie, page, handleDeleteMovie }: IProps) => {
           )}
         </Box>
       </Box>
-      {width < 1024 &&
-        (page === "viewingHistory" || page === "savedMovies") && (
-          <IconButton
-            loading={isLoading}
-            onClick={() =>
-              handleDeleteMovie &&
-              (page === "viewingHistory"
-                ? deleteMovie(movie.slug as string, "watch-history")
-                : deleteMovie(movie.slug as string, "saved-movies"))
-            }
-            sx={{
-              position: "absolute",
-              bottom: "12px",
-              right: "12px",
-            }}
-            color="danger"
-            size="sm"
-            variant="solid"
-          >
-            <DeleteOutlineIcon />
-          </IconButton>
-        )}
+      {width < 1024 && (page === "watchHistory" || page === "savedMovies") && (
+        <IconButton
+          loading={isLoading}
+          onClick={() =>
+            handleDeleteMovie &&
+            (page === "watchHistory"
+              ? deleteMovie(movie.slug as string, "watch-history")
+              : deleteMovie(movie.slug as string, "saved-movies"))
+          }
+          sx={{
+            position: "absolute",
+            bottom: "12px",
+            right: "12px",
+          }}
+          color="danger"
+          size="sm"
+          variant="solid"
+        >
+          <DeleteOutlineIcon />
+        </IconButton>
+      )}
     </Box>
   );
 };

@@ -13,12 +13,13 @@ import {
 } from "../redux/asyncThunk/moviesThunk";
 import toast from "react-hot-toast";
 import SkeletonPage from "../components/common/SkeletonPage";
+import { IUser } from "../interfaces/user";
 
 const SavedMovie = () => {
   const savedMovies = useSelector(
     (state: RootState) => state.movies.savedMovies.movies
   );
-  const user = useSelector((state: RootState) => state.users.user);
+  const user: IUser = useSelector((state: RootState) => state.users.user);
   const dispatch: AppDispatch = useDispatch();
   const [open, setOpen] = useState<boolean>(false);
   const breadcrumbsPaths = ["Phim đã lưu"];
@@ -34,7 +35,7 @@ const SavedMovie = () => {
       setIsLoading(true);
       await dispatch(
         getAllMovies({
-          userId: user.id as string,
+          userId: user?.id as string,
           type: "saved-movies",
         })
       );
@@ -49,7 +50,7 @@ const SavedMovie = () => {
   const handleDeleteMovie = async (slug: string, type: string) => {
     const res: any = await dispatch(
       deleteMovie({
-        userId: user?.id,
+        userId: user?.id as string,
         movieSlug: slug ?? "",
         type,
       })
@@ -58,7 +59,7 @@ const SavedMovie = () => {
     if (+res?.payload.EC === 0) {
       await dispatch(
         getAllMovies({
-          userId: user.id as string,
+          userId: user?.id as string,
           type: "saved-movies",
         })
       );
@@ -70,23 +71,24 @@ const SavedMovie = () => {
     setIsLoadingButton(true);
     const res: any = await dispatch(
       deleteAllMovie({
-        userId: user.id as string,
+        userId: user?.id as string,
         type: "saved-movies",
       })
     );
 
     setIsLoadingButton(false);
 
-    if (+res.payload.EC === 0) {
+    if (+res.payload?.EC === 0) {
       toast.success(res.payload.EM);
       setOpen(false);
-
+      setIsLoading(true);
       await dispatch(
         getAllMovies({
-          userId: user.id as string,
+          userId: user?.id as string,
           type: "saved-movies",
         })
       );
+      setIsLoading(false);
     }
   };
 

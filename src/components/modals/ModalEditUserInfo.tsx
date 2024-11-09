@@ -5,6 +5,8 @@ import {
   Modal,
   ModalClose,
   Option,
+  Radio,
+  RadioGroup,
   Select,
   Sheet,
   Typography,
@@ -14,12 +16,12 @@ import { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../redux/asyncThunk/userThunk";
-import LoadingButton from "../common/LoadingButon";
 import toast from "react-hot-toast";
 import {
   addActivityLog,
   getActivityLog,
 } from "../../redux/asyncThunk/activityLogThunk";
+import { IUser } from "../../interfaces/user";
 
 interface IProps {
   open: boolean;
@@ -37,7 +39,7 @@ interface UserInfo {
 
 const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
   const dispatch: AppDispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.users.user);
+  const user: IUser = useSelector((state: RootState) => state.users.user);
 
   const defaultUserInfo: UserInfo = {
     username: "",
@@ -67,7 +69,7 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
 
   const handleUpdateUser = async () => {
     const { username, email, gender, address, phone_number } = userInfo;
-    if (!username || !email || !gender || !address || !phone_number) {
+    if (!username || !gender || !address || !phone_number) {
       toast.error("Vui lòng nhập đầy đủ thông tin!");
       return;
     }
@@ -84,16 +86,16 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
       })
     );
 
-    if (+res.payload.EC === 0) {
+    if (+res.payload?.EC === 0) {
       setOpen(false);
       toast.success(res.payload.EM);
       await dispatch(
         addActivityLog({
-          userId: user?.id,
+          userId: user?.id as string,
           action: "Cập nhật thông tin người dùng!",
         })
       );
-      await dispatch(getActivityLog(user.id as string));
+      await dispatch(getActivityLog(user?.id as string));
     } else {
       toast.error(res.payload.EM);
     }
@@ -161,15 +163,15 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
             <Typography sx={{ marginBottom: "12px" }} level="title-md">
               Giới tính
             </Typography>
-            <Select
-              onChange={(event, value) =>
-                handleOnchangeInput(value as string, "gender")
+            <RadioGroup
+              value={userInfo.gender}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                handleOnchangeInput(event.target.value, "gender")
               }
-              defaultValue={userInfo.gender}
             >
-              <Option value="Nam">Nam</Option>
-              <Option value="Nữ">Nữ</Option>
-            </Select>
+              <Radio value="Nam" label="Nam" />
+              <Radio value="Nữ" label="Nữ" />
+            </RadioGroup>
           </Box>
           <Box>
             <Typography sx={{ marginBottom: "12px" }} level="title-md">
@@ -195,16 +197,14 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
             >
               Huỷ bỏ
             </Button>
-            {isLoading ? (
-              <LoadingButton />
-            ) : (
-              <Button
-                onKeyDown={(e) => e.code === "Enter" && handleUpdateUser()}
-                onClick={() => handleUpdateUser()}
-              >
-                Lưu
-              </Button>
-            )}
+
+            <Button
+              loading={isLoading}
+              onKeyDown={(e) => e.code === "Enter" && handleUpdateUser()}
+              onClick={() => handleUpdateUser()}
+            >
+              Lưu
+            </Button>
           </Box>
         </Box>
       </Sheet>

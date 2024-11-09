@@ -2,27 +2,23 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   login,
   logout,
-  getUser,
+  getUserAccount,
   verifyToken,
   updateUser,
+  getAnotherUserInfo,
 } from "../asyncThunk/userThunk";
+import { IUser } from "../../interfaces/user";
 
-export interface User {
-  id: string;
-  username: string;
-  email: string;
-  phoneNumber: string;
-  gender: string;
-  address: string;
-  isLock: boolean;
-  type_account: string;
-  refresh_token: string;
-  access_token: string;
-  avatar?: string;
+interface IInitialState {
+  user: IUser;
+  anotherUser: IUser;
+  isLoading: boolean;
+  isError: boolean;
 }
 
-const initialState: any = {
+const initialState: IInitialState = {
   user: {},
+  anotherUser: {},
   isLoading: false,
   isError: false,
 };
@@ -50,7 +46,6 @@ export const userSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(verifyToken.fulfilled, (state, action) => {
-      console.log(action.payload);
       if (+action.payload?.EC === 0) {
         state.user = action.payload?.DT;
       }
@@ -73,14 +68,26 @@ export const userSlice = createSlice({
       state.isError = true;
     });
 
-    builder.addCase(getUser.pending, (state, action) => {
+    builder.addCase(getUserAccount.pending, (state, action) => {
       state.isLoading = true;
     });
-    builder.addCase(getUser.fulfilled, (state, action) => {
+    builder.addCase(getUserAccount.fulfilled, (state, action) => {
       state.user = action.payload?.DT ?? {};
       state.isLoading = false;
     });
-    builder.addCase(getUser.rejected, (state, action) => {
+    builder.addCase(getUserAccount.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+
+    builder.addCase(getAnotherUserInfo.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getAnotherUserInfo.fulfilled, (state, action) => {
+      state.anotherUser = action.payload?.DT ?? {};
+      state.isLoading = false;
+    });
+    builder.addCase(getAnotherUserInfo.rejected, (state, action) => {
       state.isLoading = false;
       state.isError = true;
     });
@@ -89,7 +96,6 @@ export const userSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(updateUser.fulfilled, (state, action) => {
-      console.log(action.payload);
       if (+action.payload.EC === 0) {
         state.user = action.payload.DT;
       }

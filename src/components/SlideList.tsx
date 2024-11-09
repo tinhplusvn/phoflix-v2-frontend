@@ -3,7 +3,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "../styles/SlideShow.scss";
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import { Autoplay, Pagination, Navigation, EffectCards } from "swiper/modules";
 import { Box, Skeleton } from "@mui/joy";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
@@ -11,20 +11,18 @@ import _NavLink from "./common/_NavLink";
 import SlideItem from "./SlideItem";
 import { IMovie } from "../interfaces/movie";
 
-const SlideShow = () => {
+const SlideList = () => {
   const items: IMovie[] = useSelector(
-    (state: RootState) => state.movies.slideShow
+    (state: RootState) => state?.movies?.slideShow ?? []
   );
-  const isLoading: boolean = useSelector(
-    (state: RootState) => state.movies.isLoading
-  );
+  const width: number = useSelector((state: RootState) => state?.system?.width);
 
   return (
     <Box>
       <Swiper
         centeredSlides={true}
         autoplay={{
-          delay: 600000,
+          delay: 6000,
           disableOnInteraction: false,
         }}
         pagination={{
@@ -32,7 +30,9 @@ const SlideShow = () => {
         }}
         navigation={false}
         modules={[Autoplay, Pagination, Navigation]}
+        // modules={[EffectCards]}
         className="mySwiper"
+        // effect="cards"
       >
         {items.length === 0 && (
           <SwiperSlide>
@@ -44,7 +44,9 @@ const SlideShow = () => {
             <SwiperSlide
               key={index}
               style={{
-                backgroundImage: `url("${item.thumb_url}")`,
+                backgroundImage: `url("${
+                  width > 600 ? item?.thumb_url : item?.poster_url
+                }")`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
@@ -59,4 +61,4 @@ const SlideShow = () => {
   );
 };
 
-export default SlideShow;
+export default SlideList;

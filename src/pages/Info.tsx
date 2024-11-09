@@ -30,6 +30,7 @@ import MovieSuggestions from "../components/movie/MovieSuggestions";
 import SkeletonPage from "../components/common/SkeletonPage";
 import { IMovie } from "../interfaces/movie";
 import toast from "react-hot-toast";
+import { IUser } from "../interfaces/user";
 
 const Info = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -44,13 +45,13 @@ const Info = () => {
   const params = useParams();
   const [isSave, setIsSave] = useState<boolean>(false);
   const breadcrumbsPaths = ["Thông tin phim", movieInfo.name];
-  const user = useSelector((state: RootState) => state.users.user);
+  const user: IUser = useSelector((state: RootState) => state.users.user);
 
   useEffect(() => {
     const handleInit = async () => {
       await dispatch(
         getAllMovies({
-          userId: user.id as string,
+          userId: user?.id as string,
           type: "saved-movies",
         })
       );
@@ -121,7 +122,7 @@ const SectionCardMovie = ({
   setIsSave,
 }: ISectionCardMovie) => {
   const dispatch: AppDispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.users.user);
+  const user: IUser = useSelector((state: RootState) => state.users.user);
   const params = useParams();
   const savedMovies = useSelector(
     (state: RootState) => state.movies.savedMovies.movies
@@ -144,7 +145,7 @@ const SectionCardMovie = ({
     setIsLoading(true);
     const res: any = await dispatch(
       addMovie({
-        userId: user?.id,
+        userId: user?.id as string,
         movieInfo,
         type: "saved-movies",
       })
@@ -161,7 +162,7 @@ const SectionCardMovie = ({
     setIsLoading(true);
     const res: any = await dispatch(
       deleteMovie({
-        userId: user?.id,
+        userId: user?.id as string,
         movieSlug: movieInfo?.slug as string,
         type: "saved-movies",
       })

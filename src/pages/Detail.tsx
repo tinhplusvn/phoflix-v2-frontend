@@ -54,8 +54,6 @@ const Detail = () => {
   const [breadcrumbsPaths, setBreadcrumbsPaths] = useState<string[]>([]);
 
   useEffect(() => {
-    console.log(movies);
-    console.log(titlePage);
     document.title = titleHead;
   }, [titleHead]);
 

@@ -12,23 +12,50 @@ import {
 } from "@mui/joy";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { AppDispatch } from "../../redux/store";
+import { useDispatch } from "react-redux";
+import { addReportedComment } from "../../redux/asyncThunk/reportedComment";
 
 type IProps = {
   open: boolean;
+  idComment: string;
   setOpen: (open: boolean) => void;
+  setIdComment: (id: string) => void;
 };
 
-type reportingReason = "SCAM" | "SPAM" | "OFFENSIVE_CONTENT";
-
-const ModalReportComment = ({ open, setOpen }: IProps) => {
+const ModalReportComment = ({
+  open,
+  idComment,
+  setOpen,
+  setIdComment,
+}: IProps) => {
+  const dispatch: AppDispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [reportingReason, setReportingReason] =
-    useState<reportingReason>("SPAM");
-  const handleReport = () => {
-    toast("Đang phát triển!");
+    useState<string>("Nội dung xúc phạm");
+
+  const handleChangeRadio = (value: string) => {
+    setReportingReason(value);
   };
 
-  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setReportingReason(event.target.value as reportingReason);
+  const handleReport = async () => {
+    setIsLoading(true);
+    const res = await dispatch(
+      addReportedComment({
+        idComment,
+        reportingReason,
+      })
+    );
+
+    if (res.payload?.EC === 0) {
+      toast.success("Báo cáo thành công!");
+    } else {
+      toast.error(res.payload?.EM || "Có lỗi xảy ra");
+    }
+
+    setIsLoading(false);
+    setOpen(false);
+    setIdComment("");
   };
 
   return (
@@ -64,17 +91,33 @@ const ModalReportComment = ({ open, setOpen }: IProps) => {
           <FormControl>
             <FormLabel>Lý do báo cáo?</FormLabel>
             <RadioGroup
-              onChange={(event) => handleRadioChange(event)}
+              onChange={(event) =>
+                handleChangeRadio(event.target.value as string)
+              }
               value={reportingReason}
               name="radio-buttons-group"
             >
-              <Radio value="SPAM" label="Spam" size="md" />
               <Radio
-                value="OFFENSIVE_CONTENT"
+                value="Nội dung xúc phạm"
                 label="Nội dung xúc phạm"
                 size="md"
               />
-              <Radio value="SCAM" label="Lừa đảo" size="md" />
+              <Radio value="Lừa đảo" label="Lừa đảo" size="md" />
+              <Radio
+                value="Quảng cáo không mong muốn"
+                label="Quảng cáo không mong muốn"
+                size="md"
+              />
+              <Radio
+                value="Thông tin sai lệch"
+                label="Thông tin sai lệch"
+                size="md"
+              />
+              <Radio
+                value="Hành vi quấy rối"
+                label="Hành vi quấy rối"
+                size="md"
+              />
             </RadioGroup>
           </FormControl>
           <Box
@@ -92,7 +135,9 @@ const ModalReportComment = ({ open, setOpen }: IProps) => {
             >
               Huỷ bỏ
             </Button>
-            <Button onClick={() => handleReport()}>Báo cáo</Button>
+            <Button loading={isLoading} onClick={() => handleReport()}>
+              Báo cáo
+            </Button>
           </Box>
         </Box>
       </Sheet>

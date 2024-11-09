@@ -12,22 +12,34 @@ import { getCommentList } from "../../redux/asyncThunk/commentThunk";
 import { useParams } from "react-router-dom";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
-type filter = "DESC" | "ASC";
+export type Filter = "DESC" | "ASC";
+
+interface IComment {
+  id?: string;
+  content?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  email?: string | null;
+  movie_slug?: string;
+  "user.name"?: string;
+  user_id?: string;
+}
 
 const CommentSection = () => {
   const dispatch: AppDispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.users.user);
-  const commentList: any = useSelector(
+  const commentList: IComment[] = useSelector(
     (state: RootState) => state.comments.commentList
   );
   const params = useParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    handleGetAllComment("DESC");
+    const type =
+      JSON.parse(localStorage.getItem("filter-comments") as Filter) ?? "DESC";
+    handleGetAllComment(type);
   }, []);
 
-  const handleGetAllComment = async (typeFilter: filter) => {
+  const handleGetAllComment = async (typeFilter: Filter) => {
     setIsLoading(true);
     await dispatch(
       getCommentList({

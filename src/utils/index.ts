@@ -29,3 +29,8 @@ export const formatDate = (dateString: string) => {
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 };
 
+export const validateEmail = (email: string | undefined): boolean => {
+  if (!email) return false;
+  const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  return regex.test(email);
+};

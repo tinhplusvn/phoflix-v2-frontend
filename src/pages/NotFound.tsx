@@ -18,8 +18,8 @@ const NotFound = () => {
       <Box
         sx={{
           width: {
-            xs: "320px",
-            md: "600px",
+            xs: "330px",
+            md: "580px",
           },
           height: {
             xs: "160px",
@@ -39,7 +39,7 @@ const NotFound = () => {
           gap: "24px",
         }}
       >
-        <Typography color="neutral" sx={{ textAlign: "center" }} level="h2">
+        <Typography color="neutral" sx={{ textAlign: "center" }} level="h4">
           Xin lỗi, trang bạn đang tìm kiếm không tồn tại!
         </Typography>
         <Button onClick={() => navigate("/")} variant="soft">

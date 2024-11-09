@@ -10,7 +10,9 @@ import {
 import { formatDate } from "../../utils";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { Link, useNavigate } from "react-router-dom";
+import { IUser } from "../../interfaces/user";
+import { Link } from "react-router-dom";
+import avatarImg from "../../images/avatar.jpg";
 
 interface CommentItem {
   item: any;
@@ -41,16 +43,22 @@ const CommentItem = ({
   handleEditComment,
   handSaveEditComment,
 }: CommentItem) => {
-  const handleOpenModal = (idComment: string) => {
+  const user: IUser = useSelector((state: RootState) => state.users.user);
+
+  const handleOpenModalAlerDialog = (idComment: string) => {
     handleSetOpenModalAlertDialog(true);
     setIdComment(idComment);
   };
-  const user = useSelector((state: RootState) => state.users.user);
+
+  const handleOpenModalReportComment = (idComment: string) => {
+    handleSetOpenModalReportComment(true);
+    setIdComment(idComment);
+  };
 
   return (
     <li style={{ display: "flex", gap: "12px" }}>
       <Box>
-        <Avatar />
+        <Avatar alt={item?.username} src={avatarImg} />
       </Box>
       <Box
         sx={{
@@ -65,22 +73,24 @@ const CommentItem = ({
       >
         <Box>
           <Box sx={{ display: "flex", gap: "8px", alignItems: "center" }}>
-            <Tooltip
-              title="Chuyển đến trang thông tin người dùng"
-              placement="top"
+            <Typography
+              sx={{
+                cursor: "pointer",
+              }}
+              level="title-sm"
+              color="primary"
             >
-              <Typography
-                sx={{
-                  cursor: "pointer",
-                }}
-                level="title-md"
-                color="primary"
+              <Link
+                style={{ all: "unset" }}
+                to={
+                  item?.user_id === user?.id
+                    ? "/thong-tin-nguoi-dung"
+                    : `/xem-thong-tin/${item?.user_id}`
+                }
               >
-                {/* <Link style={{ all: "unset" }} to="/thong-tin-nguoi-dung">
-                </Link> */}
                 {item["user.username"]}
-              </Typography>
-            </Tooltip>
+              </Link>
+            </Typography>
             <Typography level="body-xs" color="neutral">
               {formatDate(item?.createdAt)}
             </Typography>
@@ -106,10 +116,10 @@ const CommentItem = ({
         <Divider />
         {index !== indexEdit ? (
           <Box sx={{ display: "flex" }}>
-            {item?.user_id === user.id && (
+            {item?.user_id === user?.id && (
               <>
                 <Button
-                  onClick={() => handleOpenModal(item.id)}
+                  onClick={() => handleOpenModalAlerDialog(item?.id)}
                   variant="plain"
                   color="danger"
                   size="sm"
@@ -126,9 +136,9 @@ const CommentItem = ({
                 </Button>
               </>
             )}
-            {item?.user_id !== user.id && (
+            {item?.user_id !== user?.id && (
               <Button
-                onClick={() => handleSetOpenModalReportComment(true)}
+                onClick={() => handleOpenModalReportComment(item?.id)}
                 variant="plain"
                 color="neutral"
                 size="sm"

@@ -28,8 +28,8 @@ const Authenticate = () => {
       })
     );
 
-    if (+res.payload.EC === 0) {
-      toast.success(res.payload.EM);
+    if (+res.payload?.EC === 0) {
+      toast.success(`Xin chào! ${res.payload?.DT?.username}`);
       await dispatch(
         addActivityLog({
           userId: res.payload?.DT?.id ?? "",

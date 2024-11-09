@@ -1,15 +1,20 @@
 import { Alert, Option, Select, Typography } from "@mui/joy";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Filter } from "./CommentSection";
 
-type filter = "DESC" | "ASC";
+interface IProps {
+  handleGetAllComment: (typeFilter: Filter) => Promise<void>;
+}
 
-const CommentFilter = ({ handleGetAllComment }: any) => {
-  const [typeFilter, setTypeFilter] = useState<filter>(() => {
-    return JSON.parse(localStorage.getItem("filter-comments") as filter) ?? 'DESC';
+const CommentFilter = ({ handleGetAllComment }: IProps) => {
+  const [typeFilter, setTypeFilter] = useState<Filter>(() => {
+    return (
+      JSON.parse(localStorage.getItem("filter-comments") as Filter) ?? "DESC"
+    );
   });
 
-  const handleChangeFilter = (type: filter) => {
+  const handleChangeFilter = (type: Filter) => {
     handleGetAllComment(type);
     setTypeFilter(type);
     localStorage.setItem("filter-comments", JSON.stringify(type));
@@ -29,7 +34,7 @@ const CommentFilter = ({ handleGetAllComment }: any) => {
       </Typography>
       <Select
         value={typeFilter}
-        onChange={(event, value) => handleChangeFilter(value as filter)}
+        onChange={(event, value) => handleChangeFilter(value as Filter)}
       >
         <Option value="DESC">Mới nhất</Option>
         <Option value="ASC">Cũ nhất</Option>

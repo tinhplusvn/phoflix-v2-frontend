@@ -87,10 +87,12 @@ const Search = () => {
               : `Không tìm thấy phim phù hợp!`}
           </Typography>
 
-          <Typography
-            color="primary"
-            level="title-sm"
-          >{`Trang ${currentPage}`}</Typography>
+          {movies.length > 0 && (
+            <Typography
+              color="primary"
+              level="title-sm"
+            >{`Trang ${currentPage}`}</Typography>
+          )}
         </Alert>
 
         {movies.length > 0 && !isLoading && (
@@ -113,11 +115,11 @@ const Search = () => {
             sx={{
               width: {
                 xs: "320px",
-                md: "400px",
+                md: "360px",
               },
               height: {
                 xs: "320px",
-                md: "480px",
+                md: "360px",
               },
               backgroundImage: `url(${searchNotFoundImg})`,
               backgroundSize: "cover",

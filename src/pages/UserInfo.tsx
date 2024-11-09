@@ -26,6 +26,7 @@ import {
 import { formatDate } from "../utils";
 import SkeletonActivityLog from "../components/common/SkeletonActivityLog";
 import EditNoteIcon from "@mui/icons-material/EditNote";
+import { IUser } from "../interfaces/user";
 
 const UserInfo = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -33,7 +34,7 @@ const UserInfo = () => {
     useState<boolean>(false);
   const [openModalAlertDialog, setOpenModalAlertDialog] =
     useState<boolean>(false);
-  const user = useSelector((state: RootState) => state.users.user);
+  const user: IUser = useSelector((state: RootState) => state.users.user);
   const navigate = useNavigate();
   const activityList = useSelector(
     (state: RootState) => state.activityLog.activityList
@@ -48,7 +49,7 @@ const UserInfo = () => {
 
     const handleInit = async () => {
       setIsLoading(true);
-      await dispatch(getActivityLog(user.id as string));
+      await dispatch(getActivityLog(user?.id as string));
       setIsLoading(false);
     };
     handleInit();
@@ -57,7 +58,7 @@ const UserInfo = () => {
   const handleDeleteActivityHistory = async () => {
     setIsLoadingButton(true);
     await dispatch(deleleActivityLog());
-    await dispatch(getActivityLog(user.id as string));
+    await dispatch(getActivityLog(user?.id as string));
     setOpenModalAlertDialog(false);
     setIsLoadingButton(false);
   };
@@ -141,19 +142,19 @@ const UserInfo = () => {
                 <tr>
                   <td style={{ fontWeight: "bold" }}>Số điện thoại:</td>
                   <td style={{ wordWrap: "break-word" }}>
-                    {user.phone_number ?? "Trống"}
+                    {user?.phone_number ?? "Không xác định"}
                   </td>
                 </tr>
                 <tr>
                   <td style={{ fontWeight: "bold" }}>Giới tính:</td>
                   <td style={{ wordWrap: "break-word" }}>
-                    {user.gender ?? "Trống"}
+                    {user.gender ?? "Không xác định"}
                   </td>
                 </tr>
                 <tr>
                   <td style={{ fontWeight: "bold" }}>Địa chỉ:</td>
                   <td style={{ wordWrap: "break-word" }}>
-                    {user.address ?? "Trống"}
+                    {user.address ?? "Không xác định"}
                   </td>
                 </tr>
               </tbody>
