@@ -9,7 +9,6 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useState } from "react";
 import _ from "lodash";
 import { register, sendOTP } from "../../redux/asyncThunk/userThunk";
-import LoadingButton from "../common/LoadingButon";
 import toast from "react-hot-toast";
 import { validateEmail } from "../../utils";
 
@@ -112,6 +111,7 @@ const Register = ({ setOpen }: IProps) => {
         toast.error(res.payload.EM);
       }
 
+      dispatch(setType("login"));
       setIsLoadingRegister(false);
     }
   };

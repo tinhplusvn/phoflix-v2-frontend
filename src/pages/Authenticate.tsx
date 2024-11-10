@@ -30,12 +30,6 @@ const Authenticate = () => {
 
     if (+res.payload?.EC === 0) {
       toast.success(`Xin chào! ${res.payload?.DT?.username}`);
-      await dispatch(
-        addActivityLog({
-          userId: res.payload?.DT?.id ?? "",
-          action: "Đăng nhập hệ thống!",
-        })
-      );
     } else {
       toast.error("Đăng nhập thất bại!");
     }

@@ -32,11 +32,12 @@ export const addActivityLog = createAsyncThunk(
 );
 
 export const deleleActivityLog = createAsyncThunk(
-  "movies/deleleComment",
-  async () => {
+  "movies/deleleActivityLog",
+  async (userId: string) => {
     try {
-      const response: any = await axios.delete(
-        `${process.env.REACT_APP_API}/activity-log/delete-activity-log`
+      const response: any = await axios.post(
+        `${process.env.REACT_APP_API}/activity-log/delete-activity-log`,
+        { userId }
       );
       return response;
     } catch (error) {

@@ -35,6 +35,7 @@ const Detail = () => {
   const titleHead = useSelector(
     (state: RootState) => state.movies.movieDetail.titleHead
   );
+  const isMobile = useSelector((state: RootState) => state.system.isMobile);
   const isLoading = useSelector((state: RootState) => state.movies.isLoading);
   const isError = useSelector((state: RootState) => state.movies.isError);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -135,7 +136,7 @@ const Detail = () => {
             >
               <Typography
                 startDecorator={<LiveTvRoundedIcon />}
-                level="title-lg"
+                level={!isMobile ? 'title-lg' : 'title-sm'}
               >
                 {`${titlePage} (${totalItems} bộ)`}
               </Typography>

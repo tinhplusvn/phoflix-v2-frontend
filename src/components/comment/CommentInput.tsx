@@ -1,7 +1,7 @@
 import { Box, Button, Textarea } from "@mui/joy";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   addComment,
@@ -55,7 +55,7 @@ const CommentInput = () => {
       );
     }
     setIsLoading(false);
-    toast.success(res.payload.EM);
+    toast.success(res.payload?.EM);
     setValueComment("");
   };
 

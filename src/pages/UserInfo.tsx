@@ -57,7 +57,7 @@ const UserInfo = () => {
 
   const handleDeleteActivityHistory = async () => {
     setIsLoadingButton(true);
-    await dispatch(deleleActivityLog());
+    await dispatch(deleleActivityLog(user?.id as string));
     await dispatch(getActivityLog(user?.id as string));
     setOpenModalAlertDialog(false);
     setIsLoadingButton(false);
@@ -221,10 +221,10 @@ const UserInfo = () => {
                       <td style={{ textAlign: "center" }} colSpan={2}>
                         <Typography
                           sx={{ marginTop: "12px" }}
-                          level="title-lg"
+                          level="title-md"
                           color="primary"
                         >
-                          Lịch sử hoạt động đang trống!
+                          Không có hoạt động nào gần đây!
                         </Typography>
                       </td>
                     </tr>

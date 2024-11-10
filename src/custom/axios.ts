@@ -10,7 +10,6 @@ const instance = axios.create({
 axiosRetry(instance, {
   retries: 3,
   retryCondition: (error) => {
-    console.log(error.response?.status)
     return error?.response?.status === 401;
   },
   retryDelay: (retryCount, error) => {

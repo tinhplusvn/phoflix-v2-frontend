@@ -54,7 +54,7 @@ const CommentList = () => {
       await dispatch(
         getCommentList({ movieSlug: params.slug as string, sortOrder: "DESC" })
       );
-      toast.success(res.payload.EM);
+      toast.success(res.payload?.EM);
     }
     dispatch(setOpenModalAlertDialog(false));
     setIsLoading(false);

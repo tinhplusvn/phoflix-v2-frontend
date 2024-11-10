@@ -148,7 +148,7 @@ const CommentItem = ({
             )}
           </Box>
         ) : (
-          <Box sx={{ display: "flex" }}>
+          <Box sx={{ display: "flex", gap: "12px" }}>
             <Button
               onClick={() => setIndexEdit(-1)}
               variant="plain"
@@ -160,7 +160,7 @@ const CommentItem = ({
             <Button
               loading={isLoading}
               onClick={() => handSaveEditComment(item?.id)}
-              variant="plain"
+              variant="solid"
               color="primary"
               size="sm"
             >
