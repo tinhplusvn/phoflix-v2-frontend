@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getSearchHistory } from "../asyncThunk/searchHistoryThunk";
+import { logout } from "../asyncThunk/userThunk";
 
 const initialState: any = {
   searchRecent: [],
@@ -22,6 +23,13 @@ export const searchHistorySlice = createSlice({
         ) ?? [];
       })
       .addCase(getSearchHistory.rejected, (state) => {});
+
+      .addCase(logout.pending, (state) => {})
+      .addCase(logout.fulfilled, (state, action) => {
+        state.searchRecent = [];
+        state.searchFavourite = [];
+      })
+      .addCase(logout.rejected, (state) => {});
   },
 });
 
