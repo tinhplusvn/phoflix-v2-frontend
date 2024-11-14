@@ -22,7 +22,7 @@ export const searchHistorySlice = createSlice({
           (item: any) => item.type === "favourite"
         ) ?? [];
       })
-      .addCase(getSearchHistory.rejected, (state) => {});
+      .addCase(getSearchHistory.rejected, (state) => {})
 
       .addCase(logout.pending, (state) => {})
       .addCase(logout.fulfilled, (state, action) => {
