@@ -377,18 +377,24 @@ const SectionRating = () => {
           alignItems: "center",
         }}
       >
-        <Rating
-          onChange={(event, value) => handleAddRating(value as number)}
-          name="half-rating"
-          value={stars}
-          precision={1}
-        />
+       
         {isLoading ? (
-          <Skeleton variant="text" level="body-xs" width={100} height={20} />
+          <>
+            <Skeleton variant="text" level="h3" width={100} />
+             <Skeleton variant="text" level="body-xs" width={100} height={20} />
+          </>
         ) : (
-          <Typography level="title-sm" color="neutral">
-            {rating.countRating} lượt đánh giá
-          </Typography>
+          <>
+            <Rating
+              onChange={(event, value) => handleAddRating(value as number)}
+              name="half-rating"
+              value={stars}
+              precision={1}
+            />
+            <Typography level="title-sm" color="neutral">
+              {rating.countRating} lượt đánh giá
+            </Typography>
+          </>
         )}
       </Box>
     </Alert>
