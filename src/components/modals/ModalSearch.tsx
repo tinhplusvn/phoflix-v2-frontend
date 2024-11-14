@@ -73,25 +73,28 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
 
   const handleSearchInput = async (actions: actions) => {
     if (searchValue !== "") {
-      setIsLoadingButton(true);
-      await dispatch(
-        addSearchHistory({
-          userId: user?.id as string,
-          type: "recent",
-          keyword: searchValue,
-        })
-      );
-      await dispatch(getSearchHistory(user?.id as string));
-      await dispatch(
-        addActivityLog({
-          userId: user?.id as string,
-          action: `Tìm kiếm từ khoá "${searchValue}"`,
-        })
-      );
+
+     if (user?.access_token || user?.refresh_token) {
+        setIsLoadingButton(true);
+        await dispatch(
+          addSearchHistory({
+            userId: user?.id as string,
+            type: "recent",
+            keyword: searchValue,
+          })
+        );
+        await dispatch(getSearchHistory(user?.id as string));
+        await dispatch(
+          addActivityLog({
+            userId: user?.id as string,
+            action: `Tìm kiếm từ khoá "${searchValue}"`,
+          })
+        );
+        setIsLoadingButton(false);
+     }
       navigate(`/tim-kiem/${searchValue}`);
       setSearchValue("");
-      setOpen(false);
-      setIsLoadingButton(false);
+      setOpen(false);  
     }
   };
 
