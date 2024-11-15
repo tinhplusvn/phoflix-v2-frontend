@@ -48,16 +48,10 @@ const Navigation = () => {
               <Typography
                 color="primary"
                 level="title-md"
-                variant="outlined"
                 onClick={() => navigate("/")}
                 sx={{
                   marginRight: "12px",
                   cursor: "pointer",
-                  "&:hover": {
-                    color: "#fff",
-                    backgroundColor: "#0b6bcb",
-                    transition: ".3s",
-                  },
                 }}
               >
                 PHOFLIX-V2

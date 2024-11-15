@@ -49,14 +49,17 @@ const Info = () => {
 
   useEffect(() => {
     const handleInit = async () => {
-      await dispatch(
-        getAllMovies({
-          userId: user?.id as string,
-          type: "saved-movies",
-        })
-      );
+      if (user?.access_token || user?.refresh_token) {
+        await dispatch(
+          getAllMovies({
+            userId: user?.id as string,
+            type: "saved-movies",
+          })
+        );
+      }
       await dispatch(getMovieInfo(params.slug as string));
     };
+
     handleInit();
   }, [params]);
 
@@ -128,6 +131,8 @@ const SectionCardMovie = ({
     (state: RootState) => state.movies.savedMovies.movies
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const isMobile = useSelector((state: RootState) => state.system.isMobile);
+  const width = useSelector((state: RootState) => state.system.width);
 
   useEffect(() => {
     const isExist: boolean = savedMovies.some(
@@ -178,7 +183,10 @@ const SectionCardMovie = ({
   return (
     <Box className="section-card-movie">
       <Box className="section-card-movie-inner">
-        <img src={movieInfo.poster_url} alt={movieInfo.name} />
+        <img
+          src={width ? movieInfo.poster_url : movieInfo?.thumb_url}
+          alt={movieInfo.name}
+        />
       </Box>
       <Box className="section-card-movie-actions">
         <Button

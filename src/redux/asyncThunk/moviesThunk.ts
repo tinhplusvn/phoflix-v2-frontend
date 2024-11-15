@@ -1,7 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../custom/axios";
 import { IGetMovieDetail } from "../../interfaces/movie";
-import { IAddMovie, IDeleteAllMovie, IDeleteMovie, IGetAllMovies, ISearchMovie } from "../../interfaces/movie";
+import {
+  IAddMovie,
+  IDeleteAllMovie,
+  IDeleteMovie,
+  IGetAllMovies,
+  ISearchMovie,
+} from "../../interfaces/movie";
 
 export const getCategories = createAsyncThunk(
   "movies/getCategories",
@@ -124,11 +130,9 @@ export const getMovieDetail = createAsyncThunk(
     let { describe, slug, page } = rawData;
     try {
       const baseApi = `${process.env.REACT_APP_API_BASE}/${describe}/${slug}`;
-
-      const response =
-        describe !== "nam"
-          ? await fetch(`${baseApi}?page=${page}&limit=24` as string)
-          : await fetch(baseApi as string);
+      const response = await fetch(
+        `${baseApi}?page=${page}&limit=24` as string
+      );
 
       const data = await response.json();
       return data.data;
@@ -153,7 +157,6 @@ export const searchMovie = createAsyncThunk(
     }
   }
 );
-
 
 export const getAllMovies = createAsyncThunk(
   "movies/getAllMovies",

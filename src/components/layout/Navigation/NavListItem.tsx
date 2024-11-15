@@ -39,9 +39,9 @@ const NavListItem = ({ data, describe, title }: IProps) => {
               <MenuItem
                 onClick={() => navigate(`/chi-tiet/${describe}/${item.slug}`)}
                 key={index}
-                sx={{ borderRadius: "8px", width: '25%' }}
+                sx={{ borderRadius: "8px", width: "25%" }}
               >
-                {item.name}
+                {item.name} 
               </MenuItem>
             ))}
         </Menu>

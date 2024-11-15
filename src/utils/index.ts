@@ -34,3 +34,7 @@ export const validateEmail = (email: string | undefined): boolean => {
   const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
   return regex.test(email);
 };
+
+export const generateYears = (startYear: number, endYear: number): number[] => {
+  return Array.from({ length: endYear - startYear + 1 }, (_, i) => endYear - i);
+};

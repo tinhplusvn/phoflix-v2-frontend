@@ -19,7 +19,7 @@ const InfoRow = ({ label, value, type, canPress, describe }: IProps) => (
       value.map((item, index) => (
         <Chip
           key={index}
-          variant={`${canPress ? "solid" : "soft"}`}
+          variant="solid"
           color={`${canPress ? "primary" : "neutral"}`}
         >
           {typeof item === "object" && canPress ? (

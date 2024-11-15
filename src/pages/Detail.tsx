@@ -10,7 +10,7 @@ import { Pagination, Stack } from "@mui/material";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 import _ from "lodash";
 import SkeletonPage from "../components/common/SkeletonPage";
-import { scrollToTop } from "../utils";
+import { generateYears, scrollToTop } from "../utils";
 
 // định nghĩa kiểu dữ liệu cho object
 type describe = Record<string, string>;
@@ -59,6 +59,14 @@ const Detail = () => {
   }, [titleHead]);
 
   useEffect(() => {
+    const currentYear = new Date().getFullYear();
+    const yearMapping = Object.fromEntries(
+      generateYears(1983, currentYear).map((year) => [
+        year.toString(),
+        year.toString(),
+      ])
+    );
+
     const categoryMapping = Object.fromEntries(
       categories.map((category) => [category.slug, category.name])
     );
@@ -71,6 +79,7 @@ const Detail = () => {
       ...prev,
       ...categoryMapping,
       ...countryMapping,
+      ...yearMapping,
     }));
   }, [categories, countries]);
 
@@ -136,7 +145,7 @@ const Detail = () => {
             >
               <Typography
                 startDecorator={<LiveTvRoundedIcon />}
-                level={!isMobile ? 'title-lg' : 'title-sm'}
+                level={!isMobile ? "title-lg" : "title-sm"}
               >
                 {`${titlePage} (${totalItems} bộ)`}
               </Typography>

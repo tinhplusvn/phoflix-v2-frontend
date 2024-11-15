@@ -14,6 +14,13 @@ const NavLeft = () => {
   const countries = useSelector((state: RootState) => state.movies.countries);
   const user: IUser = useSelector((state: RootState) => state.users.user);
 
+  const currentYear = new Date().getFullYear();
+  const years: number[] = Array.from(
+    { length: currentYear - 1900 + 1 },
+    (_, i) => currentYear - i
+  );
+
+
   return (
     <Box sx={{ display: "flex" }}>
       <Dropdown>
@@ -41,6 +48,8 @@ const NavLeft = () => {
       </Dropdown>
       <NavListItem data={categories} describe="the-loai" title="Thể loại" />
       <NavListItem data={countries} describe="quoc-gia" title="Quốc gia" />
+
+      <Year />
 
       {(user.access_token || user?.refresh_token) && (
         <Dropdown>

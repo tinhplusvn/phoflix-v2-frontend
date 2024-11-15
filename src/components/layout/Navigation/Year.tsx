@@ -1,43 +1,46 @@
 import { Box, Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import _NavLink from "../../common/_NavLink";
-import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { generateYears } from "../../../utils";
 
 const Year = () => {
+  const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
-  const years: number[] = Array.from(
-    { length: currentYear - 1900 + 1 },
-    (_, i) => currentYear - i
-  );
-
+  const years: number[] = generateYears(1983, currentYear);
 
   return (
     <Box>
       <Dropdown>
         <MenuButton variant="plain" color="neutral">
-          Năm
+          Năm ra mắt
           <KeyboardArrowDownIcon />
         </MenuButton>
         <Menu
           className="countrys"
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            maxWidth: "360px",
-            height: "360px",
-            overflowY: "auto",
+            maxWidth: "420px",
+            maxHeight: "420px",
             padding: "8px",
           }}
         >
-          {years.map((year, index) => (
-            <MenuItem key={index} sx={{ borderRadius: "8px", flex: "auto" }}>
-              <_NavLink
-                path={`/chi-tiet/nam/${year}`}
-                content={year.toString()}
-              />
-            </MenuItem>
-          ))}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+            }}
+          >
+            {years.map((year, index) => (
+              <MenuItem
+                onClick={() => navigate(`/chi-tiet/nam/${year}`)}
+                key={index}
+                sx={{ borderRadius: "8px", flex: "auto" }}
+              >
+                {year}
+              </MenuItem>
+            ))}
+          </Box>
         </Menu>
       </Dropdown>
     </Box>

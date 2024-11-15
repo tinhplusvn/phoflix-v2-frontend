@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
 import { verifyToken } from "../redux/asyncThunk/userThunk";
 import toast from "react-hot-toast";
-import { addActivityLog } from "../redux/asyncThunk/activityLogThunk";
 
 type TypeAccount = "LOCAL" | "GOOGLE";
 
