@@ -239,7 +239,7 @@ const SectionLinkM3U8 = ({ link_m3u8, setOpen }: IProps) => {
       >
         <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
           <Typography startDecorator={<LinkOutlinedIcon />} level="title-lg">
-            Liên kết M3U8
+            Liên kết tải video
           </Typography>
 
           <Tooltip title="Hướng dẫn tải xuống">
