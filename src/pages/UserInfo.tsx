@@ -232,8 +232,12 @@ const UserInfo = () => {
                   {activityList.length > 0 &&
                     activityList.map((item: any, index: number) => (
                       <tr key={index}>
-                        <td>{item?.action}</td>
-                        <td>{formatDate(item?.createdAt)}</td>
+                        <td style={{ wordBreak: "break-word" }}>
+                          {item?.action}
+                        </td>
+                        <td style={{ wordBreak: "break-word" }}>
+                          {formatDate(item?.createdAt)}
+                        </td>
                       </tr>
                     ))}
                 </tbody>
