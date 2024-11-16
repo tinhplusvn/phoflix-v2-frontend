@@ -2,17 +2,26 @@ import { Alert, Option, Select, Typography } from "@mui/joy";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useState } from "react";
 import { Filter } from "./CommentSection";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 interface IProps {
   handleGetAllComment: (typeFilter: Filter) => Promise<void>;
 }
 
 const CommentFilter = ({ handleGetAllComment }: IProps) => {
+  const commentList = useSelector(
+    (state: RootState) => state.comments.commentList
+  );
   const [typeFilter, setTypeFilter] = useState<Filter>(() => {
     return (
       JSON.parse(localStorage.getItem("filter-comments") as Filter) ?? "DESC"
     );
   });
+
+  useEffect(() => {
+    handleChangeFilter(DESC);
+  }, [commentList]);
 
   const handleChangeFilter = (type: Filter) => {
     handleGetAllComment(type);
