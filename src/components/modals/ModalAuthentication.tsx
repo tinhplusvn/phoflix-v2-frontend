@@ -39,9 +39,12 @@ const ModalAuthentication = ({ type, open, setOpen }: IProps) => {
         variant="outlined"
         sx={{
           minWidth: {
-            xs: "90%",
+            xs: "80%",
             sm: "500px",
           },
+          maxWidth: {
+            xs:"90%"
+          }
           borderRadius: "md",
           p: 3,
           boxShadow: "lg",
