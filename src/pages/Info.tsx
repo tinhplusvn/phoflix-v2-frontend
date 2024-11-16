@@ -39,13 +39,11 @@ const Info = () => {
     (state: RootState) => state.movies.movieInfo.info
   );
   const isError = useSelector((state: RootState) => state.movies.isError);
-  const status = useSelector(
-    (state: RootState) => state.movies.movieInfo.status
-  );
   const params = useParams();
   const [isSave, setIsSave] = useState<boolean>(false);
   const breadcrumbsPaths = ["Thông tin phim", movieInfo.name];
   const user: IUser = useSelector((state: RootState) => state.users.user);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const handleInit = async () => {
@@ -57,13 +55,15 @@ const Info = () => {
           })
         );
       }
+      setIsLoading(true)
       await dispatch(getMovieInfo(params.slug as string));
+      setIsLoading(false)
     };
 
     handleInit();
   }, [params]);
 
-  if (!status && !isError) {
+  if (isLoading) {
     return <SkeletonPage page="info" />;
   }
 

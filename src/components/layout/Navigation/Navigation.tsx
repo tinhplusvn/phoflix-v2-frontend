@@ -16,12 +16,14 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import _Drawer from "./_Drawer";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { IUser } from "../../../interfaces/user";
 
 const Navigation = () => {
   const [open, setOpen] = useState<boolean>(false);
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const width = useSelector((state: RootState) => state.system.width);
+  const user: IUser = useSelector((state: RootState) => state.users.user);
 
   useEffect(() => {
     dispatch(getCategories());
@@ -43,22 +45,21 @@ const Navigation = () => {
             </IconButton>
           )}
 
-          {width > 1200 && (
-            <>
-              <Typography
-                color="primary"
-                level="title-md"
-                onClick={() => navigate("/")}
-                sx={{
-                  marginRight: "12px",
-                  cursor: "pointer",
-                }}
-              >
-                PHOFLIX-V2
-              </Typography>
-              <NavLeft />
-            </>
+          {(width > 1200 || user?.access_token) && (
+            <Typography
+              color="primary"
+              level="title-md"
+              onClick={() => navigate("/")}
+              sx={{
+                marginRight: "12px",
+                cursor: "pointer",
+              }}
+            >
+              PHOFLIX-V2
+            </Typography>
           )}
+
+          {width > 1200 && <NavLeft />}
         </Box>
         <NavRight width={width} />
       </Box>

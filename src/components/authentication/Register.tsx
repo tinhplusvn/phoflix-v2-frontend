@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
-import { Box, Button, Input, Typography } from "@mui/joy";
+import { Box, Button, IconButton, Input, Typography } from "@mui/joy";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import KeyIcon from "@mui/icons-material/Key";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
@@ -10,6 +10,8 @@ import { useState } from "react";
 import _ from "lodash";
 import { register, sendOTP } from "../../redux/asyncThunk/userThunk";
 import toast from "react-hot-toast";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { validateEmail } from "../../utils";
 
 interface ValueInput {
@@ -50,6 +52,7 @@ const Register = ({ setOpen }: IProps) => {
     useState<ValidInput>(defaultValidIput);
   const [isLoadingSendCode, setIsLoadingSendCode] = useState<boolean>(false);
   const [isLoadingRegister, setIsLoadingRegister] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleCheckValidInput = (): boolean => {
     let check: boolean = true;
@@ -186,7 +189,18 @@ const Register = ({ setOpen }: IProps) => {
           startDecorator={<LockOutlinedIcon />}
           size="md"
           placeholder="Mật khẩu"
-          type="password"
+          type={showPassword ? "text" : "password"}
+          endDecorator={
+            showPassword ? (
+              <IconButton onClick={() => setShowPassword(false)}>
+                <VisibilityIcon />
+              </IconButton>
+            ) : (
+              <IconButton onClick={() => setShowPassword(true)}>
+                <VisibilityOffIcon />
+              </IconButton>
+            )
+          }
         />
         {!isValidInput.password && (
           <Typography level="title-sm" color="danger" sx={{ marginTop: "8px" }}>
@@ -195,28 +209,26 @@ const Register = ({ setOpen }: IProps) => {
         )}
       </Box>
       <Box>
-        <Box sx={{ display: "flex", gap: "12px" }}>
-          <Input
-            error={!isValidInput.authCode}
-            onChange={(e) => handleOnchangeInput(e.target.value, "authCode")}
-            value={valueInput.authCode}
-            sx={{ maxWidth: "180px" }}
-            startDecorator={<KeyIcon />}
-            size="md"
-            placeholder="Mã xác thực"
-            type="number"
-          />
+        <Input
+          error={!isValidInput.authCode}
+          onChange={(e) => handleOnchangeInput(e.target.value, "authCode")}
+          value={valueInput.authCode}
+          startDecorator={<KeyIcon />}
+          size="md"
+          placeholder="Mã xác thực"
+          endDecorator={
+            <Button
+              loading={isLoadingSendCode}
+              disabled={valueInput.email === ""}
+              onClick={() => handleSendOTP()}
+              variant="soft"
+              color="primary"
+            >
+              Gửi mã
+            </Button>
+          }
+        />
 
-          <Button
-            loading={isLoadingSendCode}
-            disabled={valueInput.email === ""}
-            onClick={() => handleSendOTP()}
-            variant="soft"
-            color="primary"
-          >
-            Gửi mã
-          </Button>
-        </Box>
         {!isValidInput.authCode && (
           <Typography level="title-sm" color="danger" sx={{ marginTop: "8px" }}>
             Mã xác thực không được bỏ trống!

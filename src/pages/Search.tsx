@@ -26,7 +26,7 @@ const Search = () => {
   const titleHead = useSelector(
     (state: RootState) => state.movies.searchMovie.titleHead
   );
-  const isLoading = useSelector((state: RootState) => state.movies.isLoading);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const params = useParams();
   const breadcrumbsPaths = ["Tìm kiếm", params.keyword as string];
@@ -41,12 +41,17 @@ const Search = () => {
   };
 
   useEffect(() => {
-    dispatch(
-      searchMovie({
-        keyword: params.keyword as string,
-        page: currentPage,
-      })
-    );
+    const handleInit = async () => {
+      setIsLoading(true);
+      await dispatch(
+        searchMovie({
+          keyword: params.keyword as string,
+          page: currentPage,
+        })
+      );
+      setIsLoading(false);
+    };
+    handleInit();
   }, [params, currentPage]);
 
   useEffect(() => {
@@ -110,7 +115,7 @@ const Search = () => {
           </>
         )}
 
-        {movies.length === 0 && !isLoading && (
+        {!isLoading && movies.length === 0 && (
           <Box
             sx={{
               width: {

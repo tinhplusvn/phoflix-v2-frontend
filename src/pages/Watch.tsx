@@ -52,9 +52,6 @@ const Watch = () => {
     (state: RootState) => state.movies.movieInfo.info
   );
   const isError = useSelector((state: RootState) => state.movies.isError);
-  const status = useSelector(
-    (state: RootState) => state.movies.movieInfo.status
-  );
   const episodes = useSelector(
     (state: RootState) => state.movies.movieInfo.episodes
   );
@@ -75,9 +72,15 @@ const Watch = () => {
     currentEpisode.filename.replace(`- ${currentEpisode.name}`, ""),
     currentEpisode.name,
   ];
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    dispatch(getMovieInfo(params.slug as string));
+    const handleInit = async () => {
+      setIsLoading(true);
+      await dispatch(getMovieInfo(params.slug as string));
+      setIsLoading(false);
+    };
+    handleInit();
   }, []);
 
   useEffect(() => {
@@ -128,7 +131,7 @@ const Watch = () => {
     );
   };
 
-  if (!status && !isError) {
+  if (isLoading) {
     return <SkeletonPage page="info" />;
   }
 
@@ -377,11 +380,10 @@ const SectionRating = () => {
           alignItems: "center",
         }}
       >
-       
         {isLoading ? (
           <>
             <Skeleton variant="text" level="h3" width={100} />
-             <Skeleton variant="text" level="body-xs" width={100} height={20} />
+            <Skeleton variant="text" level="body-xs" width={100} height={20} />
           </>
         ) : (
           <>

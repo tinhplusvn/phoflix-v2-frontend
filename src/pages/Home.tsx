@@ -64,7 +64,7 @@ const Home = () => {
       <Box>
         <TitleContainer
           path="/chi-tiet/danh-sach/tv-shows"
-          content="Chương trình truyền hình"
+          content="Chương trình TV"
           icon={<LiveTvRoundedIcon />}
         />
         <MovieList movies={tvShows} />

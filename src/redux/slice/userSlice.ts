@@ -32,7 +32,7 @@ export const userSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(login.fulfilled, (state, action) => {
-      if (action.payload.code) {
+      if (action.payload?.code) {
         window.location.href = `/authenticate?token=${action.payload.code}&type=LOCAL`;
       }
       state.isLoading = false;

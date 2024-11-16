@@ -7,7 +7,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useState } from "react";
 import _ from "lodash";
 import { forgotPassword, sendOTP } from "../../redux/asyncThunk/userThunk";
-import LoadingButton from "../common/LoadingButon";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import toast from "react-hot-toast";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { setType } from "../../redux/slice/systemSlice";
@@ -42,6 +43,7 @@ const ForgotPassword = ({ setOpen }: any) => {
     useState<ValidInput>(defaultValidIput);
   const [isLoadingSendCode, setIsLoadingSendCode] = useState<boolean>(false);
   const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleCheckValidInput = (): boolean => {
     let check = true;
@@ -150,8 +152,19 @@ const ForgotPassword = ({ setOpen }: any) => {
           error={!isValidInput.password}
           startDecorator={<LockOutlinedIcon />}
           size="md"
+          endDecorator={
+            showPassword ? (
+              <IconButton onClick={() => setShowPassword(false)}>
+                <VisibilityIcon />
+              </IconButton>
+            ) : (
+              <IconButton onClick={() => setShowPassword(true)}>
+                <VisibilityOffIcon />
+              </IconButton>
+            )
+          }
           placeholder="Mật khẩu mới"
-          type="password"
+          type={showPassword ? "text" : "password"}
         />
         {!isValidInput.password && (
           <Typography level="title-sm" color="danger" sx={{ marginTop: "8px" }}>
@@ -160,28 +173,27 @@ const ForgotPassword = ({ setOpen }: any) => {
         )}
       </Box>
       <Box>
-        <Box sx={{ display: "flex", gap: "12px" }}>
-          <Input
-            value={valueInput.authCode}
-            onChange={(e) => handleOnchangeInput(e.target.value, "authCode")}
-            error={!isValidInput.authCode}
-            sx={{ maxWidth: "180px" }}
-            startDecorator={<KeyIcon />}
-            size="md"
-            placeholder="Mã xác thực"
-            type="text"
-          />
+        <Input
+          value={valueInput.authCode}
+          onChange={(e) => handleOnchangeInput(e.target.value, "authCode")}
+          error={!isValidInput.authCode}
+          startDecorator={<KeyIcon />}
+          size="md"
+          placeholder="Mã xác thực"
+          type="text"
+          endDecorator={
+            <Button
+              loading={isLoadingSendCode}
+              disabled={valueInput.email === ""}
+              onClick={() => handleSendOTP()}
+              variant="soft"
+              color="primary"
+            >
+              Gửi mã
+            </Button>
+          }
+        />
 
-          <Button
-            loading={isLoadingSendCode}
-            disabled={valueInput.email === ""}
-            onClick={() => handleSendOTP()}
-            variant="soft"
-            color="primary"
-          >
-            Gửi mã
-          </Button>
-        </Box>
         {!isValidInput.authCode && (
           <Typography level="title-sm" color="danger" sx={{ marginTop: "8px" }}>
             Mã xác thực không được trống!

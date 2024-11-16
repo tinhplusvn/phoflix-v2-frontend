@@ -1,6 +1,5 @@
 import { Alert, Button, Typography } from "@mui/joy";
 import { useNavigate } from "react-router-dom";
-import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import React from "react";
 import { useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -33,7 +32,6 @@ const TitleContainer = ({ path, content, icon }: IProps) => {
       </Typography>
       <Button size="sm" variant="outlined" onClick={() => navigate(path)}>
         Xem thêm
-        <ChevronRightRoundedIcon />
       </Button>
     </Alert>
   );

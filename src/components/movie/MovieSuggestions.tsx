@@ -18,14 +18,14 @@ const MovieSuggestions = ({ categories, countries }: IProps) => {
   const dispatch: AppDispatch = useDispatch();
   const movies = useSelector((state: RootState) => state.movies.movieDetail);
   const [value, setValue] = useState<string | null>(
-    categories[0].slug as string
+    categories?.[0]?.slug as string
   );
 
   useEffect(() => {
     dispatch(
       getMovieDetail({
         describe: "the-loai",
-        slug: categories[0].slug as string,
+        slug: categories?.[0]?.slug as string,
         page: 1,
       })
     );

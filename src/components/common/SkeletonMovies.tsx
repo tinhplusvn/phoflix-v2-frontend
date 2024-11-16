@@ -7,7 +7,7 @@ const SkeletonMovie = ({ quantity }: { quantity: number }) => {
         .fill(null)
         .map((_, index) => (
           <Grid xs={6} sm={4} lg={2} md={3} key={index}>
-            <AspectRatio ratio="3/4" sx={{ borderRadius: "12px" }}>
+            <AspectRatio ratio="3/4" sx={{ borderRadius: "6px" }}>
               <Skeleton animation="wave" variant="overlay" />
             </AspectRatio>
           </Grid>

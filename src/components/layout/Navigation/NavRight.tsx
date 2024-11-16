@@ -76,12 +76,14 @@ const NavRight = ({ width }: NavRight) => {
         {!user?.refresh_token ? (
           <Box sx={{ display: "flex", gap: "12px" }}>
             <Button
+              size="sm"
               onClick={() => handleAuthentication("login")}
               variant="plain"
             >
               Đăng nhập
             </Button>
             <Button
+              size="sm"
               onClick={() => handleAuthentication("register")}
               variant="solid"
             >

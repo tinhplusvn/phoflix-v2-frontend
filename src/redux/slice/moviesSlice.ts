@@ -32,7 +32,6 @@ interface MoviesState {
     info: IMovie;
     titleHead: string;
     episodes: IEpisodes[];
-    status: string | boolean;
   };
   movieDetail: {
     items: IMovie[];
@@ -62,8 +61,7 @@ const initialState: MoviesState = {
   movieInfo: {
     info: {},
     titleHead: "",
-    episodes: [],
-    status: false,
+    episodes: []
   },
   movieDetail: {
     items: [],
@@ -193,14 +191,12 @@ export const moviesSlice = createSlice({
       // lấy thông tin phim
       .addCase(getMovieInfo.pending, (state, action) => {
         state.isLoading = true;
-        state.movieInfo.status = false;
         state.isError = false;
       })
       .addCase(getMovieInfo.fulfilled, (state, action) => {
         state.movieInfo.info = action.payload?.movie ?? {};
         state.movieInfo.episodes =
           action.payload?.episodes[0]?.server_data ?? [];
-        state.movieInfo.status = action.payload?.status;
         state.isError = !action.payload?.status;
       })
       .addCase(getMovieInfo.rejected, (state, action) => {

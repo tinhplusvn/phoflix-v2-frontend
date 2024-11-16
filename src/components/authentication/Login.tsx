@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
-import { Box, Button, Divider, Input, Typography } from "@mui/joy";
+import { Box, Button, Divider, IconButton, Input, Typography } from "@mui/joy";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import GoogleIcon from "@mui/icons-material/Google";
 import { setType } from "../../redux/slice/systemSlice";
@@ -8,7 +8,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useRef, useState } from "react";
 import _ from "lodash";
 import { login } from "../../redux/asyncThunk/userThunk";
-import LoadingButton from "../common/LoadingButon";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import toast from "react-hot-toast";
 
 interface ValueInput {
@@ -36,6 +37,7 @@ const Login = ({ setOpen }: any) => {
     useState<ValidInput>(defaultValidIput);
   const emailRef = useRef<HTMLInputElement>(null);
   const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleCheckValidInput = (): boolean => {
     let check: boolean = true;
@@ -78,7 +80,7 @@ const Login = ({ setOpen }: any) => {
         })
       );
       if (+res.payload?.EC !== 0) {
-        toast.error(res.payload.EM);
+        toast.error(res.payload?.EM);
       }
       setIsLogin(false);
     }
@@ -121,8 +123,19 @@ const Login = ({ setOpen }: any) => {
           value={valueInput.password}
           startDecorator={<LockOutlinedIcon />}
           size="md"
+          endDecorator={
+            showPassword ? (
+              <IconButton onClick={() => setShowPassword(false)}>
+                <VisibilityIcon />
+              </IconButton>
+            ) : (
+              <IconButton onClick={() => setShowPassword(true)}>
+                <VisibilityOffIcon />
+              </IconButton>
+            )
+          }
           placeholder="Mật khẩu"
-          type="password"
+          type={showPassword ? "text" : "password"}
         />
         {!isValidInput.password && (
           <Typography level="title-sm" color="danger" sx={{ marginTop: "8px" }}>

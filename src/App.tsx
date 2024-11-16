@@ -33,7 +33,7 @@ function App() {
     const handleInit = async () => {
       const res: any = await dispatch(getUserAccount());
       if (+res.payload?.EC !== 0) {
-        toast.error(res.payload?.EM);
+        toast.error(res.payload?.EM ?? "Xác minh người dùng thất bại!");
       }
     };
 
