@@ -9,20 +9,25 @@ interface IProps {
   handleGetAllComment: (typeFilter: Filter) => Promise<void>;
 }
 
-const CommentFilter = ({ handleGetAllComment }: IProps) => {
-  const commentList = useSelector(
-    (state: RootState) => state.comments.commentList
+export const handleGetFilterComments = () => {
+  let filterComments: Filter = JSON.parse(
+    localStorage.getItem("filter-comments") as Filter
   );
-  const [typeFilter, setTypeFilter] = useState<Filter>("DESC");
+  filterComments =
+    filterComments === "DESC" || filterComments === "ASC"
+      ? filterComments
+      : "DESC";
+  localStorage.setItem("filter-comments", JSON.stringify(filterComments));
+  return filterComments
+};
 
-  useEffect(() => {
-    handleChangeFilter("DESC");
-  }, [commentList]);
+const CommentFilter = ({ handleGetAllComment }: IProps) => {
+  const [typeFilter, setTypeFilter] = useState<Filter>(handleGetFilterComments());
 
   const handleChangeFilter = (type: Filter) => {
     handleGetAllComment(type);
     setTypeFilter(type);
-    // localStorage.setItem("filter-comments", JSON.stringify(type));
+    localStorage.setItem("filter-comments", JSON.stringify(type));
   };
 
   return (

@@ -62,7 +62,7 @@ const CommentItem = ({
       </Box>
       <Box
         sx={{
-          border: "1px solid #aaa",
+          border: "3px solid #f0f4f8",
           padding: "8px",
           borderRadius: "8px",
           display: "flex",

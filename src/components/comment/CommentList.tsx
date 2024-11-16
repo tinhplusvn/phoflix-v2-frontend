@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
 import { IUser } from "../../interfaces/user";
+import { handleGetFilterComments } from "./CommentFilter";
 
 const CommentList = () => {
   const commentList = useSelector(
@@ -51,8 +52,13 @@ const CommentList = () => {
     const res = await dispatch(deleleComment(idComment as string));
 
     if (+res.payload?.EC === 0) {
+      const filterComments = handleGetFilterComments();
+
       await dispatch(
-        getCommentList({ movieSlug: params.slug as string, sortOrder: "DESC" })
+        getCommentList({
+          movieSlug: params.slug as string,
+          sortOrder: filterComments,
+        })
       );
       toast.success(res.payload?.EM);
     }
@@ -77,8 +83,13 @@ const CommentList = () => {
       })
     );
     if (+res.payload?.EC === 0) {
+      const filterComments = handleGetFilterComments();
+
       await dispatch(
-        getCommentList({ movieSlug: params.slug as string, sortOrder: "DESC" })
+        getCommentList({
+          movieSlug: params.slug as string,
+          sortOrder: filterComments,
+        })
       );
 
       await dispatch(

@@ -23,10 +23,13 @@ import {
   getActivityLog,
   deleleActivityLog,
 } from "../redux/asyncThunk/activityLogThunk";
-import { formatDate } from "../utils";
+import { formatDate, scrollToTop } from "../utils";
 import SkeletonActivityLog from "../components/common/SkeletonActivityLog";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { IUser } from "../interfaces/user";
+
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 const UserInfo = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -36,11 +39,23 @@ const UserInfo = () => {
     useState<boolean>(false);
   const user: IUser = useSelector((state: RootState) => state.users.user);
   const navigate = useNavigate();
-  const activityList = useSelector(
+  const activityFromStore = useSelector(
     (state: RootState) => state.activityLog.activityList
   );
+  const [activityList, setActivityList] = useState([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
+  const [typeShowActivity, setTypeShowActivity] = useState<string>("collapse");
+
+  const handleShowEpisodes = (activity: any, type: string) => {
+    setActivityList(activity);
+    setTypeShowActivity(type);
+    type === "collapse" && scrollToTop();
+  };
+
+  useEffect(() => {
+    setActivityList(activityFromStore.slice(0, 10));
+  }, [activityFromStore]);
 
   useEffect(() => {
     if (!user?.refresh_token || !user?.access_token) {
@@ -241,6 +256,36 @@ const UserInfo = () => {
                       </tr>
                     ))}
                 </tbody>
+                {activityFromStore.length > 10 && (
+                  <Box sx={{ marginTop: "12px" }}>
+                    {typeShowActivity === "collapse" ? (
+                      <Button
+                        onClick={() =>
+                          handleShowEpisodes(activityFromStore, "extend")
+                        }
+                        color="primary"
+                        variant="plain"
+                        endDecorator={<KeyboardArrowDownIcon />}
+                      >
+                        {`Hiển thị tất cả ${activityFromStore.length - 19}`}
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="plain"
+                        onClick={() =>
+                          handleShowEpisodes(
+                            activityFromStore.slice(0, 10),
+                            "collapse"
+                          )
+                        }
+                        color="primary"
+                        endDecorator={<KeyboardArrowUpIcon />}
+                      >
+                        Thu gọn
+                      </Button>
+                    )}
+                  </Box>
+                )}
               </Table>
             </Box>
           )}

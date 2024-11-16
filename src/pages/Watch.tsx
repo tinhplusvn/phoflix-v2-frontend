@@ -33,6 +33,8 @@ import { addMovieRating, getRatings } from "../redux/asyncThunk/ratingThunk";
 import toast from "react-hot-toast";
 import { addActivityLog } from "../redux/asyncThunk/activityLogThunk";
 import { IUser } from "../interfaces/user";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 type Episode = {
   name: string;
@@ -46,18 +48,19 @@ type TypeCopy = "not-copy" | "copied";
 
 const Watch = () => {
   const user: IUser = useSelector((state: RootState) => state.users.user);
-
   const dispatch: AppDispatch = useDispatch();
   const movieInfo = useSelector(
     (state: RootState) => state.movies.movieInfo.info
   );
   const isError = useSelector((state: RootState) => state.movies.isError);
-  const episodes = useSelector(
+  const episodesFromStore = useSelector(
     (state: RootState) => state.movies.movieInfo.episodes
   );
   const watchedEpisodes = useSelector(
     (state: RootState) => state.watch.watchedEpisodes
   );
+  const [episodes, setEpisodes] = useState<Episode[]>([]);
+  const [typeShowEpisodes, setTypeShowEpisodes] = useState<string>("collapse");
   const params = useParams();
   const [currentEpisode, setCurrentEpisode] = useState<Episode>({
     name: "",
@@ -73,6 +76,10 @@ const Watch = () => {
     currentEpisode.name,
   ];
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    setEpisodes(episodesFromStore.slice(0, 50));
+  }, [episodesFromStore]);
 
   useEffect(() => {
     const handleInit = async () => {
@@ -114,6 +121,12 @@ const Watch = () => {
     );
 
     return objCurrentEpisodes?.currentEpisode;
+  };
+
+  const handleShowEpisodes = (episodes: Episode[], type: string) => {
+    setEpisodes(episodes);
+    setTypeShowEpisodes(type);
+    type === "collapse" && scrollToTop();
   };
 
   const handleChangeEpisode = (item: Episode) => {
@@ -191,6 +204,38 @@ const Watch = () => {
               </Button>
             ))}
           </Box>
+          {episodesFromStore.length > 50 && (
+            <>
+              {typeShowEpisodes === "collapse" ? (
+                <Button
+                  onClick={() =>
+                    handleShowEpisodes(episodesFromStore, "extend")
+                  }
+                  sx={{ margin: "0 auto" }}
+                  color="primary"
+                  variant="plain"
+                  endDecorator={<KeyboardArrowDownIcon />}
+                >
+                  {`Hiển thị tất cả ${episodesFromStore.length - 50}`}
+                </Button>
+              ) : (
+                <Button
+                  variant="plain"
+                  onClick={() =>
+                    handleShowEpisodes(
+                      episodesFromStore.slice(0, 50),
+                      "collapse"
+                    )
+                  }
+                  sx={{ margin: "0 auto" }}
+                  color="primary"
+                  endDecorator={<KeyboardArrowUpIcon />}
+                >
+                  Thu gọn
+                </Button>
+              )}
+            </>
+          )}
         </Alert>
 
         <SectionRating />
@@ -205,10 +250,12 @@ const Watch = () => {
         <CommentSection />
 
         <Divider />
-        <MovieSuggestions
-          categories={movieInfo.category ?? []}
-          countries={movieInfo.country ?? []}
-        />
+        {movieInfo.category && (
+          <MovieSuggestions
+            categories={movieInfo.category ?? []}
+            countries={movieInfo.country ?? []}
+          />
+        )}
       </Box>
 
       <ModalInstructDowload open={open} setOpen={setOpen} />
@@ -228,7 +275,7 @@ const SectionLinkM3U8 = ({ link_m3u8, setOpen }: IProps) => {
   const handleCopyLinkM3U8 = (link_m3u8: string) => {
     copyText(link_m3u8);
     setTypeCopy("copied");
-
+    toast.success("Đã sao chép liên kết!");
     setTimeout(() => setTypeCopy("not-copy"), 1000);
   };
   return (

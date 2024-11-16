@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
 import { IUser } from "../../interfaces/user";
 import { IMovie } from "../../interfaces/movie";
+import { handleGetFilterComments } from "./CommentFilter";
 
 const CommentInput = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -43,8 +44,10 @@ const CommentInput = () => {
     );
 
     if (+res.payload?.EC === 0) {
+      const filterComments = handleGetFilterComments();
+      
       await dispatch(
-        getCommentList({ movieSlug: params.slug as string, sortOrder: "DESC" })
+        getCommentList({ movieSlug: params.slug as string, sortOrder: filterComments })
       );
 
       await dispatch(

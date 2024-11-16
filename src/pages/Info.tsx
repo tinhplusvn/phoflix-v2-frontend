@@ -203,7 +203,7 @@ const SectionCardMovie = ({
           Xem ngay
         </Button>
         {isSave ? (
-          <Tooltip title="Xoá khỏi danh sách" variant="soft" color="danger">
+          <Tooltip title="Xoá phim" variant="soft" color="danger">
             <IconButton
               loading={isLoading}
               onClick={() => handleUnSaveMovie()}
@@ -214,7 +214,7 @@ const SectionCardMovie = ({
             </IconButton>
           </Tooltip>
         ) : (
-          <Tooltip title="Thêm vào danh sách" variant="soft" color="primary">
+          <Tooltip title="Lưu phim" variant="soft" color="primary">
             <IconButton
               loading={isLoading}
               onClick={() => handleSaveMovie()}

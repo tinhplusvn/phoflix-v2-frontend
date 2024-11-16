@@ -43,7 +43,7 @@ const SlideItem = ({ item }: IProps) => {
             width: "120px",
             height: "160px",
             overflow: "hidden",
-            borderRadius: "12px",
+            borderRadius: "8px",
             border: "1px solid #aaa",
           }}
         >

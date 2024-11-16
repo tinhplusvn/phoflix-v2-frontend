@@ -4,13 +4,14 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
 import CommentInput from "./CommentInput";
-import CommentFilter from "./CommentFilter";
+import CommentFilter, { handleGetFilterComments } from "./CommentFilter";
 import CommentList from "./CommentList";
 import SkeletonComments from "../common/SkeletonComments";
 import { useEffect, useState } from "react";
 import { getCommentList } from "../../redux/asyncThunk/commentThunk";
 import { useParams } from "react-router-dom";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import toast from "react-hot-toast";
 
 export type Filter = "DESC" | "ASC";
 
@@ -30,13 +31,18 @@ const CommentSection = () => {
   const commentList: IComment[] = useSelector(
     (state: RootState) => state.comments.commentList
   );
+  const movieInfo = useSelector(
+    (state: RootState) => state.movies.movieInfo.info
+  );
   const params = useParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const type =
-      JSON.parse(localStorage.getItem("filter-comments") as Filter) ?? "DESC";
-    handleGetAllComment(type);
+    const filterComments = handleGetFilterComments();
+
+    if (movieInfo?.slug) {
+      handleGetAllComment(filterComments);
+    }
   }, []);
 
   const handleGetAllComment = async (typeFilter: Filter) => {
@@ -64,7 +70,7 @@ const CommentSection = () => {
           color="primary"
           level="title-lg"
         >
-          Bình luận
+          {`Bình luận (${commentList?.length})`}
         </Typography>
         <Tooltip title="Làm mới bình luận">
           <IconButton onClick={() => handleGetAllComment("DESC")}>
@@ -79,10 +85,16 @@ const CommentSection = () => {
         <SkeletonComments />
       ) : (
         <>
-          {commentList.length > 0 && (
-            <CommentFilter handleGetAllComment={handleGetAllComment} />
+          {commentList.length > 0 ? (
+            <>
+              <CommentFilter handleGetAllComment={handleGetAllComment} />
+              <CommentList />
+            </>
+          ) : (
+            <Typography level="title-lg" color="primary">
+              Chưa có bình luận nào tại đây!
+            </Typography>
           )}
-          <CommentList />
         </>
       )}
     </Box>
