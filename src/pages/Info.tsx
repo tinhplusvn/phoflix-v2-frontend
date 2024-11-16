@@ -55,9 +55,9 @@ const Info = () => {
           })
         );
       }
-      setIsLoading(true)
+      setIsLoading(true);
       await dispatch(getMovieInfo(params.slug as string));
-      setIsLoading(false)
+      setIsLoading(false);
     };
 
     handleInit();
@@ -77,34 +77,38 @@ const Info = () => {
 
   return (
     <>
-      <BreadcrumbsCustom paths={breadcrumbsPaths as string[]} />
+      {!isLoading && !isError && (
+        <>
+          <BreadcrumbsCustom paths={breadcrumbsPaths as string[]} />
 
-      <Box className="info-container">
-        <Box className="info-container-inner">
-          <SectionCardMovie
-            movieInfo={movieInfo}
-            navigate={navigate}
-            isSave={isSave}
-            setIsSave={setIsSave}
-          />
+          <Box className="info-container">
+            <Box className="info-container-inner">
+              <SectionCardMovie
+                movieInfo={movieInfo}
+                navigate={navigate}
+                isSave={isSave}
+                setIsSave={setIsSave}
+              />
 
-          <SectionInfoMovie movieInfo={movieInfo} />
-        </Box>
-        <SectionContentMovie content={movieInfo.content as string} />
+              <SectionInfoMovie movieInfo={movieInfo} />
+            </Box>
+            <SectionContentMovie content={movieInfo.content as string} />
 
-        {movieInfo?.trailer_url && (
-          <SectionTrailerMovie trailer_url={movieInfo.trailer_url} />
-        )}
+            {movieInfo?.trailer_url && (
+              <SectionTrailerMovie trailer_url={movieInfo.trailer_url} />
+            )}
 
-        <Divider />
+            <Divider />
 
-        {Object.keys(movieInfo).length > 0 && (
-          <MovieSuggestions
-            categories={movieInfo.category ?? []}
-            countries={movieInfo.country ?? []}
-          />
-        )}
-      </Box>
+            {Object.keys(movieInfo).length > 0 && (
+              <MovieSuggestions
+                categories={movieInfo.category ?? []}
+                countries={movieInfo.country ?? []}
+              />
+            )}
+          </Box>
+        </>
+      )}
     </>
   );
 };

@@ -36,7 +36,7 @@ const Detail = () => {
     (state: RootState) => state.movies.movieDetail.titleHead
   );
   const isMobile = useSelector((state: RootState) => state.system.isMobile);
-  const isLoading = useSelector((state: RootState) => state.movies.isLoading);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const isError = useSelector((state: RootState) => state.movies.isError);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const params = useParams<{ describe: string; slug: string }>();
@@ -90,24 +90,29 @@ const Detail = () => {
     ]);
   }, [params, describeMapping, slugMapping]);
 
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setCurrentPage(value);
-    scrollToTop();
-  };
-
   useEffect(() => {
-    dispatch(
-      getMovieDetail({
-        describe: params.describe as string,
-        slug: params.slug as string,
-        page: currentPage,
-      })
-    );
+    const handleInit = async () => {
+      setIsLoading(true);
+      await dispatch(
+        getMovieDetail({
+          describe: params.describe as string,
+          slug: params.slug as string,
+          page: currentPage,
+        })
+      );
+      setIsLoading(false);
+    };
+    handleInit();
   }, [params, currentPage]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [params]);
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setCurrentPage(value);
+    scrollToTop();
+  };
 
   if (isLoading && !isError) {
     return <SkeletonPage page="detail" />;

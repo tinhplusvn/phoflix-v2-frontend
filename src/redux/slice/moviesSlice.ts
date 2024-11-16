@@ -61,7 +61,7 @@ const initialState: MoviesState = {
   movieInfo: {
     info: {},
     titleHead: "",
-    episodes: []
+    episodes: [],
   },
   movieDetail: {
     items: [],
@@ -192,6 +192,7 @@ export const moviesSlice = createSlice({
       .addCase(getMovieInfo.pending, (state, action) => {
         state.isLoading = true;
         state.isError = false;
+        state.movieInfo.info = {};
       })
       .addCase(getMovieInfo.fulfilled, (state, action) => {
         state.movieInfo.info = action.payload?.movie ?? {};
@@ -213,7 +214,8 @@ export const moviesSlice = createSlice({
       .addCase(getMovieDetail.fulfilled, (state, action) => {
         if (action.payload) {
           const { items, titlePage } = action.payload;
-          const titleHead = action.payload?.seoOnPage?.titleHead ?? "Chi tiết phim";
+          const titleHead =
+            action.payload?.seoOnPage?.titleHead ?? "Chi tiết phim";
           const { totalItems, totalPages } = action.payload?.params?.pagination;
           state.movieDetail.items = items;
           state.movieDetail.titlePage = titlePage;
@@ -240,7 +242,7 @@ export const moviesSlice = createSlice({
           const { totalItems, totalPages } = action.payload.params.pagination;
           const titleHead = action.payload?.seoOnPage?.titleHead;
           state.searchMovie.items = items;
-          state.searchMovie.titleHead = titleHead
+          state.searchMovie.titleHead = titleHead;
           state.searchMovie.pagination.totalItems = totalItems;
           state.searchMovie.pagination.totalPages = totalPages;
           state.isLoading = !action.payload;
