@@ -20,7 +20,7 @@ const CommentFilter = ({ handleGetAllComment }: IProps) => {
   });
 
   useEffect(() => {
-    handleChangeFilter(DESC);
+    handleChangeFilter("DESC");
   }, [commentList]);
 
   const handleChangeFilter = (type: Filter) => {
