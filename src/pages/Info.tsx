@@ -46,15 +46,18 @@ const Info = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    if (user?.access_token || user?.refresh_token) {
+      dispatch(
+        getAllMovies({
+          userId: user?.id as string,
+          type: "saved-movies",
+        })
+      );
+    }
+  }, [user]);
+
+  useEffect(() => {
     const handleInit = async () => {
-      if (user?.access_token || user?.refresh_token) {
-        await dispatch(
-          getAllMovies({
-            userId: user?.id as string,
-            type: "saved-movies",
-          })
-        );
-      }
       setIsLoading(true);
       await dispatch(getMovieInfo(params.slug as string));
       setIsLoading(false);
