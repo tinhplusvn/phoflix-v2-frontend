@@ -23,7 +23,6 @@ import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import InfoRow from "../components/common/InfoRow";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import YouTubeIcon from "@mui/icons-material/YouTube";
-
 import "../styles/Info.scss";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 import MovieSuggestions from "../components/movie/MovieSuggestions";
@@ -42,7 +41,6 @@ const Info = () => {
   const params = useParams();
   const [isSave, setIsSave] = useState<boolean>(false);
   const breadcrumbsPaths = ["Thông tin phim", movieInfo.name];
-  const user: IUser = useSelector((state: RootState) => state.users.user);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
