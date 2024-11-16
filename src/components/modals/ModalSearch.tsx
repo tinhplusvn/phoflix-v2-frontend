@@ -73,8 +73,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
 
   const handleSearchInput = async (actions: actions) => {
     if (searchValue !== "") {
-
-     if (user?.access_token || user?.refresh_token) {
+      if (user?.access_token || user?.refresh_token) {
         setIsLoadingButton(true);
         await dispatch(
           addSearchHistory({
@@ -91,10 +90,10 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
           })
         );
         setIsLoadingButton(false);
-     }
+      }
       navigate(`/tim-kiem/${searchValue}`);
       setSearchValue("");
-      setOpen(false);  
+      setOpen(false);
     }
   };
 
@@ -165,6 +164,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
             startDecorator={<SearchIcon color="primary" />}
             endDecorator={
               <Button
+                size="sm"
                 loading={isLoadingButton}
                 disabled={searchValue === ""}
                 onClick={() => handleSearchInput("recent")}

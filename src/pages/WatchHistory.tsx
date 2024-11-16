@@ -23,6 +23,7 @@ const WatchHistory = () => {
   );
   const dispatch: AppDispatch = useDispatch();
   const user: IUser = useSelector((state: RootState) => state.users.user);
+  const isMobile = useSelector((state: RootState) => state.system.isMobile);
   const [open, setOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
@@ -125,7 +126,10 @@ const WatchHistory = () => {
             width: "100%",
           }}
         >
-          <Typography startDecorator={<HistoryOutlinedIcon />} level="h4">
+          <Typography
+            startDecorator={<HistoryOutlinedIcon />}
+            level={isMobile ? "title-lg" : "h4"}
+          >
             Lịch sử xem gần đây
           </Typography>
           <Button onClick={() => setOpen(true)} color="danger" variant="solid">

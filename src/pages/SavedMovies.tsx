@@ -25,6 +25,7 @@ const SavedMovie = () => {
   const breadcrumbsPaths = ["Phim đã lưu"];
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
+  const isMobile = useSelector((state: RootState) => state.system.isMobile);
 
   useEffect(() => {
     document.title = "Phim Đã Lưu Của Bạn - Xem Lại Mọi Lúc, Mọi Nơi!";
@@ -123,7 +124,10 @@ const SavedMovie = () => {
             width: "100%",
           }}
         >
-          <Typography startDecorator={<BookmarkAddedRoundedIcon />} level="h4">
+          <Typography
+            startDecorator={<BookmarkAddedRoundedIcon />}
+            level={isMobile ? "title-lg" : "h4"}
+          >
             Phim đã lưu
           </Typography>
           <Button onClick={() => setOpen(true)} color="danger" variant="solid">

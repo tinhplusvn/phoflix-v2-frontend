@@ -35,7 +35,7 @@ const SkeletonPage = ({ page }: { page: string }) => {
                 md: "calc(100vw - 64px)",
               },
               height: "360px",
-              borderRadius: "12px",
+              borderRadius: "6px",
               marginTop: "64px",
             }}
             animation="wave"
