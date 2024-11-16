@@ -44,7 +44,7 @@ const ModalAuthentication = ({ type, open, setOpen }: IProps) => {
           },
           maxWidth: {
             xs:"90%"
-          }
+          },
           borderRadius: "md",
           p: 3,
           boxShadow: "lg",
