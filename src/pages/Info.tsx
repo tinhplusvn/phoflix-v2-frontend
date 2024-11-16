@@ -46,17 +46,6 @@ const Info = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (user?.access_token || user?.refresh_token) {
-      dispatch(
-        getAllMovies({
-          userId: user?.id as string,
-          type: "saved-movies",
-        })
-      );
-    }
-  }, [user]);
-
-  useEffect(() => {
     const handleInit = async () => {
       setIsLoading(true);
       await dispatch(getMovieInfo(params.slug as string));
@@ -142,11 +131,22 @@ const SectionCardMovie = ({
   const width = useSelector((state: RootState) => state.system.width);
 
   useEffect(() => {
+    if (user?.access_token || user?.refresh_token) {
+      dispatch(
+        getAllMovies({
+          userId: user?.id as string,
+          type: "saved-movies",
+        })
+      );
+    }
+  }, [user, params]);
+
+  useEffect(() => {
     const isExist: boolean = savedMovies.some(
       (item: any) => item.slug === params.slug
     );
     setIsSave(isExist);
-  }, []);
+  }, [savedMovies]);
 
   const handleSaveMovie = async () => {
     if (!user.access_token || !user.refresh_token) {
