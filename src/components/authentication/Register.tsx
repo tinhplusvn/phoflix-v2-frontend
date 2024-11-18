@@ -108,13 +108,13 @@ const Register = ({ setOpen }: IProps) => {
       );
 
       if (+res.payload?.EC === 0) {
-        toast.success(res.payload.EM);
+        toast.success(res.payload?.EM ?? "Đăng ký tài khoản thành công!");
+        dispatch(setType("login"));
         setOpen(false);
       } else {
-        toast.error(res.payload.EM);
+        toast.error(res.payload?.EM ?? "Đăng ký tài khoản thất bại!");
       }
-
-      dispatch(setType("login"));
+   
       setIsLoadingRegister(false);
     }
   };
