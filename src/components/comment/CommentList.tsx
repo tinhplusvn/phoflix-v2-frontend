@@ -75,6 +75,11 @@ const CommentList = () => {
   };
 
   const handSaveEditComment = async (idComment: string) => {
+    if(valueEditComment === "") {
+      toast.error("Vui lòng nhập nội dung!");
+      return;
+    }
+    
     setIsLoading(true);
     const res = await dispatch(
       updateComment({
