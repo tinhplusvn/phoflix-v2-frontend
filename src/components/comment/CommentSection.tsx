@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { getCommentList } from "../../redux/asyncThunk/commentThunk";
 import { useParams } from "react-router-dom";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import CircularProgress from "@mui/material/CircularProgress";
 import toast from "react-hot-toast";
 
 export type Filter = "DESC" | "ASC";
@@ -28,12 +29,10 @@ interface IComment {
 
 const CommentSection = () => {
   const dispatch: AppDispatch = useDispatch();
-  const commentList: IComment[] = useSelector(
-    (state: RootState) => state.comments.commentList
-  );
-  const movieInfo = useSelector(
-    (state: RootState) => state.movies.movieInfo.info
-  );
+  const { commentList, movieInfo } = useSelector((state: RootState) => ({
+    commentList: state.comments.commentList,
+    movieInfo: state.movies.movieInfo.info,
+  }));
   const params = useParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -43,17 +42,22 @@ const CommentSection = () => {
     if (movieInfo?.slug) {
       handleGetAllComment(filterComments);
     }
-  }, []);
+  }, [movieInfo?.slug]);
 
   const handleGetAllComment = async (typeFilter: Filter) => {
-    setIsLoading(true);
-    await dispatch(
-      getCommentList({
-        movieSlug: params.slug as string,
-        sortOrder: typeFilter,
-      })
-    );
-    setIsLoading(false);
+    try {
+      setIsLoading(true);
+      await dispatch(
+        getCommentList({
+          movieSlug: params.slug as string,
+          sortOrder: typeFilter,
+        })
+      );
+    } catch (error) {
+      toast.error("Lỗi khi tải bình luận!");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -70,11 +74,15 @@ const CommentSection = () => {
           color="primary"
           level="title-lg"
         >
-          {`Bình luận (${commentList?.length})`}
+          {`Bình luận (${commentList?.length || 0})`}
         </Typography>
         <Tooltip title="Làm mới bình luận">
-          <IconButton onClick={() => handleGetAllComment("DESC")}>
-            <RefreshIcon />
+          <IconButton onClick={() => handleGetAllComment("DESC")} disabled={isLoading}>
+            {isLoading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              <RefreshIcon />
+            )}
           </IconButton>
         </Tooltip>
       </Alert>
@@ -85,7 +93,7 @@ const CommentSection = () => {
         <SkeletonComments />
       ) : (
         <>
-          {commentList.length > 0 ? (
+          {commentList?.length > 0 ? (
             <>
               <CommentFilter handleGetAllComment={handleGetAllComment} />
               <CommentList />
