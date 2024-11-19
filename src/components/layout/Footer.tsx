@@ -30,7 +30,7 @@ const Footer = () => {
         </Grid>
         <Grid md={12} lg={4}>
           <Typography sx={{ marginBottom: "12px" }} level="h4">
-            Bản quuyền
+            Bản quyền
           </Typography>
           <Typography level="title-md">
             Tất cả nội dung của trang web này đều được tìm kiếm và thu thập ở
