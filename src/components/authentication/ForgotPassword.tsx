@@ -92,12 +92,12 @@ const ForgotPassword = ({ setOpen }: any) => {
 
       if (+res.payload?.EC === 0) {
         toast.success(res.payload?.EM);
+        setOpen(false);
+        dispatch(setType("login"));
       } else {
         toast.error(res.payload?.EM);
       }
-      setOpen(false);
       setIsLoadingSubmit(false);
-      dispatch(setType("login"));
     }
   };
 
