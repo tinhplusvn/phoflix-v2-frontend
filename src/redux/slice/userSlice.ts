@@ -96,7 +96,7 @@ export const userSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(updateUser.fulfilled, (state, action) => {
-      if (+action.payload.EC === 0) {
+      if (+action.payload?.EC === 0) {
         state.user = action.payload.DT;
       }
       state.isLoading = false;

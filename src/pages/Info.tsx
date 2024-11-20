@@ -34,10 +34,11 @@ import { IUser } from "../interfaces/user";
 const Info = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const movieInfo: IMovie = useSelector(
-    (state: RootState) => state.movies.movieInfo.info
-  );
-  const isError = useSelector((state: RootState) => state.movies.isError);
+  const { movieInfo, isError } = useSelector((state: RootState) => ({
+    movieInfo: state.movies.movieInfo.info,
+    isError: state.movies.isError,
+  }));
+
   const params = useParams();
   const [isSave, setIsSave] = useState<boolean>(false);
   const breadcrumbsPaths = ["Thông tin phim", movieInfo.name];
@@ -119,13 +120,12 @@ const SectionCardMovie = ({
   setIsSave,
 }: ISectionCardMovie) => {
   const dispatch: AppDispatch = useDispatch();
-  const user: IUser = useSelector((state: RootState) => state.users.user);
   const params = useParams();
+  const user: IUser = useSelector((state: RootState) => state.users.user);
   const savedMovies = useSelector(
     (state: RootState) => state.movies.savedMovies.movies
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const isMobile = useSelector((state: RootState) => state.system.isMobile);
   const width = useSelector((state: RootState) => state.system.width);
 
   useEffect(() => {
@@ -161,8 +161,8 @@ const SectionCardMovie = ({
       })
     );
 
-    if (+res?.payload.EC === 0) {
-      toast.success(res?.payload.EM);
+    if (+res?.payload?.EC === 0) {
+      toast.success(res.payload?.EM);
       setIsSave(!isSave);
     }
     setIsLoading(false);
@@ -178,8 +178,8 @@ const SectionCardMovie = ({
       })
     );
 
-    if (+res?.payload.EC === 0) {
-      toast.success(res?.payload.EM);
+    if (+res?.payload?.EC === 0) {
+      toast.success(res?.payload?.EM);
       setIsSave(!isSave);
     }
     setIsLoading(false);

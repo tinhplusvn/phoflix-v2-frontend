@@ -2,8 +2,6 @@ import { Alert, Option, Select, Typography } from "@mui/joy";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useEffect, useState } from "react";
 import { Filter } from "./CommentSection";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
 
 interface IProps {
   handleGetAllComment: (typeFilter: Filter) => Promise<void>;

@@ -31,10 +31,7 @@ function App() {
 
   useEffect(() => {
     const handleInit = async () => {
-      const res: any = await dispatch(getUserAccount());
-      if (+res.payload?.EC !== 0) {
-        toast.error(res.payload?.EM ?? "Xác minh người dùng thất bại!");
-      }
+      await dispatch(getUserAccount());
     };
 
     if (!user?.access_token || !user?.refresh_token) {

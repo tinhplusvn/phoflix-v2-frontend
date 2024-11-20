@@ -88,7 +88,7 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
 
     if (+res.payload?.EC === 0) {
       setOpen(false);
-      toast.success(res.payload.EM);
+      toast.success(res.payload?.EM);
       await dispatch(
         addActivityLog({
           userId: user?.id as string,
@@ -97,7 +97,7 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
       );
       await dispatch(getActivityLog(user?.id as string));
     } else {
-      toast.error(res.payload.EM);
+      toast.error(res.payload?.EM);
     }
 
     setIsLoading(false);

@@ -59,14 +59,14 @@ const WatchHistory = () => {
       })
     );
 
-    if (+res?.payload.EC === 0) {
+    if (+res?.payload?.EC === 0) {
       await dispatch(
         getAllMovies({
           userId: user?.id as string,
           type: "watch-history",
         })
       );
-      toast.success(res?.payload.EM);
+      toast.success(res?.payload?.EM);
     }
   };
 
@@ -82,7 +82,7 @@ const WatchHistory = () => {
     setIsLoadingButton(false);
 
     if (+res.payload?.EC === 0) {
-      toast.success(res.payload.EM);
+      toast.success(res.payload?.EM);
       setOpen(false);
       setIsLoading(true);
       await dispatch(
@@ -149,7 +149,7 @@ const WatchHistory = () => {
         setOpen={setOpen}
         handleSubmit={handleDeleteAll}
         title="Xoá lịch sử đã xem"
-        content="Lịch sử đã xem gần đây của bạn sẽ bị xoá vĩnh viễn?"
+        content="Bạn có chắc chắn muốn xoá toàn bộ lịch sử đã xem?"
       />
     </>
   );

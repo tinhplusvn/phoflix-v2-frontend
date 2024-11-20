@@ -1,4 +1,4 @@
-import { Box } from "@mui/joy";
+import { Box, Button } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
@@ -16,31 +16,38 @@ import ModalAlertDialog from "../modals/ModalAlertDialog";
 import ModalReportComment from "../modals/ModalReportComment";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
-import { IUser } from "../../interfaces/user";
 import { handleGetFilterComments } from "./CommentFilter";
+import { isEmpty } from "lodash";
+import { scrollToTop } from "../../utils";
+import ToggleShowItem from "../common/ToggleShowItem";
 
 const CommentList = () => {
-  const commentList = useSelector(
-    (state: RootState) => state.comments.commentList
-  );
+  const { commentListStore, openModalAlertDiaLog, openModalReportComment } =
+    useSelector((state: RootState) => ({
+      commentListStore: state.comments.commentList,
+      openModalAlertDiaLog: state.comments.openModal.modalAlertDialog,
+      openModalReportComment: state.comments.openModal.modalReportComment,
+    }));
 
   const dispatch: AppDispatch = useDispatch();
-  const openModalAlertDiaLog = useSelector(
-    (state: RootState) => state.comments.openModal.modalAlertDialog
-  );
-  const openModalReportComment = useSelector(
-    (state: RootState) => state.comments.openModal.modalReportComment
-  );
-  const user: IUser = useSelector((state: RootState) => state.users.user);
-  const movieInfo = useSelector(
-    (state: RootState) => state.movies.movieInfo.info
-  );
+  const params = useParams();
+  const [commentList, setCommentList] = useState<any>([]);
   const [indexEdit, setIndexEdit] = useState<number>(-1);
   const [valueEditComment, setValueEditComment] = useState<string>("");
   const [idComment, setIdComment] = useState<string>("");
-  const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
+  const [typeShow, setTypeShow] = useState<string>("collapse");
+
+  useEffect(() => {
+    setCommentList(commentListStore.slice(0, 5));
+    setTypeShow("collapse");
+  }, [commentListStore]);
+
+  const handleShowComment = (commentList: any, type: string) => {
+    setCommentList(commentList);
+    setTypeShow(type);
+    type === "collapse" && scrollToTop();
+  };
 
   const handleEditComment = (index: number, content: string) => {
     setIndexEdit(index);
@@ -75,11 +82,11 @@ const CommentList = () => {
   };
 
   const handSaveEditComment = async (idComment: string) => {
-    if(valueEditComment === "") {
+    if (isEmpty(valueEditComment.trim())) {
       toast.error("Vui lòng nhập nội dung!");
       return;
     }
-    
+
     setIsLoading(true);
     const res = await dispatch(
       updateComment({
@@ -96,14 +103,7 @@ const CommentList = () => {
           sortOrder: filterComments,
         })
       );
-
-      await dispatch(
-        addActivityLog({
-          userId: user?.id as string,
-          action: `Sửa bình luận thành "${valueEditComment}" tại phim ${movieInfo.name}"`,
-        })
-      );
-      toast.success(res.payload.EM);
+      toast.success(res.payload?.EM);
     }
     setIndexEdit(-1);
     setIsLoading(false);
@@ -139,6 +139,18 @@ const CommentList = () => {
             />
           ))}
         </ul>
+        {commentListStore.length > 5 && (
+          <Box sx={{ margin: "24px auto 0 auto" }}>
+            <ToggleShowItem
+              type={typeShow}
+              data={commentListStore}
+              quantity={5}
+              text="bình luận"
+              location="center"
+              handleShowItem={handleShowComment}
+            />
+          </Box>
+        )}
       </Box>
 
       <ModalAlertDialog
@@ -147,7 +159,7 @@ const CommentList = () => {
         open={openModalAlertDiaLog}
         setOpen={handleSetOpenModalAlertDialog}
         title="Xoá bình luận"
-        content="Bình luận của bạn sẽ được gỡ khỏi hệ thống"
+        content="Bạn có chắc chắn muốn xoá bình luận này?"
       />
 
       <ModalReportComment

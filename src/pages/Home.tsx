@@ -16,14 +16,14 @@ import TitleContainer from "../components/common/TitleContainer";
 
 const Home = () => {
   const dispatch: AppDispatch = useDispatch();
-  const featureFilm = useSelector(
-    (state: RootState) => state.movies.featureFilm
+  const { featureFilm, televisionSeries, cartoon, tvShows } = useSelector(
+    (state: RootState) => ({
+      featureFilm: state.movies.featureFilm,
+      televisionSeries: state.movies.televisionSeries,
+      cartoon: state.movies.cartoon,
+      tvShows: state.movies.tvShows,
+    })
   );
-  const televisionSeries = useSelector(
-    (state: RootState) => state.movies.televisionSeries
-  );
-  const cartoon = useSelector((state: RootState) => state.movies.cartoon);
-  const tvShows = useSelector((state: RootState) => state.movies.tvShows);
 
   useEffect(() => {
     dispatch(getSlideShow());
@@ -32,7 +32,6 @@ const Home = () => {
     dispatch(getCartoon());
     dispatch(getTvShows());
   }, []);
-
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "24px" }}>

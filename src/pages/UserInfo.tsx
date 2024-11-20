@@ -1,13 +1,4 @@
-import {
-  AspectRatio,
-  Box,
-  Button,
-  Divider,
-  Grid,
-  Skeleton,
-  Table,
-  Typography,
-} from "@mui/joy";
+import { Box, Button, Grid, Table, Typography } from "@mui/joy";
 import backgroundMovieImg from "../images/background-movie.jpg";
 import HistoryIcon from "@mui/icons-material/History";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -16,7 +7,6 @@ import ModalEditUserInfo from "../components/modals/ModalEditUserInfo";
 import ModalAlertDialog from "../components/modals/ModalAlertDialog";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
-
 import avatarImg from "../images/avatar.jpg";
 import { useNavigate } from "react-router-dom";
 import {
@@ -26,22 +16,19 @@ import {
 import { formatDate, scrollToTop } from "../utils";
 import SkeletonActivityLog from "../components/common/SkeletonActivityLog";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import { IUser } from "../interfaces/user";
-
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import ToggleShowItem from "../components/common/ToggleShowItem";
 
 const UserInfo = () => {
+  const { user, activityFromStore } = useSelector((state: RootState) => ({
+    user: state.users.user,
+    activityFromStore: state.activityLog.activityList,
+  }));
   const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate();
   const [openModalEditUserInfo, setOpenModalEditUserInfo] =
     useState<boolean>(false);
   const [openModalAlertDialog, setOpenModalAlertDialog] =
     useState<boolean>(false);
-  const user: IUser = useSelector((state: RootState) => state.users.user);
-  const navigate = useNavigate();
-  const activityFromStore = useSelector(
-    (state: RootState) => state.activityLog.activityList
-  );
   const [activityList, setActivityList] = useState([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
@@ -257,33 +244,15 @@ const UserInfo = () => {
                     ))}
                 </tbody>
                 {activityFromStore.length > 10 && (
-                  <Box sx={{ marginTop: "12px" }}>
-                    {typeShowActivity === "collapse" ? (
-                      <Button
-                        onClick={() =>
-                          handleShowEpisodes(activityFromStore, "extend")
-                        }
-                        color="primary"
-                        variant="plain"
-                        endDecorator={<KeyboardArrowDownIcon />}
-                      >
-                        {`Hiển thị tất cả ${activityFromStore.length - 19}`}
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="plain"
-                        onClick={() =>
-                          handleShowEpisodes(
-                            activityFromStore.slice(0, 10),
-                            "collapse"
-                          )
-                        }
-                        color="primary"
-                        endDecorator={<KeyboardArrowUpIcon />}
-                      >
-                        Thu gọn
-                      </Button>
-                    )}
+                  <Box sx={{ marginTop: "24px" }}>
+                    <ToggleShowItem
+                      type={typeShowActivity}
+                      data={activityFromStore}
+                      quantity={10}
+                      text="hoạt động"
+                      location="start"
+                      handleShowItem={handleShowEpisodes}
+                    />
                   </Box>
                 )}
               </Table>
@@ -302,7 +271,7 @@ const UserInfo = () => {
         isLoading={isLoadingButton}
         open={openModalAlertDialog}
         title="Xoá lịch sử hoạt động"
-        content="Lịch sử hoạt động của bạn sẽ bị xoá!"
+        content="Bạn có chắc chắn muốn xoá lịch sử hoạt động?"
         setOpen={setOpenModalAlertDialog}
         handleSubmit={handleDeleteActivityHistory}
       />

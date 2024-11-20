@@ -18,26 +18,21 @@ type slug = Record<string, string>;
 
 const Detail = () => {
   const dispatch: AppDispatch = useDispatch();
-  const categories = useSelector((state: RootState) => state.movies.categories);
-  const countries = useSelector((state: RootState) => state.movies.countries);
-  const movies = useSelector(
-    (state: RootState) => state.movies.movieDetail.items
-  );
-  const totalItems = useSelector(
-    (state: RootState) => state.movies.movieDetail.pagination.totalItems
-  );
-  const totalPages = useSelector(
-    (state: RootState) => state.movies.movieDetail.pagination.totalPages
-  );
-  const titlePage = useSelector(
-    (state: RootState) => state.movies.movieDetail.titlePage
-  );
-  const titleHead = useSelector(
-    (state: RootState) => state.movies.movieDetail.titleHead
-  );
-  const isMobile = useSelector((state: RootState) => state.system.isMobile);
+  const {
+    categories,
+    countries,
+    movieDetail: {
+      items: movies,
+      pagination: { totalItems, totalPages },
+      titlePage,
+      titleHead,
+    },
+    isError,
+  } = useSelector((state: RootState) => state.movies);
+
+  const { isMobile } = useSelector((state: RootState) => state.system);
+  
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const isError = useSelector((state: RootState) => state.movies.isError);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const params = useParams<{ describe: string; slug: string }>();
   const [describeMapping, setDescribeMapping] = useState<describe>({

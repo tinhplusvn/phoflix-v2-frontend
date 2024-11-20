@@ -28,7 +28,7 @@ const Authenticate = () => {
     );
 
     if (+res.payload?.EC === 0) {
-      toast.success(`Xin chào! ${res.payload?.DT?.username}`);
+      toast.success(`Xin chào bạn! ${res.payload?.DT?.username}`);
     } else {
       toast.error("Đăng nhập thất bại!");
     }

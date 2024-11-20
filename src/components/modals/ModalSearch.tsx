@@ -42,12 +42,10 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
   const dispatch: AppDispatch = useDispatch();
   const searchRef = useRef<HTMLInputElement>(null);
   const user: IUser = useSelector((state: RootState) => state.users.user);
-  const searchRecent = useSelector(
-    (state: RootState) => state.searchHistory.searchRecent
-  );
-  const searchFavourite = useSelector(
-    (state: RootState) => state.searchHistory.searchFavourite
-  );
+  const { searchRecent, searchFavourite } = useSelector((state: RootState) => ({
+    searchRecent: state.searchHistory.searchRecent,
+    searchFavourite: state.searchHistory.searchFavourite,
+  }));
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
 

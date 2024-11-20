@@ -12,16 +12,17 @@ import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
 import { IUser } from "../../interfaces/user";
 import { IMovie } from "../../interfaces/movie";
 import { handleGetFilterComments } from "./CommentFilter";
+import { isEmpty } from "lodash";
 
 const CommentInput = () => {
   const dispatch: AppDispatch = useDispatch();
   const [valueComment, setValueComment] = useState<string>("");
   const params = useParams();
   const user: IUser = useSelector((state: RootState) => state?.users?.user);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const movieInfo: IMovie = useSelector(
     (state: RootState) => state.movies.movieInfo.info
   );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleAddComment = async () => {
     if (!user.access_token || !user.refresh_token) {
@@ -29,7 +30,7 @@ const CommentInput = () => {
       return;
     }
 
-    if (!valueComment) {
+    if (isEmpty(valueComment.trim())) {
       toast.error("Vui lòng nhập bình luận!");
       return;
     }
@@ -45,10 +46,16 @@ const CommentInput = () => {
 
     if (+res.payload?.EC === 0) {
       const filterComments = handleGetFilterComments();
-      
+
       await dispatch(
-        getCommentList({ movieSlug: params.slug as string, sortOrder: filterComments })
+        getCommentList({
+          movieSlug: params.slug as string,
+          sortOrder: filterComments,
+        })
       );
+      setIsLoading(false);
+      setValueComment("");
+      toast.success(res.payload?.EM);
 
       await dispatch(
         addActivityLog({
@@ -56,10 +63,10 @@ const CommentInput = () => {
           action: `Bình luận "${valueComment}" tại phim ${movieInfo.name}`,
         })
       );
+    } else {
+      setIsLoading(false);
+      toast.error(res.payload?.EM);
     }
-    setIsLoading(false);
-    toast.success(res.payload?.EM);
-    setValueComment("");
   };
 
   return (

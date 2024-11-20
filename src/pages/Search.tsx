@@ -14,18 +14,15 @@ import { scrollToTop } from "../utils";
 
 const Search = () => {
   const dispatch: AppDispatch = useDispatch();
-  const movies = useSelector(
-    (state: RootState) => state.movies.searchMovie.items
+  const { movies, totalItems, totalPages, titleHead } = useSelector(
+    (state: RootState) => ({
+      movies: state.movies.searchMovie.items,
+      totalItems: state.movies.searchMovie.pagination.totalItems,
+      totalPages: state.movies.searchMovie.pagination.totalPages,
+      titleHead: state.movies.searchMovie.titleHead,
+    })
   );
-  const totalItems = useSelector(
-    (state: RootState) => state.movies.searchMovie.pagination.totalItems
-  );
-  const totalPages = useSelector(
-    (state: RootState) => state.movies.searchMovie.pagination.totalPages
-  );
-  const titleHead = useSelector(
-    (state: RootState) => state.movies.searchMovie.titleHead
-  );
+  
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const params = useParams();

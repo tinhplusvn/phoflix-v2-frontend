@@ -16,11 +16,11 @@ import SkeletonPage from "../components/common/SkeletonPage";
 import { IUser } from "../interfaces/user";
 
 const SavedMovie = () => {
+  const dispatch: AppDispatch = useDispatch();
   const savedMovies = useSelector(
     (state: RootState) => state.movies.savedMovies.movies
   );
   const user: IUser = useSelector((state: RootState) => state.users.user);
-  const dispatch: AppDispatch = useDispatch();
   const [open, setOpen] = useState<boolean>(false);
   const breadcrumbsPaths = ["Phim đã lưu"];
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -57,14 +57,14 @@ const SavedMovie = () => {
       })
     );
 
-    if (+res?.payload.EC === 0) {
+    if (+res?.payload?.EC === 0) {
       await dispatch(
         getAllMovies({
           userId: user?.id as string,
           type: "saved-movies",
         })
       );
-      toast.success(res?.payload.EM);
+      toast.success(res?.payload?.EM);
     }
   };
 
@@ -80,7 +80,7 @@ const SavedMovie = () => {
     setIsLoadingButton(false);
 
     if (+res.payload?.EC === 0) {
-      toast.success(res.payload.EM);
+      toast.success(res.payload?.EM);
       setOpen(false);
       setIsLoading(true);
       await dispatch(
@@ -147,7 +147,7 @@ const SavedMovie = () => {
         setOpen={setOpen}
         handleSubmit={handleDeleteAll}
         title="Xoá phim đã lưu"
-        content="Tất cả phim đã lưu của bạn sẽ bị xoá vĩnh viễn?"
+        content="Bạn có chắc chắn muốn xoá tất cả phim đã lưu?"
       />
     </>
   );

@@ -33,8 +33,7 @@ import { addMovieRating, getRatings } from "../redux/asyncThunk/ratingThunk";
 import toast from "react-hot-toast";
 import { addActivityLog } from "../redux/asyncThunk/activityLogThunk";
 import { IUser } from "../interfaces/user";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import ToggleShowItem from "../components/common/ToggleShowItem";
 
 type Episode = {
   name: string;
@@ -47,15 +46,16 @@ type Episode = {
 type TypeCopy = "not-copy" | "copied";
 
 const Watch = () => {
-  const user: IUser = useSelector((state: RootState) => state.users.user);
   const dispatch: AppDispatch = useDispatch();
-  const movieInfo = useSelector(
-    (state: RootState) => state.movies.movieInfo.info
+  const { user, movieInfo, isError, episodesFromStore } = useSelector(
+    (state: RootState) => ({
+      user: state.users.user,
+      movieInfo: state.movies.movieInfo.info,
+      isError: state.movies.isError,
+      episodesFromStore: state.movies.movieInfo.episodes,
+    })
   );
-  const isError = useSelector((state: RootState) => state.movies.isError);
-  const episodesFromStore = useSelector(
-    (state: RootState) => state.movies.movieInfo.episodes
-  );
+
   const watchedEpisodes = useSelector(
     (state: RootState) => state.watch.watchedEpisodes
   );
@@ -205,36 +205,16 @@ const Watch = () => {
             ))}
           </Box>
           {episodesFromStore.length > 50 && (
-            <>
-              {typeShowEpisodes === "collapse" ? (
-                <Button
-                  onClick={() =>
-                    handleShowEpisodes(episodesFromStore, "extend")
-                  }
-                  sx={{ margin: "0 auto" }}
-                  color="primary"
-                  variant="plain"
-                  endDecorator={<KeyboardArrowDownIcon />}
-                >
-                  {`Hiển thị tất cả ${episodesFromStore.length - 50}`}
-                </Button>
-              ) : (
-                <Button
-                  variant="plain"
-                  onClick={() =>
-                    handleShowEpisodes(
-                      episodesFromStore.slice(0, 50),
-                      "collapse"
-                    )
-                  }
-                  sx={{ margin: "0 auto" }}
-                  color="primary"
-                  endDecorator={<KeyboardArrowUpIcon />}
-                >
-                  Thu gọn
-                </Button>
-              )}
-            </>
+            <Box sx={{ margin: "0 auto" }}>
+              <ToggleShowItem
+                type={typeShowEpisodes}
+                data={episodesFromStore}
+                quantity={50}
+                text="tập phim"
+                location="center"
+                handleShowItem={handleShowEpisodes}
+              />
+            </Box>
           )}
         </Alert>
 

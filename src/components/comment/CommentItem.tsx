@@ -4,7 +4,6 @@ import {
   Button,
   Divider,
   Textarea,
-  Tooltip,
   Typography,
 } from "@mui/joy";
 import { formatDate } from "../../utils";
