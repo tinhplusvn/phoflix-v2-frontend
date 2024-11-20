@@ -35,6 +35,7 @@ interface UserInfo {
   phone_number: string;
   gender: string;
   address: string;
+  type_account?: string;
 }
 
 const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
@@ -47,6 +48,7 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
     phone_number: "",
     gender: "Nam",
     address: "",
+    type_account: ""
   };
   const [userInfo, setUserInfo] = useState<UserInfo>(defaultUserInfo);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -64,6 +66,7 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
       phone_number: dataUser.phone_number,
       gender: dataUser.gender,
       address: dataUser.address,
+      type_account: dataUser.type_account,
     });
   }, [dataUser]);
 
@@ -82,7 +85,7 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
         gender: userInfo.gender,
         address: userInfo.address,
         phone_number: userInfo.phone_number,
-        type_account: dataUser.type_account,
+        type_account: userInfo.type_account as "LOCAL" | "GOOGLE",
       })
     );
 
