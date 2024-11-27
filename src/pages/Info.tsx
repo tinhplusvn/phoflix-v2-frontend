@@ -189,7 +189,7 @@ const SectionCardMovie = ({
     <Box className="section-card-movie">
       <Box className="section-card-movie-inner">
         <img
-          src={width ? movieInfo.poster_url : movieInfo?.thumb_url}
+          src={width > 1024 ? movieInfo.poster_url : movieInfo?.thumb_url}
           alt={movieInfo.name}
         />
       </Box>
