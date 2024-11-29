@@ -16,11 +16,13 @@ export const handleGetFilterComments = () => {
       ? filterComments
       : "DESC";
   localStorage.setItem("filter-comments", JSON.stringify(filterComments));
-  return filterComments
+  return filterComments;
 };
 
 const CommentFilter = ({ handleGetAllComment }: IProps) => {
-  const [typeFilter, setTypeFilter] = useState<Filter>(handleGetFilterComments());
+  const [typeFilter, setTypeFilter] = useState<Filter>(
+    handleGetFilterComments()
+  );
 
   const handleChangeFilter = (type: Filter) => {
     handleGetAllComment(type);

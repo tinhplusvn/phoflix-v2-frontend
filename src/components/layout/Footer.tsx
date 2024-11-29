@@ -7,12 +7,13 @@ const Footer = () => {
   return (
     <Box
       sx={{
+        marginTop: "64px",
         padding: {
           xs: "16px",
-          md: "32px",
+          md: "64px 32px",
         },
-        backgroundColor: "#f1f1f1",
-        marginTop: "32px",
+        borderRadius: "16px 16px 0 0",
+        background: "linear-gradient(to right, #a1c4fd96 0%, #c2e9fbb5 100%)",
       }}
     >
       <Grid container spacing={2} sx={{ flexGrow: 1 }}>
@@ -64,6 +65,15 @@ const Footer = () => {
               Telegram
             </Link>
           </Box>
+        </Grid>
+        <Grid md={12}>
+          <Typography
+            sx={{ textAlign: "center", marginTop: "24px" }}
+            level="title-md"
+            color="primary"
+          >
+            © 2024 - Phát triển bởi phohoccode
+          </Typography>
         </Grid>
       </Grid>
     </Box>

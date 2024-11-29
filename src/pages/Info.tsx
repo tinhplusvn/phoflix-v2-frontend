@@ -9,7 +9,7 @@ import {
 } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   addMovie,
@@ -34,12 +34,11 @@ import { IUser } from "../interfaces/user";
 const Info = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const { movieInfo, isError } = useSelector((state: RootState) => ({
-    movieInfo: state.movies.movieInfo.info,
-    isError: state.movies.isError,
-  }));
-
   const params = useParams();
+  const movieInfo = useSelector(
+    (state: RootState) => state.movies.movieInfo.info
+  );
+  const isError = useSelector((state: RootState) => state.movies.isError);
   const [isSave, setIsSave] = useState<boolean>(false);
   const breadcrumbsPaths = ["Thông tin phim", movieInfo.name];
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -52,13 +51,13 @@ const Info = () => {
     };
 
     handleInit();
-  }, [params]);
+  }, [params?.slug]);
 
   if (isLoading) {
     return <SkeletonPage page="info" />;
   }
 
-  if (isError) {
+  if (!movieInfo?.slug && isError) {
     return (
       <Typography level="title-lg" color="danger">
         Không tìm thấy thông tin phim!
@@ -68,7 +67,7 @@ const Info = () => {
 
   return (
     <>
-      {!isLoading && !isError && (
+      {!isLoading && (
         <>
           <BreadcrumbsCustom paths={breadcrumbsPaths as string[]} />
 
@@ -85,18 +84,15 @@ const Info = () => {
             </Box>
             <SectionContentMovie content={movieInfo.content as string} />
 
+            <Divider />
+
             {movieInfo?.trailer_url && (
               <SectionTrailerMovie trailer_url={movieInfo.trailer_url} />
             )}
 
             <Divider />
 
-            {Object.keys(movieInfo).length > 0 && (
-              <MovieSuggestions
-                categories={movieInfo.category ?? []}
-                countries={movieInfo.country ?? []}
-              />
-            )}
+            <MovieSuggestions />
           </Box>
         </>
       )}
@@ -162,7 +158,7 @@ const SectionCardMovie = ({
     );
 
     if (+res?.payload?.EC === 0) {
-      toast.success(res.payload?.EM);
+      toast.success("Lưu phim thành công!");
       setIsSave(!isSave);
     }
     setIsLoading(false);

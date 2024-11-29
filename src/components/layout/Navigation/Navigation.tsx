@@ -53,6 +53,7 @@ const Navigation = () => {
               sx={{
                 marginRight: "12px",
                 cursor: "pointer",
+                fontWeight: "bold",
               }}
             >
               PHOFLIX-V2

@@ -6,8 +6,7 @@ const ToastContainer = () => {
       position="top-center"
       reverseOrder={true}
       toastOptions={{
-        className: "",
-        duration: 2000,
+        duration: 3000,
       }}
     />
   );

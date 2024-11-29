@@ -198,7 +198,7 @@ export const moviesSlice = createSlice({
         state.movieInfo.info = action.payload?.movie ?? {};
         state.movieInfo.episodes =
           action.payload?.episodes[0]?.server_data ?? [];
-        state.isError = !action.payload?.status;
+        state.isError = action.payload?.status ? false : true;
       })
       .addCase(getMovieInfo.rejected, (state, action) => {
         state.isLoading = false;

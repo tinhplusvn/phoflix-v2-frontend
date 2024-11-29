@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import CircularProgress from "@mui/material/CircularProgress";
 import toast from "react-hot-toast";
+import RefreshButton from "../common/RefreshButton";
 
 export type Filter = "DESC" | "ASC";
 
@@ -29,10 +30,12 @@ interface IComment {
 
 const CommentSection = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { commentList, movieInfo } = useSelector((state: RootState) => ({
-    commentList: state.comments.commentList,
-    movieInfo: state.movies.movieInfo.info,
-  }));
+  const commentList = useSelector(
+    (state: RootState) => state.comments.commentList
+  );
+  const movieInfo = useSelector(
+    (state: RootState) => state.movies.movieInfo.info
+  );
   const params = useParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -60,6 +63,11 @@ const CommentSection = () => {
     }
   };
 
+  const handleRefresh = async () => {
+    await handleGetAllComment("DESC");
+    toast.success("Bình luận đã được làm mới!");
+  };
+
   return (
     <Box
       sx={{
@@ -68,24 +76,21 @@ const CommentSection = () => {
         gap: "24px",
       }}
     >
-      <Alert color="primary" sx={{ justifyContent: "space-between" }}>
-        <Typography
-          startDecorator={<ForumOutlinedIcon />}
-          color="primary"
-          level="title-lg"
-        >
-          {`Bình luận (${commentList?.length || 0})`}
-        </Typography>
-        <Tooltip title="Làm mới bình luận">
-          <IconButton onClick={() => handleGetAllComment("DESC")} disabled={isLoading}>
-            {isLoading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : (
-              <RefreshIcon />
-            )}
-          </IconButton>
-        </Tooltip>
-      </Alert>
+      <Alert
+        color="neutral"
+        startDecorator={
+          <Typography startDecorator={<ForumOutlinedIcon />} level="title-lg">
+            {`Bình luận (${commentList?.length || 0})`}
+          </Typography>
+        }
+        endDecorator={
+          <RefreshButton
+            title="Làm mới bình luận"
+            isLoading={isLoading}
+            handleRefresh={handleRefresh}
+          />
+        }
+      ></Alert>
 
       <CommentInput />
 

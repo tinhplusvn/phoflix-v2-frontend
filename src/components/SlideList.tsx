@@ -30,9 +30,7 @@ const SlideList = () => {
         }}
         navigation={false}
         modules={[Autoplay, Pagination, Navigation]}
-        // modules={[EffectCards]}
         className="mySwiper"
-        // effect="cards"
       >
         {items.length === 0 && (
           <SwiperSlide>

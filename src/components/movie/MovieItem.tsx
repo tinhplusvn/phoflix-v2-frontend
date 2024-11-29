@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import imageError from "../../images/image-error.jpg"
+
 interface IProps {
   movie: IMovie;
   page: string;
@@ -32,10 +34,9 @@ const MovieItem = ({ movie, page, handleDeleteMovie }: IProps) => {
       <Link to={`/thong-tin/${movie.slug}`}>
         <img
           loading="lazy"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = `${imageError}`;
           }}
           src={
             (movie?.poster_url as string)?.includes(

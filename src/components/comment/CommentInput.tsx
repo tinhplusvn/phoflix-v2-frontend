@@ -55,7 +55,7 @@ const CommentInput = () => {
       );
       setIsLoading(false);
       setValueComment("");
-      toast.success(res.payload?.EM);
+      toast.success("Bình luận thành công!");
 
       await dispatch(
         addActivityLog({

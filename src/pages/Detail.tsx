@@ -1,5 +1,5 @@
 import { Alert, Box, Typography } from "@mui/joy";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { AppDispatch, RootState } from "../redux/store";
@@ -11,8 +11,9 @@ import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 import _ from "lodash";
 import SkeletonPage from "../components/common/SkeletonPage";
 import { generateYears, scrollToTop } from "../utils";
+import imageLoadingMovieError from "../images/loading-movie-error.png";
+import ShowBackground from "../components/common/ShowBackground";
 
-// định nghĩa kiểu dữ liệu cho object
 type describe = Record<string, string>;
 type slug = Record<string, string>;
 
@@ -29,9 +30,7 @@ const Detail = () => {
     },
     isError,
   } = useSelector((state: RootState) => state.movies);
-
   const { isMobile } = useSelector((state: RootState) => state.system);
-  
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const params = useParams<{ describe: string; slug: string }>();
@@ -98,7 +97,7 @@ const Detail = () => {
       setIsLoading(false);
     };
     handleInit();
-  }, [params, currentPage]);
+  }, [params?.slug, currentPage]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -115,9 +114,10 @@ const Detail = () => {
 
   if (!isLoading && isError) {
     return (
-      <Typography level="title-lg" color="danger">
-        Không tìm thấy thông tin phim!
-      </Typography>
+      <ShowBackground
+        urlImage={imageLoadingMovieError}
+        content="Không tìm thấy dữ liệu!"
+      />
     );
   }
 

@@ -47,13 +47,13 @@ type TypeCopy = "not-copy" | "copied";
 
 const Watch = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { user, movieInfo, isError, episodesFromStore } = useSelector(
-    (state: RootState) => ({
-      user: state.users.user,
-      movieInfo: state.movies.movieInfo.info,
-      isError: state.movies.isError,
-      episodesFromStore: state.movies.movieInfo.episodes,
-    })
+  const user = useSelector((state: RootState) => state.users.user);
+  const movieInfo = useSelector(
+    (state: RootState) => state.movies.movieInfo.info
+  );
+  const isError = useSelector((state: RootState) => state.movies.isError);
+  const episodesFromStore = useSelector(
+    (state: RootState) => state.movies.movieInfo.episodes
   );
 
   const watchedEpisodes = useSelector(
@@ -148,7 +148,7 @@ const Watch = () => {
     return <SkeletonPage page="info" />;
   }
 
-  if (isError) {
+  if (isError && !movieInfo?.slug) {
     return (
       <Typography level="title-lg" color="danger">
         Không tìm thấy thông tin phim!
@@ -225,17 +225,17 @@ const Watch = () => {
           setOpen={setOpen}
         />
 
-        <Divider />
+        <Box sx={{ margin: "12px 0" }}>
+          <Divider />
+        </Box>
 
         <CommentSection />
 
-        <Divider />
-        {movieInfo.category && (
-          <MovieSuggestions
-            categories={movieInfo.category ?? []}
-            countries={movieInfo.country ?? []}
-          />
-        )}
+        <Box sx={{ margin: "12px 0" }}>
+          <Divider />
+        </Box>
+
+        <MovieSuggestions />
       </Box>
 
       <ModalInstructDowload open={open} setOpen={setOpen} />
@@ -368,7 +368,7 @@ const SectionRating = () => {
           action: `Đánh giá ${stars} sao phim ${movieInfo.name}`,
         })
       );
-      toast.success(res.payload?.EM);
+      toast.success("Cảm ơn bạn đã đánh giá phim!");
     } else {
       toast.error(res.payload?.EM);
     }

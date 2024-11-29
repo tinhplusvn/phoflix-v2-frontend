@@ -14,7 +14,7 @@ import HistoryIcon from "@mui/icons-material/History";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import _ from "lodash";
 import "../../styles/ModalSearch.scss";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,26 +26,20 @@ import {
 } from "../../redux/asyncThunk/searchHistoryThunk";
 import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
 import SkeletonModalSearch from "../common/SkeletonModalSearch";
-import { IUser } from "../../interfaces/user";
 
 type ModalSearch = {
   open: boolean;
   setOpen: (open: boolean) => void;
 };
 
-type searchValue = string | "";
-type actions = "recent" | "favorite";
-
 const ModalSearch = ({ open, setOpen }: ModalSearch) => {
-  const [searchValue, setSearchValue] = useState<searchValue>("");
+  const [searchValue, setSearchValue] = useState<string>("");
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
-  const searchRef = useRef<HTMLInputElement>(null);
-  const user: IUser = useSelector((state: RootState) => state.users.user);
-  const { searchRecent, searchFavourite } = useSelector((state: RootState) => ({
-    searchRecent: state.searchHistory.searchRecent,
-    searchFavourite: state.searchHistory.searchFavourite,
-  }));
+  const user = useSelector((state: RootState) => state.users.user);
+  const searchRecent = useSelector((state: RootState) => state.searchHistory.searchRecent);
+  const searchFavourite = useSelector((state: RootState) => state.searchHistory.searchFavourite);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
 
@@ -61,15 +55,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
     }
   }, [user]);
 
-  useEffect(() => {
-    if (searchRef.current) {
-      setTimeout(() => {
-        searchRef.current?.focus();
-      }, 100);
-    }
-  }, []);
-
-  const handleSearchInput = async (actions: actions) => {
+  const handleSearchInput = async () => {
     if (searchValue !== "") {
       if (user?.access_token || user?.refresh_token) {
         setIsLoadingButton(true);
@@ -124,17 +110,15 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
     setIsLoading(false);
   };
 
-  const handleRemoveSearch = async (item: any) => {
+  const handleRemoveSearch = async (id: string) => {
     setIsLoading(true);
-    await dispatch(deleteSearchHistory(item));
+    await dispatch(deleteSearchHistory(id));
     await dispatch(getSearchHistory(user?.id as string));
     setIsLoading(false);
   };
 
   return (
     <Modal
-      aria-labelledby="modal-title"
-      aria-describedby="modal-desc"
       open={open}
       onClose={() => setOpen(false)}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
@@ -150,10 +134,10 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
       >
         <Box>
           <Input
+            autoFocus
             size="lg"
-            ref={searchRef}
-            onKeyDown={(e) => e.code === "Enter" && handleSearchInput("recent")}
-            value={searchValue || ""}
+            onKeyDown={(e) => e.code === "Enter" && handleSearchInput()}
+            value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             sx={{ flex: "1" }}
             color="primary"
@@ -165,7 +149,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
                 size="sm"
                 loading={isLoadingButton}
                 disabled={searchValue === ""}
-                onClick={() => handleSearchInput("recent")}
+                onClick={handleSearchInput}
                 variant="solid"
               >
                 Tìm kiếm
@@ -176,8 +160,9 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
 
         <Divider sx={{ margin: "12px -24px" }} />
 
-        {isLoading && <SkeletonModalSearch />}
-        {!isLoading && (
+        {isLoading ? (
+          <SkeletonModalSearch />
+        ) : (
           <Box
             sx={{
               height: "360px",
@@ -197,100 +182,21 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
               </Typography>
             )}
             {searchRecent.length > 0 && (
-              <Box
-                sx={{ display: "flex", flexDirection: "column", gap: "12px" }}
-              >
-                <Typography level="title-md" color="neutral">
-                  Gần đây
-                </Typography>
-                <ul className="search-list">
-                  {searchRecent.map((item: any, index: number) => (
-                    <li key={index} className="search-item">
-                      <Box
-                        onClick={() =>
-                          handleSearchFromSearchList(item?.keyword)
-                        }
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "12px",
-                          flex: "1",
-                          height: "100%",
-                        }}
-                      >
-                        <HistoryIcon />
-                        {item?.keyword}
-                      </Box>
-                      <Box>
-                        <Tooltip title="Đánh dấu yếu thích">
-                          <IconButton
-                            title="Đánh dấu yêu thích"
-                            onClick={() =>
-                              handleFavouriteSearchHistory(
-                                item.keyword,
-                                item.id
-                              )
-                            }
-                            color="primary"
-                          >
-                            <StarBorderIcon />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Xoá khỏi lịch sử">
-                          <IconButton
-                            title="Xoá"
-                            onClick={() => handleRemoveSearch(item.id)}
-                            color="primary"
-                          >
-                            <ClearIcon />
-                          </IconButton>
-                        </Tooltip>
-                      </Box>
-                    </li>
-                  ))}
-                </ul>
-              </Box>
+              <SearchList
+                data={searchRecent}
+                handleSearch={handleSearchFromSearchList}
+                handleRemoveSearch={handleRemoveSearch}
+                handleFavouriteSearchHistory={handleFavouriteSearchHistory}
+                type="recent"
+              />
             )}
             {searchFavourite.length > 0 && (
-              <Box
-                sx={{ display: "flex", flexDirection: "column", gap: "12px" }}
-              >
-                <Typography level="title-md" color="neutral">
-                  Yêu thích
-                </Typography>
-                <ul className="search-list">
-                  {searchFavourite.map((item: any, index: number) => (
-                    <li key={index} className="search-item">
-                      <Box
-                        onClick={() =>
-                          handleSearchFromSearchList(item?.keyword)
-                        }
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "12px",
-                          flex: "1",
-                          height: "100%",
-                        }}
-                      >
-                        <StarBorderIcon />
-                        {item?.keyword}
-                      </Box>
-                      <Box>
-                        <Tooltip title="Xoá khỏi lịch sử">
-                          <IconButton
-                            title="Xoá"
-                            onClick={() => handleRemoveSearch(item.id)}
-                            color="primary"
-                          >
-                            <ClearIcon />
-                          </IconButton>
-                        </Tooltip>
-                      </Box>
-                    </li>
-                  ))}
-                </ul>
-              </Box>
+              <SearchList
+                data={searchFavourite}
+                handleSearch={handleSearchFromSearchList}
+                handleRemoveSearch={handleRemoveSearch}
+                type="favorite"
+              />
             )}
           </Box>
         )}
@@ -300,3 +206,75 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
 };
 
 export default ModalSearch;
+
+interface SearchListProps {
+  data: any;
+  handleSearch: (value: string) => void;
+  handleRemoveSearch: (item: any) => void;
+  handleFavouriteSearchHistory?: (
+    keyword: string,
+    idSearchHistory: string
+  ) => void;
+  type: "recent" | "favorite";
+}
+
+const SearchList = ({
+  data,
+  type,
+  handleSearch,
+  handleRemoveSearch,
+  handleFavouriteSearchHistory,
+}: SearchListProps) => {
+  return (
+    <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+      <Typography level="title-md" color="neutral">
+        {type === "recent" ? "Gần đây" : "Yêu thích"}
+      </Typography>
+      <ul className="search-list">
+        {data.map((item: any, index: number) => (
+          <li key={index} className="search-item">
+            <Box
+              onClick={() => handleSearch(item?.keyword)}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                flex: "1",
+                height: "100%",
+              }}
+            >
+              {type === "recent" ? <HistoryIcon /> : <StarBorderIcon />}
+              {item?.keyword}
+            </Box>
+            <Box>
+              {type === "recent" && (
+                <Tooltip title="Đánh dấu yêu thích">
+                  <IconButton
+                    title="Đánh dấu yêu thích"
+                    onClick={() => {
+                      if (handleFavouriteSearchHistory) {
+                        handleFavouriteSearchHistory(item.keyword, item.id);
+                      }
+                    }}
+                    color="primary"
+                  >
+                    <StarBorderIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
+              <Tooltip title="Xoá khỏi lịch sử">
+                <IconButton
+                  title="Xoá"
+                  onClick={() => handleRemoveSearch(item.id)}
+                  color="primary"
+                >
+                  <ClearIcon />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          </li>
+        ))}
+      </ul>
+    </Box>
+  );
+};

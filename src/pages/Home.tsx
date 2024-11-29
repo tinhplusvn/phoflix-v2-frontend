@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import SlideList from "../components/SlideList";
 import { AppDispatch, RootState } from "../redux/store";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   getCartoon,
   getFeatureFilm,
@@ -13,25 +13,39 @@ import { Box } from "@mui/joy";
 import MovieList from "../components/movie/MovieList";
 import LiveTvRoundedIcon from "@mui/icons-material/LiveTvRounded";
 import TitleContainer from "../components/common/TitleContainer";
+import toast from "react-hot-toast";
 
 const Home = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { featureFilm, televisionSeries, cartoon, tvShows } = useSelector(
-    (state: RootState) => ({
-      featureFilm: state.movies.featureFilm,
-      televisionSeries: state.movies.televisionSeries,
-      cartoon: state.movies.cartoon,
-      tvShows: state.movies.tvShows,
-    })
-  );
+  const movies = useSelector((state: RootState) => state.movies);
+  const featureFilm = movies.featureFilm;
+  const televisionSeries = movies.televisionSeries;
+  const cartoon = movies.cartoon;
+  const tvShows = movies.tvShows;
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    dispatch(getSlideShow());
-    dispatch(getFeatureFilm());
-    dispatch(getTelevisionSeries());
-    dispatch(getCartoon());
-    dispatch(getTvShows());
-  }, []);
+    const handleInit = async () => {
+      try {
+        setIsLoading(true);
+
+        await Promise.all([
+          dispatch(getSlideShow()),
+          dispatch(getFeatureFilm()),
+          dispatch(getTelevisionSeries()),
+          dispatch(getCartoon()),
+          dispatch(getTvShows()),
+        ]);
+      } catch (error) {
+        toast.error("Đã xảy ra lỗi, vui lòng thử lại sau!");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    handleInit();
+  }, [dispatch]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "24px" }}>
@@ -42,7 +56,7 @@ const Home = () => {
           content="Phim lẻ"
           icon={<LiveTvRoundedIcon />}
         />
-        <MovieList movies={featureFilm} />
+        <MovieList movies={featureFilm} isLoading={isLoading} />
       </Box>
       <Box>
         <TitleContainer
@@ -50,7 +64,7 @@ const Home = () => {
           content="Phim bộ"
           icon={<LiveTvRoundedIcon />}
         />
-        <MovieList movies={televisionSeries} />
+        <MovieList movies={televisionSeries} isLoading={isLoading} />
       </Box>
       <Box>
         <TitleContainer
@@ -58,7 +72,7 @@ const Home = () => {
           content="Hoạt hình"
           icon={<LiveTvRoundedIcon />}
         />
-        <MovieList movies={cartoon} />
+        <MovieList movies={cartoon} isLoading={isLoading} />
       </Box>
       <Box>
         <TitleContainer
@@ -66,7 +80,7 @@ const Home = () => {
           content="Chương trình TV"
           icon={<LiveTvRoundedIcon />}
         />
-        <MovieList movies={tvShows} />
+        <MovieList movies={tvShows} isLoading={isLoading} />
       </Box>
     </Box>
   );

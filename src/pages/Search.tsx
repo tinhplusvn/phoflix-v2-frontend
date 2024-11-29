@@ -14,15 +14,19 @@ import { scrollToTop } from "../utils";
 
 const Search = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { movies, totalItems, totalPages, titleHead } = useSelector(
-    (state: RootState) => ({
-      movies: state.movies.searchMovie.items,
-      totalItems: state.movies.searchMovie.pagination.totalItems,
-      totalPages: state.movies.searchMovie.pagination.totalPages,
-      titleHead: state.movies.searchMovie.titleHead,
-    })
+  const movies = useSelector(
+    (state: RootState) => state.movies.searchMovie.items
   );
-  
+  const totalItems = useSelector(
+    (state: RootState) => state.movies.searchMovie.pagination.totalItems
+  );
+  const totalPages = useSelector(
+    (state: RootState) => state.movies.searchMovie.pagination.totalPages
+  );
+  const titleHead = useSelector(
+    (state: RootState) => state.movies.searchMovie.titleHead
+  );
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const params = useParams();
@@ -49,7 +53,7 @@ const Search = () => {
       setIsLoading(false);
     };
     handleInit();
-  }, [params, currentPage]);
+  }, [params?.keyword, currentPage]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -102,6 +106,7 @@ const Search = () => {
             <MovieList movies={movies} />
             <Stack spacing={2} sx={{ marginTop: "24px", alignItems: "center" }}>
               <Pagination
+                color="primary"
                 onChange={handleChange}
                 count={totalPages}
                 page={currentPage}
@@ -115,14 +120,8 @@ const Search = () => {
         {!isLoading && movies.length === 0 && (
           <Box
             sx={{
-              width: {
-                xs: "320px",
-                md: "360px",
-              },
-              height: {
-                xs: "320px",
-                md: "360px",
-              },
+              width: "128px",
+              height: "128px",
               backgroundImage: `url(${searchNotFoundImg})`,
               backgroundSize: "cover",
               backgroundPosition: "center",

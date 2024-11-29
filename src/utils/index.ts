@@ -38,3 +38,11 @@ export const validateEmail = (email: string | undefined): boolean => {
 export const generateYears = (startYear: number, endYear: number): number[] => {
   return Array.from({ length: endYear - startYear + 1 }, (_, i) => endYear - i);
 };
+
+export const randomNumber = (min: number, max: number): number => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+export const randomItemInArray = (array: any) => {
+  return array[Math.floor(Math.random() * array.length)];
+};

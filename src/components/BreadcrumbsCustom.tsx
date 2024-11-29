@@ -10,20 +10,21 @@ const BreadcrumbsCustom = ({ paths }: { paths: string[] }) => {
         separator="›"
         aria-label="breadcrumbs"
       >
-        <Link
-          style={{
-            textDecoration: "none",
-            color: 'inherit',
-            display: "flex",
-            alignItems: "center",
-            gap: "4px",
-          }}
-          color="primary"
-          to="/"
-        >
-          <HomeIcon />
-          Trang chủ
-        </Link>
+        <Typography color="primary">
+            <Link
+              style={{
+                textDecoration: "none",
+                color: 'inherit',
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
+              }}
+              to="/"
+            >
+              <HomeIcon />
+              Trang chủ
+            </Link>
+        </Typography>
         {paths.map((item: string, index: number) => (
           <Typography key={index}>{item}</Typography>
         ))}

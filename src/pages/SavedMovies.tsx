@@ -14,12 +14,16 @@ import {
 import toast from "react-hot-toast";
 import SkeletonPage from "../components/common/SkeletonPage";
 import { IUser } from "../interfaces/user";
+import { useNavigate } from "react-router-dom";
+import imageSaveMovie from "../images/save-movie.png";
+import ShowBackground from "../components/common/ShowBackground";
 
 const SavedMovie = () => {
   const dispatch: AppDispatch = useDispatch();
   const savedMovies = useSelector(
     (state: RootState) => state.movies.savedMovies.movies
   );
+  const navigate = useNavigate();
   const user: IUser = useSelector((state: RootState) => state.users.user);
   const [open, setOpen] = useState<boolean>(false);
   const breadcrumbsPaths = ["Phim đã lưu"];
@@ -45,6 +49,8 @@ const SavedMovie = () => {
 
     if (user?.access_token || user?.refresh_token) {
       handleInit();
+    } else {
+      navigate("/");
     }
   }, [user]);
 
@@ -99,9 +105,10 @@ const SavedMovie = () => {
 
   if (!isLoading && savedMovies.length === 0) {
     return (
-      <Typography level="title-lg" color="primary">
-        Chưa có bộ phim nào được lưu!
-      </Typography>
+      <ShowBackground
+        urlImage={imageSaveMovie}
+        content="Danh sách phim đã lưu đang trống!"
+      />
     );
   }
 

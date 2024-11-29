@@ -14,6 +14,9 @@ import {
 } from "../redux/asyncThunk/moviesThunk";
 import toast from "react-hot-toast";
 import { IUser } from "../interfaces/user";
+import { useNavigate } from "react-router-dom";
+import imageWatchHistory from "../images/watch-history.png";
+import ShowBackground from "../components/common/ShowBackground";
 
 type TypeDelete = "watch-history" | "saved-movies";
 
@@ -21,6 +24,7 @@ const WatchHistory = () => {
   const watchHistory = useSelector(
     (state: RootState) => state.movies.watchHistory.movies
   );
+  const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const user: IUser = useSelector((state: RootState) => state.users.user);
   const isMobile = useSelector((state: RootState) => state.system.isMobile);
@@ -47,6 +51,8 @@ const WatchHistory = () => {
 
     if (user?.access_token || user?.refresh_token) {
       handleInit();
+    } else {
+      navigate("/");
     }
   }, [user]);
 
@@ -101,9 +107,10 @@ const WatchHistory = () => {
 
   if (!isLoading && watchHistory.length === 0) {
     return (
-      <Typography level="title-lg" color="primary">
-        Lịch sử xem trống!
-      </Typography>
+      <ShowBackground
+        urlImage={imageWatchHistory}
+        content="Lịch sử xem trống!"
+      />
     );
   }
 
