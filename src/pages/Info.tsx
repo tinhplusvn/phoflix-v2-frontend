@@ -86,10 +86,12 @@ const Info = () => {
             </Box>
             <SectionContentMovie content={movieInfo.content as string} />
 
-            <Divider />
-
+      
             {movieInfo?.trailer_url && (
-              <SectionTrailerMovie trailer_url={movieInfo.trailer_url} />
+              <>
+                 <Divider />
+                 <SectionTrailerMovie trailer_url={movieInfo.trailer_url} />
+              </>    
             )}
 
             <Divider />
