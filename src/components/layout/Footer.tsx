@@ -12,7 +12,6 @@ const Footer = () => {
           xs: "16px",
           md: "64px 32px",
         },
-        borderRadius: "16px 16px 0 0",
         background: "linear-gradient(to right, #a1c4fd96 0%, #c2e9fbb5 100%)",
       }}
     >

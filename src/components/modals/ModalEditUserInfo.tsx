@@ -48,7 +48,7 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
     phone_number: "",
     gender: "Nam",
     address: "",
-    type_account: ""
+    type_account: "",
   };
   const [userInfo, setUserInfo] = useState<UserInfo>(defaultUserInfo);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -71,7 +71,7 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
   }, [dataUser]);
 
   const handleUpdateUser = async () => {
-    const { username, email, gender, address, phone_number } = userInfo;
+    const { username, gender, address, phone_number } = userInfo;
     if (!username || !gender || !address || !phone_number) {
       toast.error("Vui lòng nhập đầy đủ thông tin!");
       return;

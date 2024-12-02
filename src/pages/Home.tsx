@@ -14,6 +14,7 @@ import MovieList from "../components/movie/MovieList";
 import LiveTvRoundedIcon from "@mui/icons-material/LiveTvRounded";
 import TitleContainer from "../components/common/TitleContainer";
 import toast from "react-hot-toast";
+import MovieSuggestions from "../components/movie/MovieSuggestions";
 
 const Home = () => {
   const dispatch: AppDispatch = useDispatch();

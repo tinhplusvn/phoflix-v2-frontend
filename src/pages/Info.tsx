@@ -30,6 +30,8 @@ import SkeletonPage from "../components/common/SkeletonPage";
 import { IMovie } from "../interfaces/movie";
 import toast from "react-hot-toast";
 import { IUser } from "../interfaces/user";
+import ShareIcon from "@mui/icons-material/Share";
+import { shareInfo } from "../utils";
 
 const Info = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -232,12 +234,41 @@ const SectionInfoMovie = ({ movieInfo }: any) => {
       <Alert
         color="neutral"
         sx={{
+          position: "relative",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
         }}
       >
-        <Typography level="h4" color="primary">
+        <Tooltip
+          sx={{
+            position: "absolute",
+            right: "12px",
+            top: "12px",
+          }}
+          title="Chia sẻ"
+          variant="soft"
+          color="primary"
+        >
+          <IconButton
+            onClick={() =>
+              shareInfo({
+                title: movieInfo.name,
+                text: movieInfo.name,
+                url: window.location.href,
+              })
+            }
+          >
+            <ShareIcon />
+          </IconButton>
+        </Tooltip>
+        <Typography
+          sx={{
+            marginTop: "32px",
+          }}
+          level="h4"
+          color="primary"
+        >
           {movieInfo.name}
         </Typography>
         <Typography level="title-lg">{movieInfo.origin_name}</Typography>

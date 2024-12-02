@@ -46,3 +46,21 @@ export const randomNumber = (min: number, max: number): number => {
 export const randomItemInArray = (array: any) => {
   return array[Math.floor(Math.random() * array.length)];
 };
+
+interface shareInfo {
+  title: string;
+  text: string;
+  url: string;
+}
+
+export const shareInfo = async (data: shareInfo) => {
+  if (navigator.share) {
+    try {
+      await navigator.share(data);
+    } catch (err) {
+      alert("Không thể chia sẻ");
+    }
+  } else {
+    alert("Trình duyệt không hỗ trợ chia sẻ");
+  }
+};

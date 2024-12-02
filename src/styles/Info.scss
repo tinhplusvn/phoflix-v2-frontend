@@ -4,6 +4,10 @@
   gap: 64px;
   width: 100%;
 
+  @media (max-width: 1024px) {
+    gap: 32px;  
+  }
+
   .info-container-inner {
     display: flex;
     gap: 32px;
