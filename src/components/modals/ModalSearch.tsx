@@ -13,9 +13,9 @@ import Divider from "@mui/joy/Divider";
 import HistoryIcon from "@mui/icons-material/History";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import ClearIcon from "@mui/icons-material/Clear";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import _ from "lodash";
+import _, { debounce, set } from "lodash";
 import "../../styles/ModalSearch.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
@@ -26,6 +26,9 @@ import {
 } from "../../redux/asyncThunk/searchHistoryThunk";
 import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
 import SkeletonModalSearch from "../common/SkeletonModalSearch";
+import { searchMovie } from "../../redux/asyncThunk/moviesThunk";
+import ShowBackground from "../common/ShowBackground";
+import ImagaeSearchNotFound from "../../images/search-not-found.png";
 
 type ModalSearch = {
   open: boolean;
@@ -35,11 +38,15 @@ type ModalSearch = {
 const ModalSearch = ({ open, setOpen }: ModalSearch) => {
   const [searchValue, setSearchValue] = useState<string>("");
   const navigate = useNavigate();
+  const params = useParams();
   const dispatch: AppDispatch = useDispatch();
   const user = useSelector((state: RootState) => state.users.user);
-  const searchRecent = useSelector((state: RootState) => state.searchHistory.searchRecent);
-  const searchFavourite = useSelector((state: RootState) => state.searchHistory.searchFavourite);
-
+  const searchRecent = useSelector(
+    (state: RootState) => state.searchHistory.searchRecent
+  );
+  const searchFavourite = useSelector(
+    (state: RootState) => state.searchHistory.searchFavourite
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
 
@@ -55,7 +62,29 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
     }
   }, [user]);
 
+  useEffect(() => {
+    const handleShowPreview = async () => {
+      if (searchValue.trim() !== "") {
+        setIsLoading(true);
+        await dispatch(searchMovie({ keyword: searchValue, page: 1 }));
+        setIsLoading(false);
+      }
+    };
+
+    const debouncedSearch = debounce(handleShowPreview, 500);
+
+    debouncedSearch();
+
+    return () => debouncedSearch.cancel();
+  }, [searchValue, params?.keyword]);
+
   const handleSearchInput = async () => {
+    if (searchValue === params?.keyword) {
+      setOpen(false);
+      setSearchValue("");
+      return;
+    }
+
     if (searchValue !== "") {
       if (user?.access_token || user?.refresh_token) {
         setIsLoadingButton(true);
@@ -79,6 +108,12 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
       setSearchValue("");
       setOpen(false);
     }
+  };
+
+  const handleClickSearchPreview = (slug: string) => {
+    navigate(`/thong-tin/${slug}`);
+    setOpen(false);
+    setSearchValue("");
   };
 
   const handleSearchFromSearchList = async (value: string) => {
@@ -129,6 +164,10 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
             xs: "90%",
             sm: "640px",
           },
+          maxWidth: {
+            xs: "90%",
+            sm: "680px",
+          },
         }}
         layout="center"
       >
@@ -160,9 +199,13 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
 
         <Divider sx={{ margin: "12px -24px" }} />
 
-        {isLoading ? (
-          <SkeletonModalSearch />
-        ) : (
+        {isLoading && <SkeletonModalSearch />}
+
+        {searchValue !== "" && !isLoading && (
+          <SearchPreview handleClickSearchPreview={handleClickSearchPreview} />
+        )}
+
+        {searchValue === "" && !isLoading && (
           <Box
             sx={{
               height: "360px",
@@ -275,6 +318,96 @@ const SearchList = ({
           </li>
         ))}
       </ul>
+    </Box>
+  );
+};
+
+interface SearchPreviewProps {
+  handleClickSearchPreview: (slug: string) => void;
+}
+
+const SearchPreview = ({ handleClickSearchPreview }: SearchPreviewProps) => {
+  const movies = useSelector(
+    (state: RootState) => state.movies.searchMovie.items
+  );
+  const isMobile = useSelector((state: RootState) => state.system.isMobile);
+
+  return (
+    <Box
+      className="search-list"
+      sx={{
+        overflowY: "auto",
+        minHeight: "360px",
+      }}
+    >
+      {movies.slice(0, 10)?.map((movie: any, index: number) => (
+        <Box
+          className="search-item"
+          onClick={() => handleClickSearchPreview(movie?.slug)}
+          key={index}
+          sx={{ display: "flex", gap: "12px", alignItems: "start !important" }}
+        >
+          <Box
+            sx={{
+              flex: 1,
+            }}
+          >
+            <img
+              src={
+                (movie?.poster_url as string)?.includes(
+                  process.env.REACT_APP_API_HINH_ANH as string
+                )
+                  ? movie?.poster_url
+                  : `${process.env.REACT_APP_API_HINH_ANH as string}/${
+                      movie?.poster_url
+                    }`
+              }
+              alt={movie?.name}
+            />
+          </Box>
+          <Box
+            sx={{
+              width: {
+                xs: "calc(100% - 92px)",
+                sm: "calc(100% - 132px)",
+              },
+            }}
+          >
+            <Typography
+              sx={{
+                width: "100%",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
+              color="primary"
+              level={isMobile ? "title-sm" : "title-md"}
+            >
+              {movie?.name}
+            </Typography>
+            <Typography
+              sx={{
+                width: "100%",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
+              level={isMobile ? "body-xs" : "body-md"}
+            >
+              {movie?.origin_name}
+            </Typography>
+            <Typography level={isMobile ? "body-xs" : "body-md"}>
+              {movie?.time}
+            </Typography>
+            <Typography level={isMobile ? "body-xs" : "body-md"}>
+              {movie?.lang}
+            </Typography>
+            <Typography level={isMobile ? "body-xs" : "body-md"}>
+              {movie?.quality}
+            </Typography>
+          </Box>
+        </Box>
+      ))}
     </Box>
   );
 };

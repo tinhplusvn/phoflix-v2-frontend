@@ -15,12 +15,24 @@
     justify-content: space-between;
     gap: 12px;
     cursor: pointer;
-    transition: .1s;
+    transition: 0.1s;
     background-color: #fff;
 
     &:hover {
-        border-color: #66b3ff;
-        background-color: #ebf5ff;
+      border-color: #66b3ff;
+      background-color: #ebf5ff;
+    }
+
+    img {
+      width: 120px;
+      height: 160px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+
+      @media (max-width: 768px) {
+        width: 80px;
+        height: 100px;
+      }
     }
   }
 }

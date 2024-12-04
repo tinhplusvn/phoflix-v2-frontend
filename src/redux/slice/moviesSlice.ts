@@ -235,6 +235,7 @@ export const moviesSlice = createSlice({
       // tìm kiếm phim
       .addCase(searchMovie.pending, (state, action) => {
         state.isLoading = true;
+        state.searchMovie.items = [];
       })
       .addCase(searchMovie.fulfilled, (state, action) => {
         if (action.payload) {

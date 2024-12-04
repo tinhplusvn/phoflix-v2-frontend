@@ -88,7 +88,7 @@ const Watch = () => {
       setIsLoading(false);
     };
     handleInit();
-  }, []);
+  }, [params?.slug]);
 
   useEffect(() => {
     if (user?.access_token || user?.refresh_token) {
