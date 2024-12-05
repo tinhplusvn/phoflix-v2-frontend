@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   IconButton,
@@ -14,8 +15,9 @@ import HistoryIcon from "@mui/icons-material/History";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import _, { debounce, set } from "lodash";
+import { useEffect, useState } from "react";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import _, { debounce } from "lodash";
 import "../../styles/ModalSearch.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
@@ -26,9 +28,10 @@ import {
 } from "../../redux/asyncThunk/searchHistoryThunk";
 import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
 import SkeletonModalSearch from "../common/SkeletonModalSearch";
-import { searchMovie } from "../../redux/asyncThunk/moviesThunk";
+import { searchMovie, searchPreview } from "../../redux/asyncThunk/moviesThunk";
 import ShowBackground from "../common/ShowBackground";
 import ImagaeSearchNotFound from "../../images/search-not-found.png";
+import { ButtonBase } from "@mui/material";
 
 type ModalSearch = {
   open: boolean;
@@ -49,6 +52,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
+  const width = useSelector((state: RootState) => state.system.width);
 
   useEffect(() => {
     const handleInit = async () => {
@@ -66,7 +70,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
     const handleShowPreview = async () => {
       if (searchValue.trim() !== "") {
         setIsLoading(true);
-        await dispatch(searchMovie({ keyword: searchValue, page: 1 }));
+        await dispatch(searchPreview(searchValue));
         setIsLoading(false);
       }
     };
@@ -112,6 +116,12 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
 
   const handleClickSearchPreview = (slug: string) => {
     navigate(`/thong-tin/${slug}`);
+    setOpen(false);
+    setSearchValue("");
+  };
+
+  const handleSeeAll = () => {
+    navigate(`/tim-kiem/${searchValue}`);
     setOpen(false);
     setSearchValue("");
   };
@@ -182,17 +192,29 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
             color="primary"
             variant="outlined"
             placeholder="Tìm kiếm phim..."
-            startDecorator={<SearchIcon color="primary" />}
+            startDecorator={width > 476 && <SearchIcon color="primary" />}
             endDecorator={
-              <Button
-                size="sm"
-                loading={isLoadingButton}
-                disabled={searchValue === ""}
-                onClick={handleSearchInput}
-                variant="solid"
-              >
-                Tìm kiếm
-              </Button>
+              width > 476 ? (
+                <Button
+                  size="sm"
+                  loading={isLoadingButton}
+                  disabled={searchValue === ""}
+                  onClick={handleSearchInput}
+                  variant="solid"
+                >
+                  Tìm kiếm
+                </Button>
+              ) : (
+                <IconButton
+                  loading={isLoadingButton}
+                  disabled={searchValue === ""}
+                  onClick={handleSearchInput}
+                  variant="solid"
+                  color="primary"
+                >
+                  <SearchIcon />
+                </IconButton>
+              )
             }
           />
         </Box>
@@ -202,7 +224,10 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
         {isLoading && <SkeletonModalSearch />}
 
         {searchValue !== "" && !isLoading && (
-          <SearchPreview handleClickSearchPreview={handleClickSearchPreview} />
+          <SearchPreview
+            handleClickSearchPreview={handleClickSearchPreview}
+            handleSeeAll={handleSeeAll}
+          />
         )}
 
         {searchValue === "" && !isLoading && (
@@ -324,12 +349,14 @@ const SearchList = ({
 
 interface SearchPreviewProps {
   handleClickSearchPreview: (slug: string) => void;
+  handleSeeAll: () => void;
 }
 
-const SearchPreview = ({ handleClickSearchPreview }: SearchPreviewProps) => {
-  const movies = useSelector(
-    (state: RootState) => state.movies.searchMovie.items
-  );
+const SearchPreview = ({
+  handleClickSearchPreview,
+  handleSeeAll,
+}: SearchPreviewProps) => {
+  const movies = useSelector((state: RootState) => state.movies.searchPreview);
   const isMobile = useSelector((state: RootState) => state.system.isMobile);
 
   return (
@@ -340,7 +367,16 @@ const SearchPreview = ({ handleClickSearchPreview }: SearchPreviewProps) => {
         minHeight: "360px",
       }}
     >
-      {movies.slice(0, 10)?.map((movie: any, index: number) => (
+      {movies?.length > 0 && (
+        <Alert
+          startDecorator={<SearchIcon />}
+          color="primary"
+          sx={{ marginBottom: "12px" }}
+        >
+          Top {movies?.length} bộ phim phù hợp!
+        </Alert>
+      )}
+      {movies?.map((movie: any, index: number) => (
         <Box
           className="search-item"
           onClick={() => handleClickSearchPreview(movie?.slug)}
@@ -408,6 +444,18 @@ const SearchPreview = ({ handleClickSearchPreview }: SearchPreviewProps) => {
           </Box>
         </Box>
       ))}
+
+      {movies?.length >= 10 && (
+        <Button
+          size="sm"
+          variant="soft"
+          sx={{ margin: "16px auto 0 auto" }}
+          endDecorator={<ChevronRightIcon />}
+          onClick={() => handleSeeAll()}
+        >
+          Xem tất cả kết quả
+        </Button>
+      )}
     </Box>
   );
 };

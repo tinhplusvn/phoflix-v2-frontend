@@ -32,6 +32,7 @@ import toast from "react-hot-toast";
 import { IUser } from "../interfaces/user";
 import ShareIcon from "@mui/icons-material/Share";
 import { shareInfo } from "../utils";
+import ImageError from "../images/image-error.jpg";
 
 const Info = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -86,12 +87,11 @@ const Info = () => {
             </Box>
             <SectionContentMovie content={movieInfo.content as string} />
 
-      
             {movieInfo?.trailer_url && (
               <>
-                 <Divider />
-                 <SectionTrailerMovie trailer_url={movieInfo.trailer_url} />
-              </>    
+                <Divider />
+                <SectionTrailerMovie trailer_url={movieInfo.trailer_url} />
+              </>
             )}
 
             <Divider />
@@ -189,6 +189,10 @@ const SectionCardMovie = ({
     <Box className="section-card-movie">
       <Box className="section-card-movie-inner">
         <img
+          onError={(e: any) => {
+            e.target.onerror = null;
+            e.target.src = ImageError;
+          }}
           src={width > 1024 ? movieInfo.poster_url : movieInfo?.thumb_url}
           alt={movieInfo.name}
         />

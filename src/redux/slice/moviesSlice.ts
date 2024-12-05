@@ -11,6 +11,7 @@ import {
   getMovieDetail,
   searchMovie,
   getAllMovies,
+  searchPreview,
 } from "../asyncThunk/moviesThunk";
 import {
   ICategory,
@@ -44,6 +45,7 @@ interface MoviesState {
     pagination: IPagination;
     titleHead: string;
   };
+  searchPreview: IMovie[];
   savedMovies: any;
   watchHistory: any;
   isLoading: boolean;
@@ -80,6 +82,7 @@ const initialState: MoviesState = {
     },
     titleHead: "",
   },
+  searchPreview: [],
   savedMovies: {
     movies: [],
   },
@@ -262,7 +265,14 @@ export const moviesSlice = createSlice({
           state.watchHistory.movies = action.payload?.data?.movies ?? [];
         }
       })
-      .addCase(getAllMovies.rejected, (state, action) => {});
+      .addCase(getAllMovies.rejected, (state, action) => {})
+
+      // search preview
+      .addCase(searchPreview.pending, (state, action) => {})
+      .addCase(searchPreview.fulfilled, (state, action) => {
+        state.searchPreview = action.payload?.items ?? [];
+      })
+      .addCase(searchPreview.rejected, (state, action) => {});
   },
 });
 

@@ -158,6 +158,21 @@ export const searchMovie = createAsyncThunk(
   }
 );
 
+export const searchPreview = createAsyncThunk(
+  "movies/searchPreview",
+  async (keyword: string) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_TIM_KIEM}?keyword=${keyword}&limit=10`
+      );
+      const data = await response.json();
+      return data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const getAllMovies = createAsyncThunk(
   "movies/getAllMovies",
   async (rawData: IGetAllMovies) => {

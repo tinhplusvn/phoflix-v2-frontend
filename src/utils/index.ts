@@ -55,11 +55,7 @@ interface shareInfo {
 
 export const shareInfo = async (data: shareInfo) => {
   if (navigator.share) {
-    try {
-      await navigator.share(data);
-    } catch (err) {
-      alert("Không thể chia sẻ");
-    }
+    await navigator.share(data);
   } else {
     alert("Trình duyệt không hỗ trợ chia sẻ");
   }
