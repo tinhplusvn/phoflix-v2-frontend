@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useParams,
+} from "react-router-dom";
 import publicRoutes from "./routes";
 import DefaultLayout from "./components/layout/DefaultLayout";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,7 +46,7 @@ function App() {
 
   useEffect(() => {
     document.title = "Thế Giới Phim - Xem Phim Hay, Phim Mới Mỗi Ngày!";
-  }, [window.location.pathname]);
+  }, []);
 
   return (
     <Router>

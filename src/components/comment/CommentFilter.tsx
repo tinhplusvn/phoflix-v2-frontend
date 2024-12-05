@@ -2,6 +2,8 @@ import { Alert, Option, Select, Typography } from "@mui/joy";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useEffect, useState } from "react";
 import { Filter } from "./CommentSection";
+import { socket } from "../../socket";
+import { useParams } from "react-router-dom";
 
 interface IProps {
   handleGetAllComment: (typeFilter: Filter) => Promise<void>;
@@ -23,6 +25,7 @@ const CommentFilter = ({ handleGetAllComment }: IProps) => {
   const [typeFilter, setTypeFilter] = useState<Filter>(
     handleGetFilterComments()
   );
+  const params = useParams();
 
   const handleChangeFilter = (type: Filter) => {
     handleGetAllComment(type);

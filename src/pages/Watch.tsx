@@ -34,6 +34,7 @@ import toast from "react-hot-toast";
 import { addActivityLog } from "../redux/asyncThunk/activityLogThunk";
 import { IUser } from "../interfaces/user";
 import ToggleShowItem from "../components/common/ToggleShowItem";
+import { socket } from "../socket";
 
 type Episode = {
   name: string;
@@ -80,6 +81,12 @@ const Watch = () => {
   useEffect(() => {
     setEpisodes(episodesFromStore.slice(0, 50));
   }, [episodesFromStore]);
+
+  useEffect(() => {
+    if (movieInfo?.name && movieInfo?.origin_name) {
+      document.title = `Đang xem ${movieInfo.name} - ${movieInfo.origin_name}`;
+    }
+  }, [movieInfo]);
 
   useEffect(() => {
     const handleInit = async () => {
@@ -319,19 +326,32 @@ const SectionRating = () => {
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const handleRefreshRating = async () => {
+    setIsLoading(true);
+    await dispatch(
+      getRatings({
+        movieSlug: params.slug as string,
+        userId: user?.id as string,
+      })
+    );
+    setIsLoading(false);
+  };
+
   useEffect(() => {
-    const handleInit = async () => {
-      setIsLoading(true);
-      await dispatch(
-        getRatings({
-          movieSlug: params.slug as string,
-          userId: user?.id as string,
-        })
-      );
-      setIsLoading(false);
+    socket.on("refreshRating", (res) => {
+      if (res?.slug === params?.slug) {
+        handleRefreshRating();
+      }
+    });
+
+    return () => {
+      socket.off("refreshRating");
     };
+  }, []);
+
+  useEffect(() => {
     if (user?.access_token || user?.refresh_token) {
-      handleInit();
+      handleRefreshRating();
     }
   }, [user]);
 
@@ -357,18 +377,14 @@ const SectionRating = () => {
 
     if (+res.payload?.EC === 0) {
       await dispatch(
-        getRatings({
-          movieSlug: params.slug as string,
-          userId: user?.id as string,
-        })
-      );
-      await dispatch(
         addActivityLog({
           userId: user?.id as string,
           action: `Đánh giá ${stars} sao phim ${movieInfo.name}`,
         })
       );
       toast.success("Cảm ơn bạn đã đánh giá phim!");
+
+      socket.emit("addRating", { slug: params?.slug });
     } else {
       toast.error(res.payload?.EM);
     }

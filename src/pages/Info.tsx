@@ -47,6 +47,12 @@ const Info = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    if (movieInfo?.name && movieInfo?.origin_name) {
+      document.title = `Thông tin phim ${movieInfo?.name} - ${movieInfo?.origin_name}`;
+    }
+  }, [movieInfo]);
+
+  useEffect(() => {
     const handleInit = async () => {
       setIsLoading(true);
       await dispatch(getMovieInfo(params.slug as string));

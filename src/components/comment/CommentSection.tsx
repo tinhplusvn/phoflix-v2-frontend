@@ -1,4 +1,4 @@
-import { Alert, Box, Button, IconButton, Tooltip, Typography } from "@mui/joy";
+import { Alert, Box, Typography } from "@mui/joy";
 import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,13 +7,13 @@ import CommentInput from "./CommentInput";
 import CommentFilter, { handleGetFilterComments } from "./CommentFilter";
 import CommentList from "./CommentList";
 import SkeletonComments from "../common/SkeletonComments";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getCommentList } from "../../redux/asyncThunk/commentThunk";
 import { useParams } from "react-router-dom";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import CircularProgress from "@mui/material/CircularProgress";
+import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import toast from "react-hot-toast";
 import RefreshButton from "../common/RefreshButton";
+import { socket } from "../../socket";
 
 export type Filter = "DESC" | "ASC";
 
@@ -37,13 +37,27 @@ const CommentSection = () => {
     (state: RootState) => state.movies.movieInfo.info
   );
   const params = useParams();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false); 
+  const mount = useRef(false);
+
+  useEffect(() => {
+    socket.on("refreshComments", (res) => {
+      if (res?.slug === params?.slug && mount?.current) {
+        handleGetAllComment("DESC");
+      }
+    });
+
+    return () => {
+      socket.off("refreshComments");
+    };
+  }, []);
 
   useEffect(() => {
     const filterComments = handleGetFilterComments();
 
     if (movieInfo?.slug) {
       handleGetAllComment(filterComments);
+      mount.current = true;
     }
   }, [movieInfo?.slug]);
 
@@ -79,7 +93,7 @@ const CommentSection = () => {
       <Alert
         color="neutral"
         startDecorator={
-          <Typography startDecorator={<ForumOutlinedIcon />} level="title-lg">
+          <Typography startDecorator={<ChatOutlinedIcon />} level="title-lg">
             {`Bình luận (${commentList?.length || 0})`}
           </Typography>
         }

@@ -20,14 +20,18 @@ import { handleGetFilterComments } from "./CommentFilter";
 import { isEmpty } from "lodash";
 import { scrollToTop } from "../../utils";
 import ToggleShowItem from "../common/ToggleShowItem";
+import { socket } from "../../socket";
 
 const CommentList = () => {
-  const { commentListStore, openModalAlertDiaLog, openModalReportComment } =
-    useSelector((state: RootState) => ({
-      commentListStore: state.comments.commentList,
-      openModalAlertDiaLog: state.comments.openModal.modalAlertDialog,
-      openModalReportComment: state.comments.openModal.modalReportComment,
-    }));
+  const commentListStore = useSelector(
+    (state: RootState) => state.comments.commentList
+  );
+  const openModalAlertDiaLog = useSelector(
+    (state: RootState) => state.comments.openModal.modalAlertDialog
+  );
+  const openModalReportComment = useSelector(
+    (state: RootState) => state.comments.openModal.modalReportComment
+  );
 
   const dispatch: AppDispatch = useDispatch();
   const params = useParams();
@@ -59,18 +63,12 @@ const CommentList = () => {
     const res = await dispatch(deleleComment(idComment as string));
 
     if (+res.payload?.EC === 0) {
-      const filterComments = handleGetFilterComments();
-
-      await dispatch(
-        getCommentList({
-          movieSlug: params.slug as string,
-          sortOrder: filterComments,
-        })
-      );
       toast.success(res.payload?.EM);
     }
     dispatch(setOpenModalAlertDialog(false));
     setIsLoading(false);
+
+    socket.emit("deleteComment", { slug: params?.slug });
   };
 
   const handleSetOpenModalAlertDialog = (open: boolean) => {
@@ -95,15 +93,9 @@ const CommentList = () => {
       })
     );
     if (+res.payload?.EC === 0) {
-      const filterComments = handleGetFilterComments();
-
-      await dispatch(
-        getCommentList({
-          movieSlug: params.slug as string,
-          sortOrder: filterComments,
-        })
-      );
       toast.success(res.payload?.EM);
+
+      socket.emit("updateComment", { slug: params?.slug });
     }
     setIndexEdit(-1);
     setIsLoading(false);

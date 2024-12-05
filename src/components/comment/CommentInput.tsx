@@ -1,7 +1,7 @@
 import { Box, Button, Textarea } from "@mui/joy";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   addComment,
@@ -11,8 +11,8 @@ import toast from "react-hot-toast";
 import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
 import { IUser } from "../../interfaces/user";
 import { IMovie } from "../../interfaces/movie";
-import { handleGetFilterComments } from "./CommentFilter";
 import { isEmpty } from "lodash";
+import { socket } from "../../socket";
 
 const CommentInput = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -23,6 +23,14 @@ const CommentInput = () => {
     (state: RootState) => state.movies.movieInfo.info
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    socket.on("typing", (data) => {});
+
+    return () => {
+      socket.off("typing");
+    };
+  }, []);
 
   const handleAddComment = async () => {
     if (!user.access_token || !user.refresh_token) {
@@ -45,14 +53,6 @@ const CommentInput = () => {
     );
 
     if (+res.payload?.EC === 0) {
-      const filterComments = handleGetFilterComments();
-
-      await dispatch(
-        getCommentList({
-          movieSlug: params.slug as string,
-          sortOrder: filterComments,
-        })
-      );
       setIsLoading(false);
       setValueComment("");
       toast.success("Bình luận thành công!");
@@ -63,6 +63,10 @@ const CommentInput = () => {
           action: `Bình luận "${valueComment}" tại phim ${movieInfo.name}`,
         })
       );
+
+      socket.emit("addComment", {
+        slug: params?.slug,
+      });
     } else {
       setIsLoading(false);
       toast.error(res.payload?.EM);

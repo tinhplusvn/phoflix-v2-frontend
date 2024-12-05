@@ -2,8 +2,10 @@ import {
   Avatar,
   Box,
   Button,
+  Chip,
   Divider,
   Textarea,
+  Tooltip,
   Typography,
 } from "@mui/joy";
 import { formatDate } from "../../utils";
@@ -70,29 +72,34 @@ const CommentItem = ({
           width: `${indexEdit !== -1 ? "100%" : "unset"}`,
         }}
       >
-        <Box>
-          <Box sx={{ display: "flex", gap: "8px", alignItems: "center" }}>
-            <Typography
-              sx={{
-                cursor: "pointer",
-              }}
-              level="title-sm"
-              color="primary"
-            >
-              <Link
-                style={{ all: "unset" }}
-                to={
-                  item?.user_id === user?.id
-                    ? "/thong-tin-nguoi-dung"
-                    : `/xem-thong-tin/${item?.user_id}`
-                }
+        <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
+            <Tooltip title="Xem trang cá nhân" color="primary" variant="soft">
+              <Typography
+                sx={{
+                  cursor: "pointer",
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
+                }}
+                level="title-sm"
+                color="primary"
               >
-                {item["user.username"]}
-              </Link>
-            </Typography>
-            <Typography level="body-xs" color="neutral">
+                <Link
+                  style={{ all: "unset" }}
+                  to={
+                    item?.user_id === user?.id
+                      ? "/thong-tin-nguoi-dung"
+                      : `/xem-thong-tin/${item?.user_id}`
+                  }
+                >
+                  {item["user.username"]}
+                </Link>
+              </Typography>
+            </Tooltip>
+            <Chip color="neutral" size="sm">
               {formatDate(item?.createdAt)}
-            </Typography>
+            </Chip>
           </Box>
           {index !== indexEdit ? (
             <Typography
