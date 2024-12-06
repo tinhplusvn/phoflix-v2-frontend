@@ -2,7 +2,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  useParams,
 } from "react-router-dom";
 import publicRoutes from "./routes";
 import DefaultLayout from "./components/layout/DefaultLayout";
@@ -10,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "./redux/store";
 import { useEffect } from "react";
 import { getUserAccount } from "./redux/asyncThunk/userThunk";
-import toast from "react-hot-toast";
 import { useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { setIsMobile, setWidth } from "./redux/slice/systemSlice";

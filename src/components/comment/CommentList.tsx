@@ -4,19 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import CommentItem from "./CommentItem";
 import {
+  setIdComment,
+  setIndexEdit,
   setOpenModalAlertDialog,
   setOpenModalReportComment,
 } from "../../redux/slice/commentsSlice";
 import {
   deleleComment,
-  getCommentList,
   updateComment,
 } from "../../redux/asyncThunk/commentThunk";
 import ModalAlertDialog from "../modals/ModalAlertDialog";
 import ModalReportComment from "../modals/ModalReportComment";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import { handleGetFilterComments } from "./CommentFilter";
 import { isEmpty } from "lodash";
 import { scrollToTop } from "../../utils";
 import ToggleShowItem from "../common/ToggleShowItem";
@@ -32,13 +32,15 @@ const CommentList = () => {
   const openModalReportComment = useSelector(
     (state: RootState) => state.comments.openModal.modalReportComment
   );
+  const indexEdit = useSelector((state: RootState) => state.comments.indexEdit);
+  const valueEditComment = useSelector(
+    (state: RootState) => state.comments.valueEditComment
+  );
+  const idComment = useSelector((state: RootState) => state.comments.idComment);
 
   const dispatch: AppDispatch = useDispatch();
   const params = useParams();
   const [commentList, setCommentList] = useState<any>([]);
-  const [indexEdit, setIndexEdit] = useState<number>(-1);
-  const [valueEditComment, setValueEditComment] = useState<string>("");
-  const [idComment, setIdComment] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [typeShow, setTypeShow] = useState<string>("collapse");
 
@@ -53,18 +55,15 @@ const CommentList = () => {
     type === "collapse" && scrollToTop();
   };
 
-  const handleEditComment = (index: number, content: string) => {
-    setIndexEdit(index);
-    setValueEditComment(content);
-  };
-
   const handleDeleteComment = async () => {
     setIsLoading(true);
+
     const res = await dispatch(deleleComment(idComment as string));
 
     if (+res.payload?.EC === 0) {
       toast.success(res.payload?.EM);
     }
+
     dispatch(setOpenModalAlertDialog(false));
     setIsLoading(false);
 
@@ -97,8 +96,12 @@ const CommentList = () => {
 
       socket.emit("updateComment", { slug: params?.slug });
     }
-    setIndexEdit(-1);
+    dispatch(setIndexEdit(-1));
     setIsLoading(false);
+  };
+
+  const handleSetIdComment = (idComment: string) => {
+    dispatch(setIdComment(idComment));
   };
 
   return (
@@ -114,21 +117,14 @@ const CommentList = () => {
           }}
         >
           {commentList.map((item: any, index: any) => (
-            <CommentItem
-              key={index}
-              index={index}
-              item={item}
-              isLoading={isLoading}
-              indexEdit={indexEdit}
-              valueEditComment={valueEditComment}
-              setIndexEdit={setIndexEdit}
-              setValueEditComment={setValueEditComment}
-              handleEditComment={handleEditComment}
-              handleSetOpenModalAlertDialog={handleSetOpenModalAlertDialog}
-              handleSetOpenModalReportComment={handleSetOpenModalReportComment}
-              handSaveEditComment={handSaveEditComment}
-              setIdComment={setIdComment}
-            />
+            <Box key={index}>
+                <CommentItem
+                  index={index}
+                  item={item}
+                  isLoading={isLoading}
+                  handSaveEditComment={handSaveEditComment}
+                />
+            </Box>
           ))}
         </ul>
         {commentListStore.length > 5 && (
@@ -156,7 +152,7 @@ const CommentList = () => {
 
       <ModalReportComment
         idComment={idComment}
-        setIdComment={setIdComment}
+        setIdComment={handleSetIdComment}
         open={openModalReportComment}
         setOpen={handleSetOpenModalReportComment}
       />

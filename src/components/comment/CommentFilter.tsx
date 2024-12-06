@@ -2,36 +2,30 @@ import { Alert, Option, Select, Typography } from "@mui/joy";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useEffect, useState } from "react";
 import { Filter } from "./CommentSection";
-import { socket } from "../../socket";
-import { useParams } from "react-router-dom";
+import { AppDispatch, RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { stat } from "fs";
+import { setTypeFilter } from "../../redux/slice/commentsSlice";
 
 interface IProps {
   handleGetAllComment: (typeFilter: Filter) => Promise<void>;
 }
 
-export const handleGetFilterComments = () => {
-  let filterComments: Filter = JSON.parse(
-    localStorage.getItem("filter-comments") as Filter
-  );
-  filterComments =
-    filterComments === "DESC" || filterComments === "ASC"
-      ? filterComments
-      : "DESC";
-  localStorage.setItem("filter-comments", JSON.stringify(filterComments));
-  return filterComments;
-};
+
 
 const CommentFilter = ({ handleGetAllComment }: IProps) => {
-  const [typeFilter, setTypeFilter] = useState<Filter>(
-    handleGetFilterComments()
+
+  const typeFilter = useSelector(
+    (state: RootState) => state.comments.typeFilter
   );
-  const params = useParams();
+  const dispatch: AppDispatch = useDispatch();
 
   const handleChangeFilter = (type: Filter) => {
     handleGetAllComment(type);
-    setTypeFilter(type);
-    localStorage.setItem("filter-comments", JSON.stringify(type));
+    dispatch(setTypeFilter(type))
   };
+
+  useEffect(() => {}, []);
 
   return (
     <Alert

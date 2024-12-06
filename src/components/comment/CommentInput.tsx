@@ -24,13 +24,6 @@ const CommentInput = () => {
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    socket.on("typing", (data) => {});
-
-    return () => {
-      socket.off("typing");
-    };
-  }, []);
 
   const handleAddComment = async () => {
     if (!user.access_token || !user.refresh_token) {

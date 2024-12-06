@@ -3,6 +3,10 @@ export interface IGetCommentList {
   sortOrder: "DESC" | "ASC";
 }
 
+export interface  ITypeFilter {
+    typeFilter: "DESC" | "ASC";
+}
+
 export interface IAddComment {
   userId: string;
   movieSlug: string;

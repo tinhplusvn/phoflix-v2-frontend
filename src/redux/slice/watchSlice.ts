@@ -1,20 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IMovie } from "../../interfaces/movie";
 
-
 interface initialState {
   watchedEpisodes: IMovie[];
+  currentEpisode: any;
 }
 
 const initialState: initialState = {
   watchedEpisodes:
     JSON.parse(localStorage.getItem("watched-episodes") as string) ?? [],
+  currentEpisode: {
+    name: "",
+    slug: "",
+    filename: "",
+    link_embed: "",
+    link_m3u8: "",
+  },
 };
 
 export const watchSlice = createSlice({
   name: "watchSlice",
   initialState,
   reducers: {
+    setCurrentEpisode: (state, action) => {
+        state.currentEpisode = action.payload;
+    },
     updateWatchedEpisodes: (state, action) => {
       const index = state.watchedEpisodes.findIndex(
         (item) => item.slug === action.payload.slug
@@ -35,6 +45,6 @@ export const watchSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { updateWatchedEpisodes } = watchSlice.actions;
+export const { updateWatchedEpisodes, setCurrentEpisode } = watchSlice.actions;
 
 export default watchSlice.reducer;

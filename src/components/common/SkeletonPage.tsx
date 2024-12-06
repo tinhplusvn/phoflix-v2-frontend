@@ -1,8 +1,6 @@
 import { Box, Skeleton } from "@mui/joy";
 import SkeletonMovie from "./SkeletonMovies";
 
-type Iprops = "info" | "watch" | "detail" | "search" | "viewing-history";
-
 const SkeletonPage = ({ page }: { page: string }) => {
   return (
     <>
@@ -23,7 +21,7 @@ const SkeletonPage = ({ page }: { page: string }) => {
             width: "100%",
             display: "flex",
             flexDirection: "column",
-            gap: "23px",
+            gap: "24px",
           }}
         >
           <Skeleton animation="wave" variant="text" width="50%" />
@@ -32,7 +30,8 @@ const SkeletonPage = ({ page }: { page: string }) => {
             sx={{
               width: {
                 xs: "calc(100vw - 32px)",
-                md: "calc(100vw - 64px)",
+                sm: "calc(100vw - 48px)",
+                md: "calc(100vw - 82px)",
               },
               height: "360px",
               borderRadius: "6px",

@@ -9,51 +9,48 @@ import {
   Typography,
 } from "@mui/joy";
 import { formatDate } from "../../utils";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import { IUser } from "../../interfaces/user";
 import { Link } from "react-router-dom";
 import avatarImg from "../../images/avatar.jpg";
+import {
+  setEditComment,
+  setIdComment,
+  setIndexEdit,
+  setOpenModalAlertDialog,
+  setOpenModalReportComment,
+  setValueEditComment,
+} from "../../redux/slice/commentsSlice";
 
 interface CommentItem {
   item: any;
   index: number;
-  indexEdit: number;
   isLoading: boolean;
-  valueEditComment: string;
-  setValueEditComment: (content: string) => void;
-  setIndexEdit: (index: number) => void;
-  setIdComment: (id: string) => void;
-  handleSetOpenModalAlertDialog: (open: boolean) => void;
-  handleSetOpenModalReportComment: (open: boolean) => void;
-  handleEditComment: (index: number, content: string) => void;
   handSaveEditComment: (idComment: string) => void;
 }
 
 const CommentItem = ({
   item,
   index,
-  indexEdit,
   isLoading,
-  valueEditComment,
-  setValueEditComment,
-  setIndexEdit,
-  setIdComment,
-  handleSetOpenModalAlertDialog,
-  handleSetOpenModalReportComment,
-  handleEditComment,
   handSaveEditComment,
 }: CommentItem) => {
+  const dispatch: AppDispatch = useDispatch();
   const user: IUser = useSelector((state: RootState) => state.users.user);
+  const indexEdit = useSelector((state: RootState) => state.comments.indexEdit);
+  const valueEditComment = useSelector(
+    (state: RootState) => state.comments.valueEditComment
+  );
 
   const handleOpenModalAlerDialog = (idComment: string) => {
-    handleSetOpenModalAlertDialog(true);
-    setIdComment(idComment);
+    dispatch(setOpenModalAlertDialog(true));
+    dispatch(setIdComment(idComment));
   };
 
   const handleOpenModalReportComment = (idComment: string) => {
-    handleSetOpenModalReportComment(true);
-    setIdComment(idComment);
+    dispatch(setOpenModalReportComment(true));
+    dispatch(setIdComment(idComment));
   };
 
   return (
@@ -112,7 +109,7 @@ const CommentItem = ({
             </Typography>
           ) : (
             <Textarea
-              onChange={(e) => setValueEditComment(e.target.value)}
+              onChange={(e) => dispatch(setValueEditComment(e.target.value))}
               sx={{ marginTop: "12px" }}
               value={valueEditComment}
               variant="outlined"
@@ -133,7 +130,9 @@ const CommentItem = ({
                   Xoá
                 </Button>
                 <Button
-                  onClick={() => handleEditComment(index, item.content)}
+                  onClick={() =>
+                    dispatch(setEditComment({ index, content: item.content }))
+                  }
                   variant="plain"
                   color="primary"
                   size="sm"
@@ -156,7 +155,7 @@ const CommentItem = ({
         ) : (
           <Box sx={{ display: "flex", gap: "12px" }}>
             <Button
-              onClick={() => setIndexEdit(-1)}
+              onClick={() => dispatch(setIndexEdit(-1))}
               variant="plain"
               color="neutral"
               size="sm"

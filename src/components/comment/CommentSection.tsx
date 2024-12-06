@@ -1,10 +1,9 @@
-import { Alert, Box, Typography } from "@mui/joy";
-import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
+import { Alert, Box, Skeleton, Typography } from "@mui/joy";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
 import CommentInput from "./CommentInput";
-import CommentFilter, { handleGetFilterComments } from "./CommentFilter";
+import CommentFilter from "./CommentFilter";
 import CommentList from "./CommentList";
 import SkeletonComments from "../common/SkeletonComments";
 import { useEffect, useRef, useState } from "react";
@@ -14,10 +13,11 @@ import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import toast from "react-hot-toast";
 import RefreshButton from "../common/RefreshButton";
 import { socket } from "../../socket";
+import { setTypeFilter } from "../../redux/slice/commentsSlice";
 
 export type Filter = "DESC" | "ASC";
 
-interface IComment {
+interface IComments {
   id?: string;
   content?: string;
   createdAt?: string;
@@ -30,20 +30,21 @@ interface IComment {
 
 const CommentSection = () => {
   const dispatch: AppDispatch = useDispatch();
-  const commentList = useSelector(
+  const commentList: IComments[] = useSelector(
     (state: RootState) => state.comments.commentList
   );
   const movieInfo = useSelector(
     (state: RootState) => state.movies.movieInfo.info
   );
   const params = useParams();
-  const [isLoading, setIsLoading] = useState<boolean>(false); 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const mount = useRef(false);
 
   useEffect(() => {
     socket.on("refreshComments", (res) => {
       if (res?.slug === params?.slug && mount?.current) {
         handleGetAllComment("DESC");
+        dispatch(setTypeFilter("DESC"));
       }
     });
 
@@ -53,10 +54,8 @@ const CommentSection = () => {
   }, []);
 
   useEffect(() => {
-    const filterComments = handleGetFilterComments();
-
     if (movieInfo?.slug) {
-      handleGetAllComment(filterComments);
+      handleGetAllComment("DESC");
       mount.current = true;
     }
   }, [movieInfo?.slug]);
@@ -93,9 +92,13 @@ const CommentSection = () => {
       <Alert
         color="neutral"
         startDecorator={
-          <Typography startDecorator={<ChatOutlinedIcon />} level="title-lg">
-            {`Bình luận (${commentList?.length || 0})`}
-          </Typography>
+          isLoading ? (
+            <Skeleton variant="text" level="h3" width={"180px"} />
+          ) : (
+            <Typography startDecorator={<ChatOutlinedIcon />} level="title-lg">
+              {`Bình luận (${commentList?.length || 0})`}
+            </Typography>
+          )
         }
         endDecorator={
           <RefreshButton
@@ -104,8 +107,7 @@ const CommentSection = () => {
             handleRefresh={handleRefresh}
           />
         }
-      ></Alert>
-
+      />
       <CommentInput />
 
       {isLoading ? (
