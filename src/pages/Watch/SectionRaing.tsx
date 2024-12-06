@@ -7,10 +7,11 @@ import { addMovieRating, getRatings } from "../../redux/asyncThunk/ratingThunk";
 import { socket } from "../../socket";
 import toast from "react-hot-toast";
 import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
-import { Alert, Box, Chip, Skeleton, Typography } from "@mui/joy";
+import { Alert, Box, Chip, Skeleton, Tooltip, Typography } from "@mui/joy";
 import PollOutlinedIcon from "@mui/icons-material/PollOutlined";
 import { Rating } from "@mui/material";
-
+import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
+import ModalListUserRating from "../../components/modals/ModalListUserRating";
 
 const SectionRating = () => {
   const [stars, setStars] = useState<number>(0);
@@ -22,6 +23,11 @@ const SectionRating = () => {
     (state: RootState) => state.movies.movieInfo.info
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log("rating", rating);
+  }, [rating]);
 
   const handleRefreshRating = async () => {
     setIsLoading(true);
@@ -37,6 +43,7 @@ const SectionRating = () => {
   useEffect(() => {
     socket.on("refreshRating", (res) => {
       if (res?.slug === params?.slug) {
+        console.log(">>> user", user);
         handleRefreshRating();
       }
     });
@@ -53,7 +60,7 @@ const SectionRating = () => {
   }, [user]);
 
   useEffect(() => {
-    setStars(rating.ratingWidthUser);
+    setStars(rating?.ratingWidthUser);
   }, [rating]);
 
   const handleAddRating = async (stars: number) => {
@@ -89,59 +96,79 @@ const SectionRating = () => {
   };
 
   return (
-    <Alert
-      sx={{
-        flexDirection: "column",
-        gap: "12px",
-      }}
-    >
-      <Box
+    <>
+      <Alert
         sx={{
-          display: "flex",
+          flexDirection: "column",
           gap: "12px",
-          alignItems: "center",
         }}
       >
-        <Typography startDecorator={<PollOutlinedIcon />} level="title-lg">
-          Đánh giá phim
-        </Typography>
-        {isLoading ? (
-          <Skeleton variant="text" level="body-xs" width={50} height={20} />
-        ) : (
-          <Chip color="primary">{rating.averageRating}/5 sao</Chip>
-        )}
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          gap: "12px",
-          justifyContent: "center",
-          flex: "1",
-          alignItems: "center",
-        }}
-      >
-        {isLoading ? (
-          <>
-            <Skeleton variant="text" level="h3" width={100} />
-            <Skeleton variant="text" level="body-xs" width={100} height={20} />
-          </>
-        ) : (
-          <>
-            <Rating
-              onChange={(event, value) => handleAddRating(value as number)}
-              name="half-rating"
-              value={stars}
-              precision={1}
-            />
-            <Typography level="title-sm" color="neutral">
-              {rating.countRating} lượt đánh giá
-            </Typography>
-          </>
-        )}
-      </Box>
-    </Alert>
+        <Box
+          sx={{
+            display: "flex",
+            gap: "12px",
+            alignItems: "center",
+          }}
+        >
+          <Typography startDecorator={<PollOutlinedIcon />} level="title-lg">
+            Đánh giá phim
+          </Typography>
+          {isLoading ? (
+            <Skeleton variant="text" level="body-xs" width={50} height={20} />
+          ) : (
+            <Chip endDecorator={<StarBorderRoundedIcon />} color="primary">
+              {rating.averageRating} / 5.0
+            </Chip>
+          )}
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            gap: "12px",
+            justifyContent: "center",
+            flex: "1",
+            alignItems: "center",
+          }}
+        >
+          {isLoading ? (
+            <>
+              <Skeleton variant="text" level="h3" width={100} />
+              <Skeleton
+                variant="text"
+                level="body-xs"
+                width={100}
+                height={20}
+              />
+            </>
+          ) : (
+            <>
+              <Rating
+                onChange={(event, value) => handleAddRating(value as number)}
+                name="half-rating"
+                value={stars}
+                precision={1}
+              />
+             <Tooltip title="Danh sách đánh giá">
+                  <Typography
+                    sx={{
+                      cursor: "pointer",
+                      "&:hover": { textDecoration: "underline" },
+                    }}
+                    onClick={() => setOpenModal(true)}
+                    level="title-sm"
+                    color="neutral"
+                  >
+                    {rating.countRating} lượt đánh giá
+                  </Typography>
+             </Tooltip>
+            </>
+          )}
+        </Box>
+      </Alert>
+
+      <ModalListUserRating open={openModal} setOpen={setOpenModal} />
+    </>
   );
 };
-
 
 export default SectionRating;

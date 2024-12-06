@@ -1,7 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getRatings } from "../asyncThunk/ratingThunk";
 
-const initialState: any = {
+interface IRating {
+  listUserRating: {
+    username: string;
+    rating: number;
+  }[];
+  averageRating: number;
+  countRating: number;
+  ratingWidthUser: number;
+}
+
+const initialState: IRating = {
+  listUserRating: [],
   averageRating: 0,
   countRating: 0,
   ratingWidthUser: 0,
@@ -18,6 +29,7 @@ export const ratingSlice = createSlice({
         state.averageRating = action.payload?.DT?.averageRating ?? 0;
         state.countRating = action.payload?.DT?.countRating ?? 0;
         state.ratingWidthUser = action.payload?.DT?.ratingWidthUser ?? 0;
+        state.listUserRating = action.payload?.DT?.listUserRating ?? [];
       })
       .addCase(getRatings.rejected, (state) => {});
   },

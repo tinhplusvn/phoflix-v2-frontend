@@ -9,7 +9,7 @@ import SkeletonPage from "../../components/common/SkeletonPage";
 import MovieSuggestions from "../../components/movie/MovieSuggestions";
 import BreadcrumbsCustom from "../../components/BreadcrumbsCustom";
 import CommentSection from "../../components/comment/CommentSection";
-import SectionDownload from "./SectionDowload";
+import SectionDownload from "./SectionDownload";
 import SectionRating from "./SectionRaing";
 import SectionListEpisodes from "./SectionListEpisodes";
 import SectionVideoPlayer from "./SectionVideoPlayer";
