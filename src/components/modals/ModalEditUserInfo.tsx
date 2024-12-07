@@ -4,10 +4,8 @@ import {
   Input,
   Modal,
   ModalClose,
-  Option,
   Radio,
   RadioGroup,
-  Select,
   Sheet,
   Typography,
 } from "@mui/joy";
@@ -22,13 +20,11 @@ import {
   getActivityLog,
 } from "../../redux/asyncThunk/activityLogThunk";
 import { IUser } from "../../interfaces/user";
-
 interface IProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   dataUser: any;
 }
-
 interface UserInfo {
   username: string;
   email: string;
@@ -61,12 +57,12 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
 
   useEffect(() => {
     setUserInfo({
-      username: dataUser.username,
-      email: dataUser.email,
-      phone_number: dataUser.phone_number,
-      gender: dataUser.gender,
-      address: dataUser.address,
-      type_account: dataUser.type_account,
+      username: dataUser?.username,
+      email: dataUser?.email,
+      phone_number: dataUser?.phone_number,
+      gender: dataUser?.gender,
+      address: dataUser?.address,
+      type_account: dataUser?.type_account,
     });
   }, [dataUser]);
 
@@ -80,12 +76,12 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
     setIsLoading(true);
     const res = await dispatch(
       updateUser({
-        email: userInfo.email,
-        username: userInfo.username,
-        gender: userInfo.gender,
-        address: userInfo.address,
-        phone_number: userInfo.phone_number,
-        type_account: userInfo.type_account as "LOCAL" | "GOOGLE",
+        email: userInfo?.email,
+        username: userInfo?.username,
+        gender: userInfo?.gender,
+        address: userInfo?.address,
+        phone_number: userInfo?.phone_number,
+        type_account: userInfo?.type_account as "LOCAL" | "GOOGLE",
       })
     );
 
@@ -110,11 +106,16 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
     <Modal
       open={open}
       onClose={() => setOpen(false)}
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
       <Sheet
         variant="outlined"
         sx={{
+          animation: "scaleIn 0.3s",
           minWidth: {
             xs: "90%",
             sm: "500px",

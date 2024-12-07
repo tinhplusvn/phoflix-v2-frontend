@@ -25,10 +25,6 @@ const SectionRating = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log("rating", rating);
-  }, [rating]);
-
   const handleRefreshRating = async () => {
     setIsLoading(true);
     await dispatch(
@@ -148,19 +144,19 @@ const SectionRating = () => {
                 value={stars}
                 precision={1}
               />
-             <Tooltip title="Danh sách đánh giá">
-                  <Typography
-                    sx={{
-                      cursor: "pointer",
-                      "&:hover": { textDecoration: "underline" },
-                    }}
-                    onClick={() => setOpenModal(true)}
-                    level="title-sm"
-                    color="neutral"
-                  >
-                    {rating.countRating} lượt đánh giá
-                  </Typography>
-             </Tooltip>
+              <Tooltip title="Danh sách đánh giá">
+                <Typography
+                  sx={{
+                    cursor: "pointer",
+                    "&:hover": { textDecoration: "underline" },
+                  }}
+                  onClick={() => setOpenModal(true)}
+                  level="title-sm"
+                  color="neutral"
+                >
+                  {rating.countRating} lượt đánh giá
+                </Typography>
+              </Tooltip>
             </>
           )}
         </Box>

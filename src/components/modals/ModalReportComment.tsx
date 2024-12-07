@@ -67,6 +67,7 @@ const ModalReportComment = ({
       <Sheet
         variant="outlined"
         sx={{
+          animation: "scaleIn 0.3s",
           minWidth: {
             xs: "90%",
             sm: "500px",

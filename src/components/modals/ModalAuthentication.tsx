@@ -5,7 +5,6 @@ import ForgotPassword from "../authentication/ForgotPassword";
 import { AppDispatch } from "../../redux/store";
 import { useDispatch } from "react-redux";
 import { setType } from "../../redux/slice/systemSlice";
-
 interface IProps {
   type: string;
   open: boolean;
@@ -14,7 +13,6 @@ interface IProps {
 
 const ModalAuthentication = ({ type, open, setOpen }: IProps) => {
   const dispatch: AppDispatch = useDispatch();
-
 
   const handleClose = () => {
     if (type === "forgot-password" || type === "register") {
@@ -33,21 +31,24 @@ const ModalAuthentication = ({ type, open, setOpen }: IProps) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        backdropFilter: "unset",
       }}
     >
       <Sheet
         variant="outlined"
         sx={{
+          animation: "scaleIn 0.3s",
           minWidth: {
             xs: "80%",
             sm: "500px",
           },
           maxWidth: {
-            xs:"90%"
+            xs: "90%",
           },
           borderRadius: "md",
           p: 3,
           boxShadow: "lg",
+          backdropFilter: "unset"
         }}
       >
         <ModalClose variant="plain" sx={{ m: 1 }} />

@@ -5,7 +5,7 @@ import {
   DialogTitle,
   Divider,
   Modal,
-  ModalDialog,
+  Sheet,
 } from "@mui/joy";
 
 interface IProps {
@@ -26,12 +26,24 @@ const ModalAlertDialog = ({
   isLoading,
 }: IProps) => {
   return (
-    <Modal open={open} onClose={() => setOpen(false)}>
-      <ModalDialog variant="outlined" role="alertdialog">
+    <Modal
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      open={open}
+      onClose={() => setOpen(false)}
+    >
+      <Sheet
+        variant="outlined"
+        sx={{
+          animation: "scaleIn 0.3s",
+          borderRadius: "md",
+          p: 2,
+          boxShadow: "lg",
+        }}
+      >
         <DialogTitle>{title}</DialogTitle>
-        <Divider />
+        <Divider sx={{ margin: "12px -16px" }} />
         <DialogContent>{content}</DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ marginTop: "32px" }}>
           <Button
             loading={isLoading}
             variant="solid"
@@ -41,6 +53,7 @@ const ModalAlertDialog = ({
             Xác nhận
           </Button>
           <Button
+            sx={{ marginRight: "12px" }}
             variant="plain"
             color="neutral"
             onClick={() => setOpen(false)}
@@ -48,7 +61,7 @@ const ModalAlertDialog = ({
             Huỷ bỏ
           </Button>
         </DialogActions>
-      </ModalDialog>
+      </Sheet>
     </Modal>
   );
 };

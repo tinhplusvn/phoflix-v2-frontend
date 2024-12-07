@@ -32,6 +32,7 @@ const ModalInstructDowload = ({ open, setOpen }: IProps) => {
       <Sheet
         variant="outlined"
         sx={{
+          animation: "scaleIn 0.3s",
           width: { xs: "90%", md: "600px" },
           borderRadius: "md",
           padding: {

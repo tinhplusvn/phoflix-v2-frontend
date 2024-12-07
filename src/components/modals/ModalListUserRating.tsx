@@ -26,6 +26,7 @@ const ModalListUserRating = ({ open, setOpen }: ModalListUserRatingProps) => {
       <Sheet
         variant="outlined"
         sx={{
+          animation: "scaleIn 0.3s",
           maxWidth: "500px",
           minWidth: {
             xs: "90%",
@@ -43,7 +44,7 @@ const ModalListUserRating = ({ open, setOpen }: ModalListUserRatingProps) => {
             gap: "12px",
             minHeight: "300px",
             maxHeight: "500px",
-            overflowY: "auto"
+            overflowY: "auto",
           }}
         >
           {rating?.listUserRating.length === 0 ? (

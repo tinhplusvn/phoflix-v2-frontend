@@ -9,7 +9,6 @@ export interface IUser {
   type_account?: string;
   refresh_token?: string;
   access_token?: string;
-  avatar?: string;
   createdAt?: string;
 }
 

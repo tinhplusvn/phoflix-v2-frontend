@@ -6,6 +6,7 @@ import {
   Input,
   Modal,
   ModalDialog,
+  Sheet,
   Tooltip,
   Typography,
 } from "@mui/joy";
@@ -28,10 +29,7 @@ import {
 } from "../../redux/asyncThunk/searchHistoryThunk";
 import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
 import SkeletonModalSearch from "../common/SkeletonModalSearch";
-import { searchMovie, searchPreview } from "../../redux/asyncThunk/moviesThunk";
-import ShowBackground from "../common/ShowBackground";
-import ImagaeSearchNotFound from "../../images/search-not-found.png";
-import { ButtonBase } from "@mui/material";
+import { searchPreview } from "../../redux/asyncThunk/moviesThunk";
 
 type ModalSearch = {
   open: boolean;
@@ -168,8 +166,9 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
       onClose={() => setOpen(false)}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
-      <ModalDialog
+      <Sheet
         sx={{
+          animation: "scaleIn 0.3s",
           minWidth: {
             xs: "90%",
             sm: "640px",
@@ -178,8 +177,10 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
             xs: "90%",
             sm: "680px",
           },
+          borderRadius: "md",
+          p: 3,
+          boxShadow: "lg",
         }}
-        layout="center"
       >
         <Box>
           <Input
@@ -268,7 +269,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
             )}
           </Box>
         )}
-      </ModalDialog>
+      </Sheet>
     </Modal>
   );
 };
@@ -364,7 +365,7 @@ const SearchPreview = ({
       className="search-list"
       sx={{
         overflowY: "auto",
-        minHeight: "360px",
+        height: "70vh",
       }}
     >
       {movies?.length > 0 && (
