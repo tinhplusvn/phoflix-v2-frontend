@@ -120,6 +120,10 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
             xs: "90%",
             sm: "500px",
           },
+          maxWidth: {
+            xs: "90%",
+            sm: "520px",
+          },
           borderRadius: "md",
           p: 3,
           boxShadow: "lg",
