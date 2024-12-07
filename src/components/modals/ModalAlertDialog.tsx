@@ -34,9 +34,13 @@ const ModalAlertDialog = ({
       <Sheet
         variant="outlined"
         sx={{
-          maxWidth:{
-            xs: "90vw",
-            md: "360px"
+          minWidth: {
+            xs: "90%",
+            sm: "360px",
+          },
+          maxWidth: {
+            xs: "90%",
+            sm: "380px",
           },
           animation: "scaleIn 0.3s",
           borderRadius: "md",
