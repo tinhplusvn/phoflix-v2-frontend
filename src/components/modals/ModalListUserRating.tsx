@@ -27,7 +27,10 @@ const ModalListUserRating = ({ open, setOpen }: ModalListUserRatingProps) => {
         variant="outlined"
         sx={{
           animation: "scaleIn 0.3s",
-          maxWidth: "500px",
+          maxWidth: {
+            xs: "90%",
+            sm: "420px",
+          },
           minWidth: {
             xs: "90%",
             sm: "400px",
