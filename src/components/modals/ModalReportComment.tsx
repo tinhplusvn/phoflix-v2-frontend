@@ -68,7 +68,7 @@ const ModalReportComment = ({
         variant="outlined"
         sx={{
           animation: "scaleIn 0.3s",
-          minWidth: {
+          width: {
             xs: "90%",
             sm: "500px",
           },
