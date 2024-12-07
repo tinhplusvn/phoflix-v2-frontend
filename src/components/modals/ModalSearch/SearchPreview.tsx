@@ -1,0 +1,123 @@
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { Alert, Box, Button, Typography } from "@mui/joy";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import SearchIcon from "@mui/icons-material/Search";
+
+interface SearchPreviewProps {
+  handleClickSearchPreview: (slug: string) => void;
+  handleSeeAll: () => void;
+}
+
+const SearchPreview = ({
+  handleClickSearchPreview,
+  handleSeeAll,
+}: SearchPreviewProps) => {
+  const movies = useSelector((state: RootState) => state.movies.searchPreview);
+  const isMobile = useSelector((state: RootState) => state.system.isMobile);
+
+  return (
+    <Box
+      className="search-list"
+      sx={{
+        overflowY: "auto",
+        maxHeight: {
+          xs: "calc(100vh - 300px)",
+          sm: "calc(100vh - 200px)",
+        },  
+      }}
+    >
+      {movies?.length > 0 && (
+        <Alert
+          startDecorator={<SearchIcon />}
+          color="primary"
+          sx={{ marginBottom: "12px" }}
+        >
+          Top {movies?.length} bộ phim phù hợp!
+        </Alert>
+      )}
+      {movies?.map((movie: any, index: number) => (
+        <Box
+          className="search-item"
+          onClick={() => handleClickSearchPreview(movie?.slug)}
+          key={index}
+          sx={{ display: "flex", gap: "12px", alignItems: "start !important" }}
+        >
+          <Box
+            sx={{
+              flex: 1,
+            }}
+          >
+            <img
+              src={
+                (movie?.poster_url as string)?.includes(
+                  process.env.REACT_APP_API_HINH_ANH as string
+                )
+                  ? movie?.poster_url
+                  : `${process.env.REACT_APP_API_HINH_ANH as string}/${
+                      movie?.poster_url
+                    }`
+              }
+              alt={movie?.name}
+            />
+          </Box>
+          <Box
+            sx={{
+              width: {
+                xs: "calc(100% - 92px)",
+                sm: "calc(100% - 132px)",
+              },
+            }}
+          >
+            <Typography
+              sx={{
+                width: "100%",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
+              color="primary"
+              level={isMobile ? "title-sm" : "title-md"}
+            >
+              {movie?.name}
+            </Typography>
+            <Typography
+              sx={{
+                width: "100%",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
+              level={isMobile ? "body-xs" : "body-md"}
+            >
+              {movie?.origin_name}
+            </Typography>
+            <Typography level={isMobile ? "body-xs" : "body-md"}>
+              {movie?.time}
+            </Typography>
+            <Typography level={isMobile ? "body-xs" : "body-md"}>
+              {movie?.lang}
+            </Typography>
+            <Typography level={isMobile ? "body-xs" : "body-md"}>
+              {movie?.quality}
+            </Typography>
+          </Box>
+        </Box>
+      ))}
+
+      {movies?.length >= 10 && (
+        <Button
+          size="sm"
+          variant="soft"
+          sx={{ margin: "16px auto 0 auto" }}
+          endDecorator={<ChevronRightIcon />}
+          onClick={() => handleSeeAll()}
+        >
+          Xem tất cả kết quả
+        </Button>
+      )}
+    </Box>
+  );
+};
+
+export default SearchPreview;

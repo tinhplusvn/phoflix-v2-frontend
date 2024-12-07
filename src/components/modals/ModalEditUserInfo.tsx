@@ -20,6 +20,7 @@ import {
   getActivityLog,
 } from "../../redux/asyncThunk/activityLogThunk";
 import { IUser } from "../../interfaces/user";
+import ModalContainer from "./ModalContainer";
 interface IProps {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -103,120 +104,109 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
   };
 
   return (
-    <Modal
+    <ModalContainer
       open={open}
-      onClose={() => setOpen(false)}
+      setOpen={setOpen}
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        animation: "scaleIn 0.3s",
+        minWidth: {
+          xs: "90%",
+          sm: "500px",
+        },
+        maxWidth: {
+          xs: "90%",
+          sm: "520px",
+        },
+        borderRadius: "md",
+        p: 3,
+        boxShadow: "lg",
       }}
     >
-      <Sheet
-        variant="outlined"
+      <Box
         sx={{
-          animation: "scaleIn 0.3s",
-          minWidth: {
-            xs: "90%",
-            sm: "500px",
-          },
-          maxWidth: {
-            xs: "90%",
-            sm: "520px",
-          },
-          borderRadius: "md",
-          p: 3,
-          boxShadow: "lg",
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px",
+          maxHeight: "80vh",
+          overflowY: "auto",
+          overflowX: "hidden",
         }}
       >
-        <ModalClose variant="plain" sx={{ m: 1 }} />
-        <Typography level="h4" color="primary">
-          Chỉnh sửa thông tin
-        </Typography>
+        <Box>
+          <Typography sx={{ marginBottom: "12px" }} level="title-md">
+            Tên người dùng
+          </Typography>
+          <Input
+            onChange={(e) => handleOnchangeInput(e.target.value, "username")}
+            value={userInfo.username || ""}
+          />
+        </Box>
+        <Box>
+          <Typography sx={{ marginBottom: "12px" }} level="title-md">
+            Email
+          </Typography>
+          <Input disabled value={userInfo.email || ""} />
+        </Box>
+        <Box>
+          <Typography sx={{ marginBottom: "12px" }} level="title-md">
+            Số điện thoại
+          </Typography>
+          <Input
+            onChange={(e) =>
+              handleOnchangeInput(e.target.value, "phone_number")
+            }
+            value={userInfo.phone_number || ""}
+          />
+        </Box>
+        <Box>
+          <Typography sx={{ marginBottom: "12px" }} level="title-md">
+            Giới tính
+          </Typography>
+          <RadioGroup
+            value={userInfo.gender}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              handleOnchangeInput(event.target.value, "gender")
+            }
+          >
+            <Radio value="Nam" label="Nam" />
+            <Radio value="Nữ" label="Nữ" />
+          </RadioGroup>
+        </Box>
+        <Box>
+          <Typography sx={{ marginBottom: "12px" }} level="title-md">
+            Địa chỉ
+          </Typography>
+          <Input
+            onChange={(e) => handleOnchangeInput(e.target.value, "address")}
+            value={userInfo.address || ""}
+          />
+        </Box>
         <Box
           sx={{
-            marginTop: "24px",
             display: "flex",
-            flexDirection: "column",
             gap: "12px",
+            justifyContent: "end",
+            marginTop: "24px",
           }}
         >
-          <Box>
-            <Typography sx={{ marginBottom: "12px" }} level="title-md">
-              Tên người dùng
-            </Typography>
-            <Input
-              onChange={(e) => handleOnchangeInput(e.target.value, "username")}
-              value={userInfo.username || ""}
-            />
-          </Box>
-          <Box>
-            <Typography sx={{ marginBottom: "12px" }} level="title-md">
-              Email
-            </Typography>
-            <Input disabled value={userInfo.email || ""} />
-          </Box>
-          <Box>
-            <Typography sx={{ marginBottom: "12px" }} level="title-md">
-              Số điện thoại
-            </Typography>
-            <Input
-              onChange={(e) =>
-                handleOnchangeInput(e.target.value, "phone_number")
-              }
-              value={userInfo.phone_number || ""}
-            />
-          </Box>
-          <Box>
-            <Typography sx={{ marginBottom: "12px" }} level="title-md">
-              Giới tính
-            </Typography>
-            <RadioGroup
-              value={userInfo.gender}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                handleOnchangeInput(event.target.value, "gender")
-              }
-            >
-              <Radio value="Nam" label="Nam" />
-              <Radio value="Nữ" label="Nữ" />
-            </RadioGroup>
-          </Box>
-          <Box>
-            <Typography sx={{ marginBottom: "12px" }} level="title-md">
-              Địa chỉ
-            </Typography>
-            <Input
-              onChange={(e) => handleOnchangeInput(e.target.value, "address")}
-              value={userInfo.address || ""}
-            />
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              gap: "12px",
-              justifyContent: "end",
-              marginTop: "24px",
-            }}
+          <Button
+            onClick={() => setOpen(false)}
+            color="neutral"
+            variant="plain"
           >
-            <Button
-              onClick={() => setOpen(false)}
-              color="neutral"
-              variant="plain"
-            >
-              Huỷ bỏ
-            </Button>
+            Huỷ bỏ
+          </Button>
 
-            <Button
-              loading={isLoading}
-              onKeyDown={(e) => e.code === "Enter" && handleUpdateUser()}
-              onClick={() => handleUpdateUser()}
-            >
-              Lưu
-            </Button>
-          </Box>
+          <Button
+            loading={isLoading}
+            onKeyDown={(e) => e.code === "Enter" && handleUpdateUser()}
+            onClick={() => handleUpdateUser()}
+          >
+            Lưu
+          </Button>
         </Box>
-      </Sheet>
-    </Modal>
+      </Box>
+    </ModalContainer>
   );
 };
 

@@ -5,6 +5,7 @@ interface IRating {
   listUserRating: {
     username: string;
     rating: number;
+    userId: string;
   }[];
   averageRating: number;
   countRating: number;

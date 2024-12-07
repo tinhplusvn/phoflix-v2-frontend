@@ -5,6 +5,7 @@ import ForgotPassword from "../authentication/ForgotPassword";
 import { AppDispatch } from "../../redux/store";
 import { useDispatch } from "react-redux";
 import { setType } from "../../redux/slice/systemSlice";
+import ModalContainer from "./ModalContainer";
 interface IProps {
   type: string;
   open: boolean;
@@ -22,43 +23,31 @@ const ModalAuthentication = ({ type, open, setOpen }: IProps) => {
   };
 
   return (
-    <Modal
-      aria-labelledby="modal-title"
-      aria-describedby="modal-desc"
+    <ModalContainer
       open={open}
-      onClose={handleClose}
+      setOpen={setOpen}
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        animation: "scaleIn 0.3s",
+        minWidth: {
+          xs: "90%",
+          sm: "500px",
+        },
+        maxWidth: {
+          xs: "90%",
+          sm: "520px",
+        },
+        borderRadius: "md",
+        p: 3,
+        boxShadow: "lg",
         backdropFilter: "unset",
       }}
     >
-      <Sheet
-        variant="outlined"
-        sx={{
-          animation: "scaleIn 0.3s",
-          minWidth: {
-            xs: "80%",
-            sm: "500px",
-          },
-          maxWidth: {
-            xs: "90%",
-          },
-          borderRadius: "md",
-          p: 3,
-          boxShadow: "lg",
-          backdropFilter: "unset"
-        }}
-      >
-        <ModalClose variant="plain" sx={{ m: 1 }} />
-        <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-          {type === "login" && <Login setOpen={setOpen} />}
-          {type === "register" && <Register setOpen={setOpen} />}
-          {type === "forgot-password" && <ForgotPassword setOpen={setOpen} />}
-        </Box>
-      </Sheet>
-    </Modal>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        {type === "login" && <Login setOpen={setOpen} />}
+        {type === "register" && <Register setOpen={setOpen} />}
+        {type === "forgot-password" && <ForgotPassword setOpen={setOpen} />}
+      </Box>
+    </ModalContainer>
   );
 };
 

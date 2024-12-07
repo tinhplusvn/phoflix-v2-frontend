@@ -3,7 +3,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import _NavLink from "../../common/_NavLink";
 import UserOptions from "./UserOptions";
 import { useEffect, useState } from "react";
-import ModalSearch from "../../modals/ModalSearch";
+import ModalSearch from "../../modals/ModalSearch/ModalSearch";
 import ModalAuthentication from "../../modals/ModalAuthentication";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";

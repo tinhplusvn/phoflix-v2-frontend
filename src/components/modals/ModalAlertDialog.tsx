@@ -7,6 +7,9 @@ import {
   Modal,
   Sheet,
 } from "@mui/joy";
+import ModalContainer from "./ModalContainer";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 interface IProps {
   open: boolean;
@@ -25,52 +28,49 @@ const ModalAlertDialog = ({
   content,
   isLoading,
 }: IProps) => {
+  const isMobile = useSelector((state: RootState) => state.system.isMobile);
+
   return (
-    <Modal
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+    <ModalContainer
       open={open}
-      onClose={() => setOpen(false)}
+      setOpen={setOpen}
+      sx={{
+        animation: "scaleIn 0.3s",
+        minWidth: {
+          xs: "90%",
+          md: "320px",
+        },
+        maxWidth: {
+          xs: "90%",
+          md: "360px",
+        },
+        borderRadius: "md",
+        p: 2,
+        boxShadow: "lg",
+      }}
     >
-      <Sheet
-        variant="outlined"
-        sx={{
-          minWidth: {
-            xs: "90%",
-            sm: "360px",
-          },
-          maxWidth: {
-            xs: "90%",
-            sm: "380px",
-          },
-          animation: "scaleIn 0.3s",
-          borderRadius: "md",
-          p: 2,
-          boxShadow: "lg",
-        }}
-      >
-        <DialogTitle>{title}</DialogTitle>
-        <Divider sx={{ margin: "12px -16px" }} />
-        <DialogContent>{content}</DialogContent>
-        <DialogActions sx={{ marginTop: "32px" }}>
-          <Button
-            loading={isLoading}
-            variant="solid"
-            color="danger"
-            onClick={handleSubmit}
-          >
-            Xác nhận
-          </Button>
-          <Button
-            sx={{ marginRight: "12px" }}
-            variant="plain"
-            color="neutral"
-            onClick={() => setOpen(false)}
-          >
-            Huỷ bỏ
-          </Button>
-        </DialogActions>
-      </Sheet>
-    </Modal>
+      <DialogTitle>{title}</DialogTitle>
+      <Divider sx={{ margin: "12px -16px" }} />
+      <DialogContent>{content}</DialogContent>
+      <DialogActions sx={{ marginTop: "32px" }}>
+        <Button
+          loading={isLoading}
+          variant="solid"
+          color="danger"
+          onClick={handleSubmit}
+        >
+          Xác nhận
+        </Button>
+        <Button
+          sx={{ marginRight: "12px" }}
+          variant="plain"
+          color="neutral"
+          onClick={() => setOpen(false)}
+        >
+          Huỷ bỏ
+        </Button>
+      </DialogActions>
+    </ModalContainer>
   );
 };
 
