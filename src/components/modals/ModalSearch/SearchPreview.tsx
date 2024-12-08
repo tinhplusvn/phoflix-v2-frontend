@@ -15,6 +15,7 @@ const SearchPreview = ({
 }: SearchPreviewProps) => {
   const movies = useSelector((state: RootState) => state.movies.searchPreview);
   const isMobile = useSelector((state: RootState) => state.system.isMobile);
+  const theme = useSelector((state: RootState) => state.system.theme);
 
   return (
     <Box
@@ -24,7 +25,7 @@ const SearchPreview = ({
         maxHeight: {
           xs: "calc(100vh - 300px)",
           sm: "calc(100vh - 200px)",
-        },  
+        },
       }}
     >
       {movies?.length > 0 && (
@@ -38,10 +39,24 @@ const SearchPreview = ({
       )}
       {movies?.map((movie: any, index: number) => (
         <Box
-          className="search-item"
           onClick={() => handleClickSearchPreview(movie?.slug)}
           key={index}
-          sx={{ display: "flex", gap: "12px", alignItems: "start !important" }}
+          sx={{
+            display: "flex",
+            gap: "12px",
+            alignItems: "start !important",
+            padding: "8px",
+            border: "1px solid rgba(61, 71, 81, 0.3)",
+            borderRadius: "12px",
+            justifyContent: "space-between",
+            cursor: "pointer",
+            transition: "0.1s",
+            "&:hover": {
+              color: `${theme === "light" ? "#006BD6" : "#66B3FF"}`,
+              backgroundColor: theme === "light" ? "#ebf5ff" : "rgb(9,34,59)",
+              borderColor: theme === "light" ? "#66b3ff" : "rgb(5,61,119)",
+            },
+          }}
         >
           <Box
             sx={{
