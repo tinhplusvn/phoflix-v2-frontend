@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { addActivityLog } from "../../redux/asyncThunk/activityLogThunk";
 import { Alert, Box, Chip, Skeleton, Tooltip, Typography } from "@mui/joy";
 import PollOutlinedIcon from "@mui/icons-material/PollOutlined";
-import { Rating } from "@mui/material";
+import { Experimental_CssVarsProvider, Rating } from "@mui/material";
 import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
 import ModalListUserRating from "../../components/modals/ModalListUserRating";
 
@@ -138,12 +138,20 @@ const SectionRating = () => {
             </>
           ) : (
             <>
-              <Rating
-                onChange={(event, value) => handleAddRating(value as number)}
-                name="half-rating"
-                value={stars}
-                precision={1}
-              />
+              <Experimental_CssVarsProvider>
+                <Rating
+                  sx={{
+                    backgroundColor: "#fff",
+                    padding: "4px",
+                    borderRadius: "8px",
+                  }}
+                  color="primary"
+                  onChange={(event, value) => handleAddRating(value as number)}
+                  name="half-rating"
+                  value={stars}
+                  precision={1}
+                />
+              </Experimental_CssVarsProvider>
               <Tooltip title="Danh sách đánh giá">
                 <Typography
                   sx={{

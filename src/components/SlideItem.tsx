@@ -27,7 +27,7 @@ const SlideItem = ({ item }: IProps) => {
         right: !isLargeScreen ? "24px" : "unset",
         backdropFilter: isLargeScreen ? "blur(8px)" : "unset",
         backgroundColor: isLargeScreen ? "rgba(255, 255, 255, 0.3)" : "unset",
-        border: isLargeScreen ? "1px solid #aaa" : "unset",
+        border: isLargeScreen ? "1px solid rgba(61, 71, 81, 0.3)" : "unset",
         padding: isLargeScreen ? "16px" : "0",
         borderRadius: "12px",
         gap: "24px",
@@ -44,7 +44,7 @@ const SlideItem = ({ item }: IProps) => {
             height: "160px",
             overflow: "hidden",
             borderRadius: "8px",
-            border: "1px solid #aaa",
+            border: "1px solid rgba(61, 71, 81, 0.3)",
           }}
         >
           <img

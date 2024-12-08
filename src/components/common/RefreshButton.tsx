@@ -1,5 +1,6 @@
 import { IconButton, Tooltip } from "@mui/joy";
-import { CircularProgress } from "@mui/material";
+import CircularProgress from "@mui/joy/CircularProgress";
+
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 interface RefreshButtonProps {
@@ -17,7 +18,7 @@ const RefreshButton = ({
     <Tooltip title={title}>
       <IconButton onClick={handleRefresh} disabled={isLoading}>
         {isLoading ? (
-          <CircularProgress size={24} color="inherit" />
+          <CircularProgress size="sm" />
         ) : (
           <RefreshIcon />
         )}

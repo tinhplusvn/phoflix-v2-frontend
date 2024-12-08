@@ -11,7 +11,8 @@ export interface ISystemState {
 const initialState: ISystemState = {
   type: "login",
   isOpenModalAuthentication: false,
-  theme: "light",
+  theme:
+    JSON.parse(localStorage.getItem("theme") as "light" | "dark") ?? "light",
   isMobile: false,
   width: window.innerWidth,
 };
@@ -32,10 +33,15 @@ export const systemSlice = createSlice({
     setWidth: (state, action) => {
       state.width = action.payload;
     },
+    changeTheme: (state, action) => {
+      state.theme = action.payload;
+      localStorage.setItem("theme", JSON.stringify(action.payload));
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setOpen, setType, setIsMobile, setWidth } = systemSlice.actions;
+export const { changeTheme, setOpen, setType, setIsMobile, setWidth } =
+  systemSlice.actions;
 
 export default systemSlice.reducer;

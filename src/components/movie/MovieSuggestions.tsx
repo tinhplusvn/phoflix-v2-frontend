@@ -1,4 +1,4 @@
-import { Alert, Box, IconButton, Tooltip, Typography } from "@mui/joy";
+import { Alert, Box, Typography } from "@mui/joy";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -7,8 +7,6 @@ import MovieList from "../movie/MovieList";
 import BubbleChartIcon from "@mui/icons-material/BubbleChart";
 import { randomItemInArray } from "../../utils";
 import { useParams } from "react-router-dom";
-import CircularProgress from "@mui/material/CircularProgress";
-import RefreshIcon from "@mui/icons-material/Refresh";
 import RefreshButton from "../common/RefreshButton";
 import toast from "react-hot-toast";
 

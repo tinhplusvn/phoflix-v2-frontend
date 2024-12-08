@@ -2,8 +2,12 @@ import { Box, Grid, Typography } from "@mui/joy";
 import Link from "@mui/joy/Link";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import TelegramIcon from "@mui/icons-material/Telegram";
+import { RootState } from "../../redux/store";
+import { useSelector } from "react-redux";
 
 const Footer = () => {
+  const theme = useSelector((state: RootState) => state.system.theme);
+
   return (
     <Box
       sx={{
@@ -12,7 +16,11 @@ const Footer = () => {
           xs: "16px",
           md: "64px 32px",
         },
-        background: "linear-gradient(to right, #a1c4fd96 0%, #c2e9fbb5 100%)",
+        background: `${
+          theme === "light"
+            ? "linear-gradient(to right, #a1c4fd96 0%, #c2e9fbb5 100%) "
+            : "rgba(255 255 255 / 0.1)"
+        } `,
       }}
     >
       <Grid container spacing={2} sx={{ flexGrow: 1 }}>
@@ -65,7 +73,7 @@ const Footer = () => {
             </Link>
           </Box>
         </Grid>
-        <Grid md={12}>
+        <Grid sm={12} md={12} xs={12}>
           <Typography
             sx={{ textAlign: "center", marginTop: "24px" }}
             level="title-md"

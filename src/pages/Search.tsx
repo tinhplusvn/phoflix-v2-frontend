@@ -5,12 +5,13 @@ import { useParams } from "react-router-dom";
 import { AppDispatch, RootState } from "../redux/store";
 import { searchMovie } from "../redux/asyncThunk/moviesThunk";
 import MovieList from "../components/movie/MovieList";
-import { Pagination, Stack } from "@mui/material";
+import { Experimental_CssVarsProvider, Pagination, Stack } from "@mui/material";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 import SkeletonPage from "../components/common/SkeletonPage";
 import SearchIcon from "@mui/icons-material/Search";
 import searchNotFoundImg from "../images/search-not-found.png";
 import { scrollToTop } from "../utils";
+import _Pagination from "../components/layout/Navigation/_Pagination";
 
 const Search = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -104,16 +105,11 @@ const Search = () => {
         {movies.length > 0 && !isLoading && (
           <>
             <MovieList movies={movies} />
-            <Stack spacing={2} sx={{ marginTop: "24px", alignItems: "center" }}>
-              <Pagination
-                color="primary"
-                onChange={handleChange}
-                count={totalPages}
-                page={currentPage}
-                variant="outlined"
-                shape="rounded"
-              />
-            </Stack>
+            <_Pagination
+              handleChange={handleChange}
+              totalPages={totalPages}
+              currentPage={currentPage}
+            />
           </>
         )}
 

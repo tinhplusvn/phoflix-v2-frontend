@@ -26,31 +26,40 @@ img {
 }
 
 .animation-scale-in {
-    animation: scaleIn,  0.5s ease-in-out;
+  animation: scaleIn, 0.5s ease-in-out;
 }
 
 .animation-scale-out {
-    animation: scaleOut,  0.5s ease-in-out;
+  animation: scaleOut, 0.5s ease-in-out;
 }
 
 @keyframes scaleIn {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes scaleOut {
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(0);
-        opacity: 0;
-    }
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes smartGradient {
+  0% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: top 37.5% left 37.5%;
+  }
 }

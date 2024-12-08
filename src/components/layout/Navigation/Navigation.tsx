@@ -24,6 +24,11 @@ const Navigation = () => {
   const navigate = useNavigate();
   const width = useSelector((state: RootState) => state.system.width);
   const user: IUser = useSelector((state: RootState) => state.users.user);
+  const theme = useSelector((state: RootState) => state.system.theme);
+
+  useEffect(() => {
+    console.log("theme", theme);
+  }, [theme]);
 
   useEffect(() => {
     dispatch(getCategories());
@@ -32,13 +37,21 @@ const Navigation = () => {
 
   return (
     <>
-      <Box className="navigation">
+      <Box
+        className="navigation"
+        sx={{
+          borderBottom: "1px solid rgba(61, 71, 81, 0.3)",
+          backgroundColor: `${
+            theme === "light" ? "rgba(255, 255, 255, 0.8)" : "rgb(18,18,18,0.8)"
+          }`,
+        }}
+      >
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {width < 1200 && (
             <IconButton
               sx={{ marginRight: "12px", borderRadius: "12px" }}
               variant="outlined"
-              color="primary"
+              color="neutral"
               onClick={() => setOpen(true)}
             >
               <MenuIcon />

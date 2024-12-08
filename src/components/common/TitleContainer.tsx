@@ -26,7 +26,7 @@ const TitleContainer = ({ path, content, icon }: IProps) => {
       <Typography
         startDecorator={icon}
         color="neutral"
-        level={isMobile ? "title-md" : "h4"}
+        level={isMobile ? "title-md" : "title-lg"}
       >
         {content}
       </Typography>

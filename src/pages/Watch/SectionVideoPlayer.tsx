@@ -17,7 +17,7 @@ const SectionVideoPlayer = () => {
           width: "100%",
           height: { lg: "480px", xs: "260px" },
           borderRadius: "8px",
-          border: "1px solid #aaa",
+          border: "1px solid rgba(61, 71, 81, 0.3)",
           overflow: "hidden",
         }}
       >

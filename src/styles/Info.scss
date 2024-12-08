@@ -5,7 +5,7 @@
   width: 100%;
 
   @media (max-width: 1024px) {
-    gap: 32px;  
+    gap: 32px;
   }
 
   .info-container-inner {
@@ -33,7 +33,7 @@
       height: 260px;
       border-radius: 6px;
       overflow: hidden;
-      border: 1px solid #aaa;
+      border: 1px solid rgba(61, 71, 81, 0.3);
 
       @media (max-width: 1024px) {
         width: 100%;
@@ -55,7 +55,7 @@
         background-color: rgba(255, 255, 255, 0.3);
         padding: 8px;
         border-radius: 12px;
-        border: 1px solid #aaa;
+        border: 1px solid rgba(61, 71, 81, 0.3);
       }
     }
   }

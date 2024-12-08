@@ -42,6 +42,7 @@ const CommentItem = ({
   const valueEditComment = useSelector(
     (state: RootState) => state.comments.valueEditComment
   );
+  const theme = useSelector((state: RootState) => state.system.theme);
 
   const handleOpenModalAlerDialog = (idComment: string) => {
     dispatch(setOpenModalAlertDialog(true));
@@ -60,7 +61,9 @@ const CommentItem = ({
       </Box>
       <Box
         sx={{
-          border: "3px solid #f0f4f8",
+          border: `3px solid ${
+            theme === "light" ? "#f0f4f8" : "rgba(61, 71, 81, 0.3)"
+          }`,
           padding: "8px",
           borderRadius: "8px",
           display: "flex",

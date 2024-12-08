@@ -9,7 +9,7 @@ const InfomationUser = ({ setOpenModalEditUserInfo }: any) => {
   return (
     <Box
       sx={{
-        border: "1px solid #ccc",
+        border: "1px solid rgba(61, 71, 81, 0.3)",
         padding: "16px",
         borderRadius: "12px",
         display: "flex",

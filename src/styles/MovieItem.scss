@@ -1,6 +1,6 @@
 .movie-item {
   height: 320px;
-  border: 1px solid #eee;
+  border: 1px solid rgba(61, 71, 81, 0.3);
   border-radius: 6px;
   overflow: hidden;
   position: relative;
@@ -37,7 +37,7 @@
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 12px;
     transition: 0.3s;
-    border: 1px solid #cccccc85;
+    border: 1px solid rgba(61, 71, 81, 0.3) ccc85;
     padding: 8px;
   }
 }

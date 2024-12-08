@@ -6,13 +6,14 @@ import { AppDispatch, RootState } from "../redux/store";
 import { getMovieDetail } from "../redux/asyncThunk/moviesThunk";
 import LiveTvRoundedIcon from "@mui/icons-material/LiveTvRounded";
 import MovieList from "../components/movie/MovieList";
-import { Pagination, Stack } from "@mui/material";
+import { Experimental_CssVarsProvider, Pagination, Stack } from "@mui/material";
 import BreadcrumbsCustom from "../components/BreadcrumbsCustom";
 import _ from "lodash";
 import SkeletonPage from "../components/common/SkeletonPage";
 import { generateYears, scrollToTop } from "../utils";
 import imageLoadingMovieError from "../images/loading-movie-error.png";
 import ShowBackground from "../components/common/ShowBackground";
+import _Pagination from "../components/layout/Navigation/_Pagination";
 
 type describe = Record<string, string>;
 type slug = Record<string, string>;
@@ -104,8 +105,8 @@ const Detail = () => {
   }, [params]);
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setCurrentPage(value);
     scrollToTop();
+    setCurrentPage(value);
   };
 
   if (isLoading && !isError) {
@@ -141,16 +142,16 @@ const Detail = () => {
                 alignItems: "center",
                 width: "100%",
               }}
-              color="primary"
+              color="neutral"
             >
               <Typography
                 startDecorator={<LiveTvRoundedIcon />}
-                level={!isMobile ? "title-lg" : "title-sm"}
+                level={!isMobile ? "title-md" : "title-sm"}
               >
                 {`${titlePage} (${totalItems} bộ)`}
               </Typography>
               <Typography
-                color="primary"
+                color="neutral"
                 level="title-sm"
               >{`Trang ${currentPage}`}</Typography>
             </Alert>
@@ -160,16 +161,11 @@ const Detail = () => {
 
       <MovieList movies={movies} />
 
-      <Stack spacing={2} sx={{ marginTop: "24px", alignItems: "center" }}>
-        <Pagination
-          color="primary"
-          page={currentPage}
-          onChange={handleChange}
-          count={totalPages}
-          variant="outlined"
-          shape="rounded"
-        />
-      </Stack>
+      <_Pagination
+        handleChange={handleChange}
+        totalPages={totalPages}
+        currentPage={currentPage}
+      />
     </Box>
   );
 };

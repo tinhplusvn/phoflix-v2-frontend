@@ -37,7 +37,7 @@ const ModalInstructDowload = ({ open, setOpen }: IProps) => {
           xs: "90%",
           sm: "520px",
         },
-        height: {
+        maxHeight: {
             xs: "90vh",
             sm: "unset",
         },

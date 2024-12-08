@@ -8,7 +8,7 @@
 
   .search-item {
     padding: 4px;
-    border: 1px solid #cdd7e1;
+    border: 1px solid rgba(255 255 255 / 0.1);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -16,17 +16,11 @@
     gap: 12px;
     cursor: pointer;
     transition: 0.1s;
-    background-color: #fff;
-
-    &:hover {
-      border-color: #66b3ff;
-      background-color: #ebf5ff;
-    }
 
     img {
       width: 120px;
       height: 160px;
-      border: 1px solid #eee;
+      border: 1px solid rgba(61, 71, 81, 0.3);
       border-radius: 8px;
 
       @media (max-width: 768px) {
@@ -36,4 +30,3 @@
     }
   }
 }
-
