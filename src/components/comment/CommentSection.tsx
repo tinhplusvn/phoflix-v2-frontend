@@ -36,6 +36,7 @@ const CommentSection = () => {
   const movieInfo = useSelector(
     (state: RootState) => state.movies.movieInfo.info
   );
+  const theme = useSelector((state: RootState) => state.system.theme);
   const params = useParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const mount = useRef(false);
@@ -120,7 +121,10 @@ const CommentSection = () => {
               <CommentList />
             </>
           ) : (
-            <Typography level="title-lg" color="primary">
+            <Typography
+              level="title-lg"
+              color={theme === "light" ? "primary" : "neutral"}
+            >
               Chưa có bình luận nào tại đây!
             </Typography>
           )}

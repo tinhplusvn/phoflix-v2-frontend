@@ -1,5 +1,4 @@
 import {
-  CircularProgress,
   Divider,
   Dropdown,
   Menu,
@@ -7,7 +6,7 @@ import {
   MenuItem,
 } from "@mui/joy";
 import PersonIcon from "@mui/icons-material/Person";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import AccountCircleIcon from   "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import _NavLink from "../../common/_NavLink";
 import { AppDispatch, RootState } from "../../../redux/store";
@@ -47,15 +46,16 @@ const UserOptions = () => {
               : "unset",
         }}
       >
-        {!isLoading && <AccountCircleIcon />}
+        {!isLoading && (
+          <AccountCircleIcon
+            color={theme === "light" ? "primary" : "secondary"}
+          />
+        )}
       </MenuButton>
       <Menu>
-        <MenuItem>
+        <MenuItem onClick={() => navigate("/thong-tin-nguoi-dung")}>
           <PersonIcon />
-          <_NavLink
-            path="/thong-tin-nguoi-dung"
-            content="Thông tin người dùng"
-          />
+          Thông tin người dùng
         </MenuItem>
         <Divider />
         <MenuItem onClick={() => handleLogout()}>

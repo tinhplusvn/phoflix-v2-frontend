@@ -139,7 +139,7 @@ const SavedMovie = () => {
         >
           <Typography
             startDecorator={<BookmarkAddedRoundedIcon />}
-            level={isMobile ? "title-md" : "title-lg"}
+            level={isMobile ? "title-sm" : "title-md"}
           >
             Phim đã lưu
           </Typography>
@@ -156,7 +156,7 @@ const SavedMovie = () => {
 
       {movies.length < savedMovies.length && (
         <Box
-          sx={{ display: "flex", marginTop: "32px", justifyContent: "center" }}
+          sx={{ display: "flex", marginTop: "48px", justifyContent: "center" }}
         >
           <ButtonSeeMore
             currentData={movies}

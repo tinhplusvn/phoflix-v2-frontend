@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import SlideList from "../components/slide/SlideList";
 import { AppDispatch, RootState } from "../redux/store";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getCartoon,
   getFeatureFilm,
@@ -14,7 +14,6 @@ import MovieList from "../components/movie/MovieList";
 import LiveTvRoundedIcon from "@mui/icons-material/LiveTvRounded";
 import TitleContainer from "../components/common/TitleContainer";
 import toast from "react-hot-toast";
-import MovieSuggestions from "../components/movie/MovieSuggestions";
 
 const Home = () => {
   const dispatch: AppDispatch = useDispatch();

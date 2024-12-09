@@ -11,6 +11,7 @@ const TableActivitiesUser = ({ setOpenModalAlertDialog }: any) => {
     (state: RootState) => state.activityLog.activityList
   );
   const [activityList, setActivityList] = useState<any[]>([]);
+  const theme = useSelector((state: RootState) => state.system.theme);
 
   useEffect(() => {
     setActivityList(activityFromStore.slice(0, 10));
@@ -34,7 +35,7 @@ const TableActivitiesUser = ({ setOpenModalAlertDialog }: any) => {
         <Typography
           startDecorator={<HistoryIcon />}
           level="title-lg"
-          color="primary"
+          color={theme === "light" ? "primary" : "neutral"}
         >
           Lịch sử hoạt động
         </Typography>

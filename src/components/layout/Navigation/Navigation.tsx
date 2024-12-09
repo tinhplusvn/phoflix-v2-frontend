@@ -47,7 +47,7 @@ const Navigation = () => {
             <IconButton
               sx={{ marginRight: "12px", borderRadius: "12px" }}
               variant="outlined"
-              color="neutral"
+              color={theme === "light" ? "primary" : "neutral"}
               onClick={() => setOpen(true)}
             >
               <MenuIcon />
@@ -56,7 +56,7 @@ const Navigation = () => {
 
           {(width > 1200 || user?.access_token) && (
             <Typography
-              color="primary"
+              color={theme === "light" ? "primary" : "neutral"}
               level="title-md"
               onClick={() => navigate("/")}
               sx={{

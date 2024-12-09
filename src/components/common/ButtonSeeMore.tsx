@@ -19,6 +19,7 @@ const ButtonSeeMore = ({
   setData,
 }: ButtonSeeMoreProps) => {
   const isMobile = useSelector((state: RootState) => state.system.isMobile);
+  const theme = useSelector((state: RootState) => state.system.theme);
 
   const handleSeeMore = () => {
     if (currentData.length < originalData.length) {
@@ -28,7 +29,7 @@ const ButtonSeeMore = ({
 
   return (
     <Tooltip
-      color="primary"
+      color={theme === "light" ? "primary" : "neutral"}
       variant="soft"
       title={`Còn ${originalData?.length - currentData?.length} ${title}`}
     >
@@ -36,6 +37,7 @@ const ButtonSeeMore = ({
         endDecorator={<ExpandMoreIcon />}
         onClick={handleSeeMore}
         variant="solid"
+        color={theme === "light" ? "primary" : "neutral"}
         sx={{ width: isMobile ? "100%" : "320px" }}
       >
         Xem thêm

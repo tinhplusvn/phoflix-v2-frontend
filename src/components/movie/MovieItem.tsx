@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import imageError from "../../images/image-error.jpg"
+import imageError from "../../images/image-error.jpg";
 
 interface IProps {
   movie: IMovie;
@@ -20,6 +20,7 @@ const MovieItem = ({ movie, page, handleDeleteMovie }: IProps) => {
   const navigate = useNavigate();
   const width = useSelector((state: RootState) => state.system.width);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const theme = useSelector((state: RootState) => state.system.theme);
 
   const deleteMovie = async (slug: string, type: string) => {
     setIsLoading(true);
@@ -61,10 +62,18 @@ const MovieItem = ({ movie, page, handleDeleteMovie }: IProps) => {
           gap: "12px",
         }}
       >
-        <Chip size="sm" variant="soft" color="neutral">
+        <Chip
+          size="sm"
+          variant={theme === "light" ? "soft" : "solid"}
+          color="neutral"
+        >
           {movie.lang}
         </Chip>
-        <Chip size="sm" variant="soft" color="primary">
+        <Chip
+          size="sm"
+          variant={theme === "light" ? "soft" : "solid"}
+          color="primary"
+        >
           {movie.time}
         </Chip>
       </Box>

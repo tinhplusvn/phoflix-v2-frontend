@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 import { useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 interface IProps {
   path: string;
@@ -12,8 +14,8 @@ interface IProps {
 
 const TitleContainer = ({ path, content, icon }: IProps) => {
   const navigate = useNavigate();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useSelector((state: RootState) => state.system.isMobile);
+  const theme = useSelector((state: RootState) => state.system.theme);
 
   return (
     <Alert
@@ -30,7 +32,12 @@ const TitleContainer = ({ path, content, icon }: IProps) => {
       >
         {content}
       </Typography>
-      <Button size="sm" variant="outlined" onClick={() => navigate(path)}>
+      <Button
+        size="sm"
+        color={theme === "light" ? "primary" : "neutral"}
+        variant="solid"
+        onClick={() => navigate(path)}
+      >
         Xem thêm
       </Button>
     </Alert>

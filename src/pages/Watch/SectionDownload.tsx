@@ -6,6 +6,8 @@ import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 interface IProps {
   link_m3u8: string;
@@ -15,7 +17,7 @@ type TypeCopy = "not-copy" | "copied";
 
 const SectionDownload = ({ link_m3u8, setOpen }: IProps) => {
   const [typeCopy, setTypeCopy] = useState<TypeCopy>("not-copy");
-
+  const theme = useSelector((state: RootState) => state.system.theme);
   const handleCopyLinkM3U8 = (link_m3u8: string) => {
     copyText(link_m3u8);
     setTypeCopy("copied");
@@ -43,7 +45,11 @@ const SectionDownload = ({ link_m3u8, setOpen }: IProps) => {
           </Tooltip>
         </Box>
         {typeCopy === "not-copy" ? (
-          <Tooltip title="Sao chép">
+          <Tooltip
+            title="Sao chép"
+            variant={theme === "light" ? "soft" : "solid"}
+            color={theme === "light" ? "primary" : "neutral"}
+          >
             <IconButton onClick={() => handleCopyLinkM3U8(link_m3u8 as string)}>
               <ContentCopyIcon />
             </IconButton>

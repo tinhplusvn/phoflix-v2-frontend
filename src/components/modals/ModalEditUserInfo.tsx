@@ -38,7 +38,7 @@ interface UserInfo {
 const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
   const dispatch: AppDispatch = useDispatch();
   const user: IUser = useSelector((state: RootState) => state.users.user);
-
+  const theme = useSelector((state: RootState) => state.system.theme);
   const defaultUserInfo: UserInfo = {
     username: "",
     email: "",
@@ -199,6 +199,7 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
 
           <Button
             loading={isLoading}
+            color={theme === "light" ? "primary" : "neutral"}
             onKeyDown={(e) => e.code === "Enter" && handleUpdateUser()}
             onClick={() => handleUpdateUser()}
           >

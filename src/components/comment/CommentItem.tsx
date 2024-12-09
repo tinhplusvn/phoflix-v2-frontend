@@ -83,7 +83,7 @@ const CommentItem = ({
                   },
                 }}
                 level="title-sm"
-                color="primary"
+                color={theme === "light" ? "primary" : "neutral"}
               >
                 <Link
                   style={{ all: "unset" }}
@@ -97,7 +97,11 @@ const CommentItem = ({
                 </Link>
               </Typography>
             </Tooltip>
-            <Chip color="neutral" size="sm">
+            <Chip
+              variant="outlined"
+              color={theme === "light" ? "neutral" : "primary"}
+              size="sm"
+            >
               {formatDate(item?.createdAt)}
             </Chip>
           </Box>
@@ -121,12 +125,12 @@ const CommentItem = ({
         </Box>
         <Divider />
         {index !== indexEdit ? (
-          <Box sx={{ display: "flex" }}>
+          <Box sx={{ display: "flex", gap: "12px" }}>
             {item?.user_id === user?.id && (
               <>
                 <Button
                   onClick={() => handleOpenModalAlerDialog(item?.id)}
-                  variant="plain"
+                  variant={theme === "light" ? "plain" : "solid"}
                   color="danger"
                   size="sm"
                 >
@@ -136,8 +140,8 @@ const CommentItem = ({
                   onClick={() =>
                     dispatch(setEditComment({ index, content: item.content }))
                   }
-                  variant="plain"
-                  color="primary"
+                  variant={theme === "light" ? "plain" : "solid"}
+                  color={theme === "light" ? "primary" : "neutral"}
                   size="sm"
                 >
                   Chỉnh sửa
@@ -169,7 +173,7 @@ const CommentItem = ({
               loading={isLoading}
               onClick={() => handSaveEditComment(item?.id)}
               variant="solid"
-              color="primary"
+              color={theme === "light" ? "primary" : "neutral"}
               size="sm"
             >
               Lưu

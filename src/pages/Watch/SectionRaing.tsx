@@ -24,6 +24,7 @@ const SectionRating = () => {
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const theme = useSelector((state: RootState) => state.system.theme);
 
   const handleRefreshRating = async () => {
     setIsLoading(true);
@@ -111,7 +112,11 @@ const SectionRating = () => {
           {isLoading ? (
             <Skeleton variant="text" level="body-xs" width={50} height={20} />
           ) : (
-            <Chip endDecorator={<StarBorderRoundedIcon />} color="primary">
+            <Chip
+              endDecorator={<StarBorderRoundedIcon />}
+              variant="outlined"
+              color={theme === "light" ? "primary" : "neutral"}
+            >
               {rating.averageRating} / 5.0
             </Chip>
           )}
@@ -140,9 +145,11 @@ const SectionRating = () => {
               <Experimental_CssVarsProvider>
                 <Rating
                   sx={{
-                    backgroundColor: "#fff",
-                    padding: "4px",
-                    borderRadius: "8px",
+                    "& .css-h06ynj-MuiRating-icon": {
+                      color: `${
+                        theme === "dark" ? "#9fa6ad" : "rgba(0, 0, 0, 0.26)"
+                      }`,
+                    },
                   }}
                   color="primary"
                   onChange={(event, value) => handleAddRating(value as number)}

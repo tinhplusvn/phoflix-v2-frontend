@@ -1,5 +1,5 @@
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import { Box, Button, IconButton, Input, Typography } from "@mui/joy";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import KeyIcon from "@mui/icons-material/Key";
@@ -53,6 +53,7 @@ const Register = ({ setOpen }: IProps) => {
   const [isLoadingSendCode, setIsLoadingSendCode] = useState<boolean>(false);
   const [isLoadingRegister, setIsLoadingRegister] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const theme = useSelector((state: RootState) => state.system.theme);
 
   const handleCheckValidInput = (): boolean => {
     let check: boolean = true;
@@ -114,7 +115,7 @@ const Register = ({ setOpen }: IProps) => {
       } else {
         toast.error(res.payload?.EM ?? "Đăng ký tài khoản thất bại!");
       }
-   
+
       setIsLoadingRegister(false);
     }
   };
@@ -145,7 +146,7 @@ const Register = ({ setOpen }: IProps) => {
       <Typography
         sx={{ marginBottom: "12px" }}
         level="title-lg"
-        color="primary"
+        color={theme === "light" ? "primary" : "neutral"}
       >
         Đăng ký
       </Typography>
@@ -221,8 +222,8 @@ const Register = ({ setOpen }: IProps) => {
               loading={isLoadingSendCode}
               disabled={valueInput.email === ""}
               onClick={() => handleSendOTP()}
-              variant="soft"
-              color="primary"
+              variant={theme === "light" ? "soft" : "solid"}
+              color={theme === "light" ? "primary" : "neutral"}
             >
               Gửi mã
             </Button>
@@ -236,7 +237,11 @@ const Register = ({ setOpen }: IProps) => {
         )}
       </Box>
 
-      <Button loading={isLoadingRegister} onClick={() => handleRegister()}>
+      <Button
+        color={theme === "light" ? "primary" : "neutral"}
+        loading={isLoadingRegister}
+        onClick={() => handleRegister()}
+      >
         Đăng ký
       </Button>
 
@@ -254,7 +259,7 @@ const Register = ({ setOpen }: IProps) => {
         <Typography
           onClick={() => dispatch(setType("login"))}
           level="title-sm"
-          color="primary"
+          color={theme === "light" ? "primary" : "neutral"}
           sx={{
             cursor: "pointer",
             "&:hover": {

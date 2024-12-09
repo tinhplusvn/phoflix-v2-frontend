@@ -15,6 +15,7 @@ const SlideItem = ({ item }: IProps) => {
   const navigate = useNavigate();
   const width: number = useSelector((state: RootState) => state?.system?.width);
   const isLargeScreen: boolean = width > 1024;
+  const theme = useSelector((state: RootState) => state.system.theme);
 
   return (
     <Box
@@ -107,7 +108,7 @@ const SlideItem = ({ item }: IProps) => {
             onClick={() => navigate(`/thong-tin/${item?.slug}`)}
             size={isLargeScreen ? "md" : "sm"}
             color="neutral"
-            variant="soft"
+            variant={theme === "light" ? "soft" : "solid"}
             startDecorator={<InfoOutlinedIcon />}
           >
             Chi tiết
@@ -116,8 +117,8 @@ const SlideItem = ({ item }: IProps) => {
         <Chip
           size="sm"
           sx={{ marginTop: "12px" }}
-          variant="soft"
-          color="primary"
+          variant={theme === "light" ? "soft" : "solid"}
+          color={theme === "light" ? "primary" : "neutral"}
         >
           Năm phát hành {item?.year}
         </Chip>

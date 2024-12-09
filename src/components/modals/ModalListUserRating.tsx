@@ -12,6 +12,7 @@ interface ModalListUserRatingProps {
 const ModalListUserRating = ({ open, setOpen }: ModalListUserRatingProps) => {
   const rating = useSelector((state: RootState) => state.rating);
   const user = useSelector((state: RootState) => state.users.user);
+  const theme = useSelector((state: RootState) => state.system.theme);
 
   return (
     <ModalContainer
@@ -49,7 +50,11 @@ const ModalListUserRating = ({ open, setOpen }: ModalListUserRatingProps) => {
         }}
       >
         {rating?.listUserRating.length === 0 ? (
-          <Typography sx={{ margin: "0 auto" }} level="title-sm">
+          <Typography
+            sx={{ margin: "0 auto" }}
+            level="title-sm"
+            color={theme === "light" ? "primary" : "neutral"}
+          >
             Chưa có lượt đánh giá nào!
           </Typography>
         ) : (
@@ -79,7 +84,11 @@ const ModalListUserRating = ({ open, setOpen }: ModalListUserRatingProps) => {
                     ? "Bản thân"
                     : userRating.username}
                 </Typography>
-                <Chip color="primary" endDecorator={<StarBorderRoundedIcon />}>
+                <Chip
+                  variant={theme === "light" ? "soft" : "outlined"}
+                  color={theme === "light" ? "primary" : "neutral"}
+                  endDecorator={<StarBorderRoundedIcon />}
+                >
                   {userRating.rating}
                 </Chip>
               </Box>

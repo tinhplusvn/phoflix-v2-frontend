@@ -22,6 +22,10 @@ const SearchPreview = ({
       className="search-list"
       sx={{
         overflowY: "auto",
+        minHeight: {
+          xs: "calc(100vh - 300px)",
+          sm: "calc(100vh - 200px)",
+        },
         maxHeight: {
           xs: "calc(100vh - 300px)",
           sm: "calc(100vh - 200px)",
@@ -29,13 +33,13 @@ const SearchPreview = ({
       }}
     >
       {movies?.length > 0 && (
-        <Alert
+        <Typography
           startDecorator={<SearchIcon />}
-          color="primary"
+          color={theme === "light" ? "primary" : "neutral"}
           sx={{ marginBottom: "12px" }}
         >
           Top {movies?.length} bộ phim phù hợp!
-        </Alert>
+        </Typography>
       )}
       {movies?.map((movie: any, index: number) => (
         <Box
@@ -122,9 +126,10 @@ const SearchPreview = ({
 
       {movies?.length >= 10 && (
         <Button
-          size="sm"
-          variant="soft"
-          sx={{ margin: "16px auto 0 auto" }}
+          size="lg"
+          variant="solid"
+          color={theme === "light" ? "primary" : "neutral"}
+          sx={{ width: "100%", marginTop: "12px" }}
           endDecorator={<ChevronRightIcon />}
           onClick={() => handleSeeAll()}
         >

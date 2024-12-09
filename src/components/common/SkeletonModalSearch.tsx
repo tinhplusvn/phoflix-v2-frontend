@@ -18,10 +18,6 @@ const SkeletonModalSearch = () => {
       <Skeleton variant="text" level="h1" />
       <Skeleton variant="text" level="h1" />
       <Skeleton variant="text" level="h1" />
-      <Skeleton variant="text" level="h1" />
-      <Skeleton variant="text" level="h1" />
-      <Skeleton variant="text" level="h1" />
-      <Skeleton variant="text" level="h1" />
     </Box>
   );
 };

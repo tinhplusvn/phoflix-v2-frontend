@@ -1,5 +1,5 @@
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import { Box, Button, Divider, IconButton, Input, Typography } from "@mui/joy";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -38,6 +38,7 @@ const Login = ({ setOpen }: any) => {
   const emailRef = useRef<HTMLInputElement>(null);
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const theme = useSelector((state: RootState) => state.system.theme);
 
   const handleCheckValidInput = (): boolean => {
     let check: boolean = true;
@@ -95,7 +96,7 @@ const Login = ({ setOpen }: any) => {
       <Typography
         sx={{ marginBottom: "12px" }}
         level="title-lg"
-        color="primary"
+        color={theme === "light" ? "primary" : "neutral"}
       >
         Đăng nhập
       </Typography>
@@ -144,7 +145,11 @@ const Login = ({ setOpen }: any) => {
         )}
       </Box>
 
-      <Button loading={isLogin} onClick={() => handleLogin()}>
+      <Button
+        color={theme === "light" ? "primary" : "neutral"}
+        loading={isLogin}
+        onClick={() => handleLogin()}
+      >
         Đăng nhập
       </Button>
 
@@ -165,7 +170,7 @@ const Login = ({ setOpen }: any) => {
       <Divider sx={{ margin: "12px 0" }} />
       <Button
         onClick={() => handleLoginGoogle()}
-        variant="soft"
+        variant={theme === "light" ? "soft" : "outlined"}
         color="neutral"
         startDecorator={<GoogleIcon />}
       >
@@ -185,7 +190,7 @@ const Login = ({ setOpen }: any) => {
         <Typography
           onClick={() => dispatch(setType("register"))}
           level="title-sm"
-          color="primary"
+          color={theme === "light" ? "primary" : "neutral"}
           sx={{
             cursor: "pointer",
             "&:hover": {

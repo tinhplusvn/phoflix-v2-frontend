@@ -4,7 +4,11 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { useParams } from "react-router-dom";
 import { IUser } from "../../interfaces/user";
 import { useEffect, useState } from "react";
-import { addMovie, deleteMovie, getAllMovies } from "../../redux/asyncThunk/moviesThunk";
+import {
+  addMovie,
+  deleteMovie,
+  getAllMovies,
+} from "../../redux/asyncThunk/moviesThunk";
 import toast from "react-hot-toast";
 import { Box, Button, IconButton, Tooltip } from "@mui/joy";
 import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
@@ -31,6 +35,7 @@ const SectionCardMovie = ({
   const savedMovies = useSelector(
     (state: RootState) => state.movies.savedMovies.movies
   );
+  const theme = useSelector((state: RootState) => state.system.theme);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const width = useSelector((state: RootState) => state.system.width);
 
@@ -113,7 +118,11 @@ const SectionCardMovie = ({
           Xem ngay
         </Button>
         {isSave ? (
-          <Tooltip title="Xoá phim" variant="soft" color="danger">
+          <Tooltip
+            title="Xoá phim"
+            variant={theme === "light" ? "soft" : "solid"}
+            color="danger"
+          >
             <IconButton
               loading={isLoading}
               onClick={() => handleUnSaveMovie()}
@@ -124,7 +133,11 @@ const SectionCardMovie = ({
             </IconButton>
           </Tooltip>
         ) : (
-          <Tooltip title="Lưu phim" variant="soft" color="primary">
+          <Tooltip
+            title="Lưu phim"
+            variant={theme === "light" ? "soft" : "solid"}
+            color={theme === "light" ? "primary" : "neutral"}
+          >
             <IconButton
               loading={isLoading}
               onClick={() => handleSaveMovie()}

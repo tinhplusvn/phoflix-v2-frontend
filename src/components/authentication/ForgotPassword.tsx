@@ -1,5 +1,5 @@
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import { Box, Button, IconButton, Input, Typography } from "@mui/joy";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import KeyIcon from "@mui/icons-material/Key";
@@ -44,6 +44,7 @@ const ForgotPassword = ({ setOpen }: any) => {
   const [isLoadingSendCode, setIsLoadingSendCode] = useState<boolean>(false);
   const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const theme = useSelector((state: RootState) => state.system.theme);
 
   const handleCheckValidInput = (): boolean => {
     let check = true;
@@ -125,7 +126,10 @@ const ForgotPassword = ({ setOpen }: any) => {
         <IconButton onClick={() => dispatch(setType("login"))}>
           <ArrowBackIcon />
         </IconButton>
-        <Typography level="title-lg" color="primary">
+        <Typography
+          level="title-lg"
+          color={theme === "light" ? "primary" : "neutral"}
+        >
           Quên mật khẩu?
         </Typography>
       </Box>
@@ -138,6 +142,7 @@ const ForgotPassword = ({ setOpen }: any) => {
           size="md"
           placeholder="Email"
           type="email"
+        
         />
         {!isValidInput.email && (
           <Typography level="title-sm" color="danger" sx={{ marginTop: "8px" }}>
@@ -186,8 +191,8 @@ const ForgotPassword = ({ setOpen }: any) => {
               loading={isLoadingSendCode}
               disabled={valueInput.email === ""}
               onClick={() => handleSendOTP()}
-              variant="soft"
-              color="primary"
+              variant={theme === "light" ? "soft" : "solid"}
+              color={theme === "light" ? "primary" : "neutral"}
             >
               Gửi mã
             </Button>
@@ -201,7 +206,11 @@ const ForgotPassword = ({ setOpen }: any) => {
         )}
       </Box>
 
-      <Button loading={isLoadingSubmit} onClick={() => handleSubmit()}>
+      <Button
+        color={theme === "light" ? "primary" : "neutral"}
+        loading={isLoadingSubmit}
+        onClick={() => handleSubmit()}
+      >
         Xác nhận
       </Button>
     </>

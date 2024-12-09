@@ -12,8 +12,8 @@ import {
 } from "@mui/joy";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { AppDispatch } from "../../redux/store";
-import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import { addReportedComment } from "../../redux/asyncThunk/reportedComment";
 import ModalContainer from "./ModalContainer";
 
@@ -34,7 +34,7 @@ const ModalReportComment = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [reportingReason, setReportingReason] =
     useState<string>("Nội dung xúc phạm");
-
+  const theme = useSelector((state: RootState) => state.system.theme);
   const handleChangeRadio = (value: string) => {
     setReportingReason(value);
   };
@@ -78,7 +78,7 @@ const ModalReportComment = ({
         boxShadow: "lg",
       }}
     >
-      <Typography level="h4" color="primary">
+      <Typography level="h4" color={theme === "light" ? "primary" : "neutral"}>
         Báo cáo bình luận
       </Typography>
       <Box

@@ -22,6 +22,7 @@ const CommentInput = () => {
   const movieInfo: IMovie = useSelector(
     (state: RootState) => state.movies.movieInfo.info
   );
+  const theme = useSelector((state: RootState) => state.system.theme);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleAddComment = async () => {
@@ -87,7 +88,7 @@ const CommentInput = () => {
         loading={isLoading}
         onClick={() => handleAddComment()}
         disabled={valueComment === ""}
-        color="primary"
+        color={theme === "light" ? "primary" : "neutral"}
         variant="solid"
       >
         Bình luận

@@ -5,6 +5,7 @@ import { RootState } from "../../redux/store";
 
 const InfomationUser = ({ setOpenModalEditUserInfo }: any) => {
   const user = useSelector((state: RootState) => state.users.user);
+  const theme = useSelector((state: RootState) => state.system.theme);
 
   return (
     <Box
@@ -20,7 +21,7 @@ const InfomationUser = ({ setOpenModalEditUserInfo }: any) => {
       <Typography
         startDecorator={<AccountCircleIcon />}
         level="title-lg"
-        color="primary"
+        color={theme === "light" ? "primary" : "neutral"}
       >
         Thông tin người dùng
       </Typography>
@@ -59,11 +60,9 @@ const InfomationUser = ({ setOpenModalEditUserInfo }: any) => {
       <Button
         onClick={() => setOpenModalEditUserInfo(true)}
         sx={{
-          marginLeft: {
-            xs: "unset",
-            md: "auto",
-          },
+          marginTop: "12px",
         }}
+        color={theme === "light" ? "primary" : "neutral"}
       >
         Chỉnh sửa thông tin
       </Button>

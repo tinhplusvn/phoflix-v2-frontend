@@ -1,5 +1,7 @@
 import { Stack } from "@mui/joy";
 import { Experimental_CssVarsProvider, Pagination } from "@mui/material";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 interface IPagination {
   handleChange: (event: React.ChangeEvent<unknown>, value: number) => void;
@@ -12,23 +14,31 @@ const _Pagination = ({
   totalPages,
   currentPage,
 }: IPagination) => {
+  const theme = useSelector((state: RootState) => state.system.theme);
+
   return (
     <>
       <Experimental_CssVarsProvider>
-        <Stack spacing={2} sx={{ marginTop: "24px", alignItems: "center" }}>
+        <Stack spacing={2} sx={{ marginTop: "32px", alignItems: "center" }}>
           <Pagination
             sx={{
-              backgroundColor: "#fff",
-              padding: "8px",
-              borderRadius: "8px",
-              border: "1px solid rgba(61, 71, 81, 0.3)",
+              "& .css-11i1h4p-MuiButtonBase-root-MuiPaginationItem-root": {
+                color: theme === "dark" ? "#fff" : "#000",
+                borderColor: "#ccc",
+              },
+              "& .css-z9d6q9-MuiPaginationItem-root": {
+                color: theme === "dark" ? "#fff" : "#000",
+              },
             }}
+            hidePrevButton
+            hideNextButton
             color="primary"
             onChange={handleChange}
             count={totalPages}
             page={currentPage}
             variant="outlined"
             shape="rounded"
+            size="medium"
           />
         </Stack>
       </Experimental_CssVarsProvider>

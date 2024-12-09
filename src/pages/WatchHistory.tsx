@@ -141,7 +141,7 @@ const WatchHistory = () => {
         >
           <Typography
             startDecorator={<HistoryOutlinedIcon />}
-            level={isMobile ? "title-md" : "title-lg"}
+            level={isMobile ? "title-sm" : "title-md"}
           >
             Lịch sử xem gần đây
           </Typography>
@@ -158,7 +158,7 @@ const WatchHistory = () => {
 
       {movies.length < watchHistory.length && (
         <Box
-          sx={{ display: "flex", justifyContent: "center", marginTop: "32px" }}
+          sx={{ display: "flex", justifyContent: "center", marginTop: "48px" }}
         >
           <ButtonSeeMore
             currentData={movies}

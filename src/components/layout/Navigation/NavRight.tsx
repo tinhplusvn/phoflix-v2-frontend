@@ -67,8 +67,12 @@ const NavRight = ({ width }: NavRightProps) => {
               }}
               onClick={() => setOpenModalSearch(true)}
               variant="outlined"
-              color="neutral"
-              startDecorator={<SearchIcon color="primary"/>}
+              color={theme === "light" ? "primary" : "neutral"}
+              startDecorator={
+                <SearchIcon
+                  color={theme === "light" ? "primary" : "secondary"}
+                />
+              }
             >
               Tìm kiếm phim...
             </Button>
@@ -85,7 +89,7 @@ const NavRight = ({ width }: NavRightProps) => {
               }}
               onClick={() => setOpenModalSearch(true)}
               variant="outlined"
-              color="neutral"
+              color={theme === "light" ? "primary" : "neutral"}
             >
               <SearchIcon />
             </IconButton>
@@ -98,8 +102,9 @@ const NavRight = ({ width }: NavRightProps) => {
           <Box sx={{ display: "flex", gap: "12px" }}>
             <Button
               size="sm"
+              color="neutral"
               onClick={() => handleAuthentication("login")}
-              variant="plain"
+              variant={theme === "light" ? "plain" : "solid"}
             >
               Đăng nhập
             </Button>

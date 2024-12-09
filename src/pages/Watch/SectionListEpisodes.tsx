@@ -22,6 +22,7 @@ const SectionListEpisodes = () => {
   const movieInfo = useSelector(
     (state: RootState) => state.movies.movieInfo.info
   );
+  const theme = useSelector((state: RootState) => state.system.theme);
   const dispatch: AppDispatch = useDispatch();
   const params = useParams();
   const [episodes, setEpisodes] = useState<Episode[]>([]);
@@ -80,6 +81,7 @@ const SectionListEpisodes = () => {
           <Button
             sx={{ flex: "auto" }}
             key={index}
+            color={theme === "light" ? "primary" : "neutral"}
             variant={item.slug === currentEpisode.slug ? "solid" : "soft"}
             onClick={() => handleChangeEpisode(item)}
           >
@@ -89,7 +91,14 @@ const SectionListEpisodes = () => {
       </Box>
       {episodesFromStore?.length > 50 &&
         episodes?.length < episodesFromStore?.length && (
-          <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              width: "100%",
+              marginTop: "24px",
+            }}
+          >
             <ButtonSeeMore
               originalData={episodesFromStore}
               currentData={episodes}

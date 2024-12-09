@@ -2,8 +2,12 @@ import { Alert, Box, IconButton, Tooltip, Typography } from "@mui/joy";
 import { shareInfo } from "../../utils";
 import ShareIcon from "@mui/icons-material/Share";
 import InfoRow from "../../components/common/InfoRow";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const SectionInfoMovie = ({ movieInfo }: any) => {
+  const theme = useSelector((state: RootState) => state.system.theme);
+
   return (
     <Box className="section-info-movie">
       <Alert
@@ -22,8 +26,8 @@ const SectionInfoMovie = ({ movieInfo }: any) => {
             top: "12px",
           }}
           title="Chia sẻ"
-          variant="soft"
-          color="primary"
+          variant={theme === "light" ? "soft" : "solid"}
+          color={theme === "light" ? "primary" : "neutral"}
         >
           <IconButton
             onClick={() =>
@@ -41,12 +45,12 @@ const SectionInfoMovie = ({ movieInfo }: any) => {
           sx={{
             marginTop: "32px",
           }}
-          level="h4"
+          level="title-lg"
           color="primary"
         >
           {movieInfo.name}
         </Typography>
-        <Typography level="title-lg">{movieInfo.origin_name}</Typography>
+        <Typography level="title-md">{movieInfo.origin_name}</Typography>
       </Alert>
 
       <Alert

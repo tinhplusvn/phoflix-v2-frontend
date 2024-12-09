@@ -27,7 +27,7 @@ const Search = () => {
   const titleHead = useSelector(
     (state: RootState) => state.movies.searchMovie.titleHead
   );
-
+  const isMobile = useSelector((state: RootState) => state.system.isMobile);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const params = useParams();
@@ -86,9 +86,12 @@ const Search = () => {
               md: "row",
             },
           }}
-          color="primary"
+          color="neutral"
         >
-          <Typography startDecorator={<SearchIcon />} level="title-lg">
+          <Typography
+            startDecorator={<SearchIcon />}
+            level={isMobile ? "title-sm" : "title-md"}
+          >
             {movies.length > 0
               ? `Tìm kiếm được ${totalItems} bộ phim phù hợp cho từ khoá "${params.keyword}"`
               : `Không tìm thấy phim phù hợp!`}
@@ -96,7 +99,7 @@ const Search = () => {
 
           {movies.length > 0 && (
             <Typography
-              color="primary"
+              color="neutral"
               level="title-sm"
             >{`Trang ${currentPage}`}</Typography>
           )}

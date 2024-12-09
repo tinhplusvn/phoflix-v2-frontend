@@ -22,6 +22,7 @@ type IProps = {
 
 const ModalInstructDowload = ({ open, setOpen }: IProps) => {
   const isMobile = useSelector((state: RootState) => state.system.isMobile);
+  const theme = useSelector((state: RootState) => state.system.theme);
 
   return (
     <ModalContainer
@@ -38,8 +39,8 @@ const ModalInstructDowload = ({ open, setOpen }: IProps) => {
           sm: "520px",
         },
         maxHeight: {
-            xs: "90vh",
-            sm: "unset",
+          xs: "90vh",
+          sm: "unset",
         },
         overflow: "auto",
         borderRadius: "md",
@@ -47,7 +48,10 @@ const ModalInstructDowload = ({ open, setOpen }: IProps) => {
         boxShadow: "lg",
       }}
     >
-      <Typography level="title-lg" color="primary">
+      <Typography
+        level="title-lg"
+        color={theme === "light" ? "primary" : "neutral"}
+      >
         Hướng dẫn tải video
       </Typography>
       {!isMobile ? (

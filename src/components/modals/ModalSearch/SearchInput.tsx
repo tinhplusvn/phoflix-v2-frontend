@@ -17,6 +17,7 @@ const SearchInput = ({
   setSearchValue,
 }: SearchInputProps) => {
   const width = useSelector((state: RootState) => state.system.width);
+  const theme = useSelector((state: RootState) => state.system.theme);
 
   return (
     <Box>
@@ -27,14 +28,19 @@ const SearchInput = ({
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
         sx={{ flex: "1" }}
-        color="primary"
+        color={theme === "light" ? "primary" : "neutral"}
         variant="outlined"
         placeholder="Tìm kiếm phim..."
-        startDecorator={width > 476 && <SearchIcon color="primary" />}
+        startDecorator={
+          width > 476 && (
+            <SearchIcon color={theme === "light" ? "primary" : "secondary"} />
+          )
+        }
         endDecorator={
           width > 476 ? (
             <Button
               size="sm"
+              color={theme === "light" ? "primary" : "neutral"}
               loading={isLoadingButton}
               disabled={searchValue === ""}
               onClick={handleSearchInput}
@@ -48,7 +54,7 @@ const SearchInput = ({
               disabled={searchValue === ""}
               onClick={handleSearchInput}
               variant="solid"
-              color="primary"
+              color={theme === "light" ? "primary" : "neutral"}
             >
               <SearchIcon />
             </IconButton>
