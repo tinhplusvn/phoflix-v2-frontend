@@ -11,7 +11,7 @@ import SkeletonPage from "../components/common/SkeletonPage";
 import SearchIcon from "@mui/icons-material/Search";
 import searchNotFoundImg from "../images/search-not-found.png";
 import { scrollToTop } from "../utils";
-import _Pagination from "../components/layout/Navigation/_Pagination";
+import _Pagination from "../components/common/_Pagination";
 
 const Search = () => {
   const dispatch: AppDispatch = useDispatch();

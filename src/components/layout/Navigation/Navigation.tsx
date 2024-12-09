@@ -27,10 +27,6 @@ const Navigation = () => {
   const theme = useSelector((state: RootState) => state.system.theme);
 
   useEffect(() => {
-    console.log("theme", theme);
-  }, [theme]);
-
-  useEffect(() => {
     dispatch(getCategories());
     dispatch(getCountries());
   }, []);

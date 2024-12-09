@@ -13,7 +13,7 @@ import SkeletonPage from "../components/common/SkeletonPage";
 import { generateYears, scrollToTop } from "../utils";
 import imageLoadingMovieError from "../images/loading-movie-error.png";
 import ShowBackground from "../components/common/ShowBackground";
-import _Pagination from "../components/layout/Navigation/_Pagination";
+import _Pagination from "../components/common/_Pagination";
 
 type describe = Record<string, string>;
 type slug = Record<string, string>;

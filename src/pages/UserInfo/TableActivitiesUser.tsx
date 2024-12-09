@@ -1,27 +1,20 @@
 import { Box, Button, Table, Typography } from "@mui/joy";
 import HistoryIcon from "@mui/icons-material/History";
-import { formatDate, scrollToTop } from "../../utils";
+import { formatDate } from "../../utils";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import ToggleShowItem from "../../components/common/ToggleShowItem";
 import { useEffect, useState } from "react";
+import ButtonSeeMore from "../../components/common/ButtonSeeMore";
 
 const TableActivitiesUser = ({ setOpenModalAlertDialog }: any) => {
   const activityFromStore = useSelector(
     (state: RootState) => state.activityLog.activityList
   );
-  const [typeShowActivity, setTypeShowActivity] = useState<string>("collapse");
-  const [activityList, setActivityList] = useState([]);
+  const [activityList, setActivityList] = useState<any[]>([]);
 
   useEffect(() => {
     setActivityList(activityFromStore.slice(0, 10));
   }, [activityFromStore]);
-
-  const handleShowEpisodes = (activity: any, type: string) => {
-    setActivityList(activity);
-    setTypeShowActivity(type);
-    type === "collapse" && scrollToTop();
-  };
 
   return (
     <Box
@@ -86,18 +79,24 @@ const TableActivitiesUser = ({ setOpenModalAlertDialog }: any) => {
               </tr>
             ))}
         </tbody>
-        {activityFromStore.length > 10 && (
-          <Box sx={{ marginTop: "24px" }}>
-            <ToggleShowItem
-              type={typeShowActivity}
-              data={activityFromStore}
-              quantity={10}
-              text="hoạt động"
-              location="start"
-              handleShowItem={handleShowEpisodes}
-            />
-          </Box>
-        )}
+        {activityFromStore.length > 10 &&
+          activityList?.length < activityFromStore?.length && (
+            <tfoot>
+              <tr>
+                <td colSpan={2} style={{ textAlign: "center" }}>
+                  <Box sx={{ marginTop: "24px" }}>
+                    <ButtonSeeMore
+                      originalData={activityFromStore}
+                      currentData={activityList}
+                      countDisplay={10}
+                      setData={setActivityList}
+                      title="hoạt động"
+                    />
+                  </Box>
+                </td>
+              </tr>
+            </tfoot>
+          )}
       </Table>
     </Box>
   );

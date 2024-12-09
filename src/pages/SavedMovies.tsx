@@ -17,12 +17,14 @@ import { IUser } from "../interfaces/user";
 import { useNavigate } from "react-router-dom";
 import imageSaveMovie from "../images/save-movie.png";
 import ShowBackground from "../components/common/ShowBackground";
+import ButtonSeeMore from "../components/common/ButtonSeeMore";
 
 const SavedMovie = () => {
   const dispatch: AppDispatch = useDispatch();
   const savedMovies = useSelector(
     (state: RootState) => state.movies.savedMovies.movies
   );
+  const [movies, setMovies] = useState<any[]>([]);
   const navigate = useNavigate();
   const user: IUser = useSelector((state: RootState) => state.users.user);
   const [open, setOpen] = useState<boolean>(false);
@@ -30,6 +32,10 @@ const SavedMovie = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
   const isMobile = useSelector((state: RootState) => state.system.isMobile);
+
+  useEffect(() => {
+    setMovies(savedMovies.slice(0, 12));
+  }, [savedMovies]);
 
   useEffect(() => {
     document.title = "Phim Đã Lưu Của Bạn - Xem Lại Mọi Lúc, Mọi Nơi!";
@@ -133,7 +139,7 @@ const SavedMovie = () => {
         >
           <Typography
             startDecorator={<BookmarkAddedRoundedIcon />}
-            level={isMobile ? "title-lg" : "h4"}
+            level={isMobile ? "title-md" : "title-lg"}
           >
             Phim đã lưu
           </Typography>
@@ -142,11 +148,25 @@ const SavedMovie = () => {
           </Button>
         </Alert>
         <MovieList
-          movies={savedMovies}
+          movies={movies}
           page="savedMovies"
           handleDeleteMovie={handleDeleteMovie}
         />
       </Box>
+
+      {movies.length < savedMovies.length && (
+        <Box
+          sx={{ display: "flex", marginTop: "32px", justifyContent: "center" }}
+        >
+          <ButtonSeeMore
+            currentData={movies}
+            originalData={savedMovies}
+            countDisplay={10}
+            setData={setMovies}
+            title="phim"
+          />
+        </Box>
+      )}
 
       <ModalAlertDialog
         isLoading={isLoadingButton}

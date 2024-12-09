@@ -24,7 +24,6 @@ const CommentInput = () => {
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-
   const handleAddComment = async () => {
     if (!user.access_token || !user.refresh_token) {
       toast.error("Vui lòng đăng nhập để bình luận!");
@@ -76,6 +75,7 @@ const CommentInput = () => {
       }}
     >
       <Textarea
+        disabled={isLoading}
         value={valueComment}
         onChange={(e) => setValueComment(e.target.value)}
         sx={{ width: "100%" }}

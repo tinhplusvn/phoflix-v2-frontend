@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import SlideList from "../components/SlideList";
+import SlideList from "../components/slide/SlideList";
 import { AppDispatch, RootState } from "../redux/store";
 import { useEffect, useMemo, useState } from "react";
 import {

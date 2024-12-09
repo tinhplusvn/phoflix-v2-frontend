@@ -1,11 +1,10 @@
 import { Box, Button, Chip, Typography } from "@mui/joy";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
-import _NavLink from "./common/_NavLink";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useNavigate } from "react-router-dom";
-import { IMovie } from "../interfaces/movie";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { IMovie } from "../../interfaces/movie";
+import { RootState } from "../../redux/store";
 
 interface IProps {
   item: IMovie;

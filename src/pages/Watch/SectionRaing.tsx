@@ -39,7 +39,6 @@ const SectionRating = () => {
   useEffect(() => {
     socket.on("refreshRating", (res) => {
       if (res?.slug === params?.slug) {
-        console.log(">>> user", user);
         handleRefreshRating();
       }
     });

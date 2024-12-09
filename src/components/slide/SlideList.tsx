@@ -2,14 +2,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import "../styles/SlideShow.scss";
-import { Autoplay, Pagination, Navigation, EffectCards } from "swiper/modules";
+import "../../styles/SlideShow.scss";
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import { Box, Skeleton } from "@mui/joy";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import _NavLink from "./common/_NavLink";
+import { RootState } from "../../redux/store";
+import _NavLink from "../common/_NavLink";
 import SlideItem from "./SlideItem";
-import { IMovie } from "../interfaces/movie";
+import { IMovie } from "../../interfaces/movie";
 
 const SlideList = () => {
   const items: IMovie[] = useSelector(

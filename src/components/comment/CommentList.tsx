@@ -18,9 +18,8 @@ import ModalReportComment from "../modals/ModalReportComment";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { isEmpty } from "lodash";
-import { scrollToTop } from "../../utils";
-import ToggleShowItem from "../common/ToggleShowItem";
 import { socket } from "../../socket";
+import ButtonSeeMore from "../common/ButtonSeeMore";
 
 const CommentList = () => {
   const commentListStore = useSelector(
@@ -42,18 +41,10 @@ const CommentList = () => {
   const params = useParams();
   const [commentList, setCommentList] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [typeShow, setTypeShow] = useState<string>("collapse");
 
   useEffect(() => {
     setCommentList(commentListStore.slice(0, 5));
-    setTypeShow("collapse");
   }, [commentListStore]);
-
-  const handleShowComment = (commentList: any, type: string) => {
-    setCommentList(commentList);
-    setTypeShow(type);
-    type === "collapse" && scrollToTop();
-  };
 
   const handleDeleteComment = async () => {
     setIsLoading(true);
@@ -118,27 +109,33 @@ const CommentList = () => {
         >
           {commentList.map((item: any, index: any) => (
             <Box key={index}>
-                <CommentItem
-                  index={index}
-                  item={item}
-                  isLoading={isLoading}
-                  handSaveEditComment={handSaveEditComment}
-                />
+              <CommentItem
+                index={index}
+                item={item}
+                isLoading={isLoading}
+                handSaveEditComment={handSaveEditComment}
+              />
             </Box>
           ))}
         </ul>
-        {commentListStore.length > 5 && (
-          <Box sx={{ margin: "24px auto 0 auto" }}>
-            <ToggleShowItem
-              type={typeShow}
-              data={commentListStore}
-              quantity={5}
-              text="bình luận"
-              location="center"
-              handleShowItem={handleShowComment}
-            />
-          </Box>
-        )}
+        {commentListStore?.length > 5 &&
+          commentList?.length < commentListStore?.length && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "32px",
+              }}
+            >
+              <ButtonSeeMore
+                currentData={commentList}
+                originalData={commentListStore}
+                countDisplay={5}
+                setData={setCommentList}
+                title="bình luận"
+              />
+            </Box>
+          )}
       </Box>
 
       <ModalAlertDialog

@@ -1,6 +1,5 @@
 import { Alert, Box, Button, Typography } from "@mui/joy";
 import SubscriptionsOutlinedIcon from "@mui/icons-material/SubscriptionsOutlined";
-import ToggleShowItem from "../../components/common/ToggleShowItem";
 import { Episode } from "./Watch";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +10,7 @@ import {
   updateWatchedEpisodes,
 } from "../../redux/slice/watchSlice";
 import { useParams } from "react-router-dom";
+import ButtonSeeMore from "../../components/common/ButtonSeeMore";
 
 const SectionListEpisodes = () => {
   const episodesFromStore = useSelector(
@@ -25,8 +25,9 @@ const SectionListEpisodes = () => {
   const dispatch: AppDispatch = useDispatch();
   const params = useParams();
   const [episodes, setEpisodes] = useState<Episode[]>([]);
-  const [typeShowEpisodes, setTypeShowEpisodes] = useState<string>("collapse");
-  const currentEpisode = useSelector((state: RootState) => state.watch.currentEpisode);
+  const currentEpisode = useSelector(
+    (state: RootState) => state.watch.currentEpisode
+  );
 
   useEffect(() => {
     setEpisodes(episodesFromStore.slice(0, 50));
@@ -49,12 +50,6 @@ const SectionListEpisodes = () => {
     );
 
     return objCurrentEpisodes?.currentEpisode;
-  };
-
-  const handleShowEpisodes = (episodes: Episode[], type: string) => {
-    setEpisodes(episodes);
-    setTypeShowEpisodes(type);
-    type === "collapse" && scrollToTop();
   };
 
   const handleChangeEpisode = (item: Episode) => {
@@ -92,18 +87,18 @@ const SectionListEpisodes = () => {
           </Button>
         ))}
       </Box>
-      {episodesFromStore.length > 50 && (
-        <Box sx={{ margin: "0 auto" }}>
-          <ToggleShowItem
-            type={typeShowEpisodes}
-            data={episodesFromStore}
-            quantity={50}
-            text="tập phim"
-            location="center"
-            handleShowItem={handleShowEpisodes}
-          />
-        </Box>
-      )}
+      {episodesFromStore?.length > 50 &&
+        episodes?.length < episodesFromStore?.length && (
+          <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+            <ButtonSeeMore
+              originalData={episodesFromStore}
+              currentData={episodes}
+              countDisplay={50}
+              setData={setEpisodes}
+              title="tập phim"
+            />
+          </Box>
+        )}
     </Alert>
   );
 };

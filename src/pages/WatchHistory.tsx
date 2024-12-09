@@ -17,6 +17,7 @@ import { IUser } from "../interfaces/user";
 import { useNavigate } from "react-router-dom";
 import imageWatchHistory from "../images/watch-history.png";
 import ShowBackground from "../components/common/ShowBackground";
+import ButtonSeeMore from "../components/common/ButtonSeeMore";
 
 type TypeDelete = "watch-history" | "saved-movies";
 
@@ -24,6 +25,7 @@ const WatchHistory = () => {
   const watchHistory = useSelector(
     (state: RootState) => state.movies.watchHistory.movies
   );
+  const [movies, setMovies] = useState<any[]>([]);
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const user: IUser = useSelector((state: RootState) => state.users.user);
@@ -32,6 +34,10 @@ const WatchHistory = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
   const breadcrumbsPaths = ["Lịch sử đã xem"];
+
+  useEffect(() => {
+    setMovies(watchHistory.slice(0, 12));
+  }, [watchHistory]);
 
   useEffect(() => {
     document.title = "Nhật Ký Xem Phim - Theo Dõi Hành Trình Giải Trí Của Bạn!";
@@ -135,7 +141,7 @@ const WatchHistory = () => {
         >
           <Typography
             startDecorator={<HistoryOutlinedIcon />}
-            level={isMobile ? "title-lg" : "h4"}
+            level={isMobile ? "title-md" : "title-lg"}
           >
             Lịch sử xem gần đây
           </Typography>
@@ -144,11 +150,25 @@ const WatchHistory = () => {
           </Button>
         </Alert>
         <MovieList
-          movies={watchHistory}
+          movies={movies}
           page="watchHistory"
           handleDeleteMovie={handleDeleteMovie}
         />
       </Box>
+
+      {movies.length < watchHistory.length && (
+        <Box
+          sx={{ display: "flex", justifyContent: "center", marginTop: "32px" }}
+        >
+          <ButtonSeeMore
+            currentData={movies}
+            originalData={watchHistory}
+            countDisplay={12}
+            setData={setMovies}
+            title="phim"
+          />
+        </Box>
+      )}
 
       <ModalAlertDialog
         isLoading={isLoadingButton}
