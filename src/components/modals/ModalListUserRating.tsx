@@ -1,8 +1,9 @@
-import { Box, Chip, Typography } from "@mui/joy";
+import { Box, Chip, Divider, ModalClose, Typography } from "@mui/joy";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
 import ModalContainer from "./ModalContainer";
+import TitleModal from "../common/TitleModal";
 
 interface ModalListUserRatingProps {
   open: boolean;
@@ -29,17 +30,19 @@ const ModalListUserRating = ({ open, setOpen }: ModalListUserRatingProps) => {
           sm: "400px",
         },
         borderRadius: "md",
-        p: 3,
+        p: 2,
         boxShadow: "lg",
       }}
     >
+      <TitleModal title="Danh sách đánh giá" marginDivider="12px -16px" />
+
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           gap: "12px",
           minHeight: {
-            xs: "80vh",
+            xs: "50vh",
             sm: "400px",
           },
           maxHeight: {
@@ -51,7 +54,7 @@ const ModalListUserRating = ({ open, setOpen }: ModalListUserRatingProps) => {
       >
         {rating?.listUserRating.length === 0 ? (
           <Typography
-            sx={{ margin: "0 auto" }}
+            sx={{ margin: "auto" }}
             level="title-sm"
             color={theme === "light" ? "primary" : "neutral"}
           >

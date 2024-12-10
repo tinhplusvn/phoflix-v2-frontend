@@ -16,6 +16,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { addReportedComment } from "../../redux/asyncThunk/reportedComment";
 import ModalContainer from "./ModalContainer";
+import TitleModal from "../common/TitleModal";
 
 type IProps = {
   open: boolean;
@@ -23,6 +24,14 @@ type IProps = {
   setOpen: (open: boolean) => void;
   setIdComment: (id: string) => void;
 };
+
+const arrReportReason = [
+  { value: "Nội dung xúc phạm", label: "Nội dung xúc phạm" },
+  { value: "Lừa đảo", label: "Lừa đảo" },
+  { value: "Quảng cáo cờ bạc", label: "Quảng cáo cờ bạc" },
+  { value: "Thông tin sai lệch", label: "Thông tin sai lệch" },
+  { value: "Hành vi quấy rối", label: "Hành vi quấy rối" },
+];
 
 const ModalReportComment = ({
   open,
@@ -74,13 +83,12 @@ const ModalReportComment = ({
           sm: "520px",
         },
         borderRadius: "md",
-        p: 3,
+        p: 2,
         boxShadow: "lg",
       }}
     >
-      <Typography level="h4" color={theme === "light" ? "primary" : "neutral"}>
-        Báo cáo bình luận
-      </Typography>
+      <TitleModal title="Báo cáo bình luận" marginDivider="12px -16px" />
+
       <Box
         sx={{
           marginTop: "24px",
@@ -98,27 +106,15 @@ const ModalReportComment = ({
             value={reportingReason}
             name="radio-buttons-group"
           >
-            <Radio
-              value="Nội dung xúc phạm"
-              label="Nội dung xúc phạm"
-              size="md"
-            />
-            <Radio value="Lừa đảo" label="Lừa đảo" size="md" />
-            <Radio
-              value="Quảng cáo không mong muốn"
-              label="Quảng cáo không mong muốn"
-              size="md"
-            />
-            <Radio
-              value="Thông tin sai lệch"
-              label="Thông tin sai lệch"
-              size="md"
-            />
-            <Radio
-              value="Hành vi quấy rối"
-              label="Hành vi quấy rối"
-              size="md"
-            />
+            {arrReportReason.map((item, index) => (
+              <Radio
+                color={theme === "light" ? "primary" : "neutral"}
+                key={index}
+                value={item.value}
+                label={item.label}
+                size="md"
+              />
+            ))}
           </RadioGroup>
         </FormControl>
         <Box
@@ -136,7 +132,11 @@ const ModalReportComment = ({
           >
             Huỷ bỏ
           </Button>
-          <Button loading={isLoading} onClick={() => handleReport()}>
+          <Button
+            color={theme === "light" ? "primary" : "neutral"}
+            loading={isLoading}
+            onClick={() => handleReport()}
+          >
             Báo cáo
           </Button>
         </Box>

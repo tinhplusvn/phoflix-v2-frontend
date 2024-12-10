@@ -36,7 +36,6 @@ const CommentList = () => {
     (state: RootState) => state.comments.valueEditComment
   );
   const idComment = useSelector((state: RootState) => state.comments.idComment);
-
   const dispatch: AppDispatch = useDispatch();
   const params = useParams();
   const [commentList, setCommentList] = useState<any>([]);
@@ -84,7 +83,6 @@ const CommentList = () => {
     );
     if (+res.payload?.EC === 0) {
       toast.success(res.payload?.EM);
-
       socket.emit("updateComment", { slug: params?.slug });
     }
     dispatch(setIndexEdit(-1));

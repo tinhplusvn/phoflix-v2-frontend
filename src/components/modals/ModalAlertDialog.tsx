@@ -4,32 +4,28 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
-  Modal,
-  Sheet,
 } from "@mui/joy";
 import ModalContainer from "./ModalContainer";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
 
 interface IProps {
   open: boolean;
   title: string;
   content: string;
+  isLoading?: boolean;
   setOpen: (open: boolean) => void;
   handleSubmit: () => void;
-  isLoading?: boolean;
+  handleCancel?: () => void;
 }
 
 const ModalAlertDialog = ({
   open,
-  setOpen,
-  handleSubmit,
   title,
   content,
   isLoading,
+  setOpen,
+  handleSubmit,
+  handleCancel,
 }: IProps) => {
-  const isMobile = useSelector((state: RootState) => state.system.isMobile);
-
   return (
     <ModalContainer
       open={open}
@@ -65,7 +61,10 @@ const ModalAlertDialog = ({
           sx={{ marginRight: "12px" }}
           variant="plain"
           color="neutral"
-          onClick={() => setOpen(false)}
+          onClick={() => {
+            setOpen(false);
+            handleCancel && handleCancel();
+          }}
         >
           Huỷ bỏ
         </Button>

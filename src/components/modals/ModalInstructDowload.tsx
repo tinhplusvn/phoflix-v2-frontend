@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import ModalContainer from "./ModalContainer";
 import { over } from "lodash";
+import TitleModal from "../common/TitleModal";
 
 type IProps = {
   open: boolean;
@@ -44,16 +45,12 @@ const ModalInstructDowload = ({ open, setOpen }: IProps) => {
         },
         overflow: "auto",
         borderRadius: "md",
-        p: 3,
+        p: 2,
         boxShadow: "lg",
       }}
     >
-      <Typography
-        level="title-lg"
-        color={theme === "light" ? "primary" : "neutral"}
-      >
-        Hướng dẫn tải video
-      </Typography>
+      <TitleModal title="Hướng dẫn tải video" marginDivider="12px -16px" />
+
       {!isMobile ? (
         <Box sx={{ marginTop: "12px" }}>
           <Typography level="body-md">

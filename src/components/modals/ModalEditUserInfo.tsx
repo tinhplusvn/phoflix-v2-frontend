@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Divider,
   Input,
   Modal,
   ModalClose,
@@ -21,6 +22,7 @@ import {
 } from "../../redux/asyncThunk/activityLogThunk";
 import { IUser } from "../../interfaces/user";
 import ModalContainer from "./ModalContainer";
+import TitleModal from "../common/TitleModal";
 interface IProps {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -118,10 +120,15 @@ const ModalEditUserInfo = ({ open, setOpen, dataUser }: IProps) => {
           sm: "520px",
         },
         borderRadius: "md",
-        p: 3,
+        p: 2,
         boxShadow: "lg",
       }}
     >
+      <TitleModal
+        title="Chỉnh sửa thông tin"
+        marginDivider="12px -16px"
+      />
+
       <Box
         sx={{
           display: "flex",

@@ -89,7 +89,7 @@ const CommentItem = ({
                   style={{ all: "unset" }}
                   to={
                     item?.user_id === user?.id
-                      ? "/thong-tin-nguoi-dung"
+                      ? "/trang-ca-nhan"
                       : `/xem-thong-tin/${item?.user_id}`
                   }
                 >

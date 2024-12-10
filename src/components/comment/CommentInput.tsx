@@ -24,6 +24,9 @@ const CommentInput = () => {
   );
   const theme = useSelector((state: RootState) => state.system.theme);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const incognitoMode = useSelector(
+    (state: RootState) => state.system.incognitoMode
+  );
 
   const handleAddComment = async () => {
     if (!user.access_token || !user.refresh_token) {
@@ -50,12 +53,14 @@ const CommentInput = () => {
       setValueComment("");
       toast.success("Bình luận thành công!");
 
-      await dispatch(
-        addActivityLog({
-          userId: user?.id as string,
-          action: `Bình luận "${valueComment}" tại phim ${movieInfo.name}`,
-        })
-      );
+      if (!incognitoMode) {
+        await dispatch(
+          addActivityLog({
+            userId: user?.id as string,
+            action: `Bình luận "${valueComment}" tại phim ${movieInfo.name}`,
+          })
+        );
+      }
 
       socket.emit("addComment", {
         slug: params?.slug,

@@ -22,12 +22,12 @@ const _Pagination = ({
         <Stack spacing={2} sx={{ marginTop: "32px", alignItems: "center" }}>
           <Pagination
             sx={{
-              "& .css-11i1h4p-MuiButtonBase-root-MuiPaginationItem-root": {
-                color: theme === "dark" ? "#fff" : "#000",
+              "& button": {
+                color: theme === "dark" ? "#fff !important" : "#000 !important",
                 borderColor: "#ccc",
               },
-              "& .css-z9d6q9-MuiPaginationItem-root": {
-                color: theme === "dark" ? "#fff" : "#000",
+              "& div": {
+                color: theme === "dark" ? "#fff !important" : "#000 !important",
               },
             }}
             hidePrevButton

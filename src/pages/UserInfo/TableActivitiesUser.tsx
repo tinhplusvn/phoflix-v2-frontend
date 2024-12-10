@@ -63,7 +63,7 @@ const TableActivitiesUser = ({ setOpenModalAlertDialog }: any) => {
                 <Typography
                   sx={{ marginTop: "12px" }}
                   level="title-md"
-                  color="primary"
+                  color={theme === "light" ? "primary" : "neutral"}
                 >
                   Không có hoạt động nào gần đây!
                 </Typography>

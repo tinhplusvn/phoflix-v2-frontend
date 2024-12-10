@@ -45,3 +45,18 @@ export const deleteSearchHistory = createAsyncThunk(
     }
   }
 );
+
+export const deleteAllSearchHistory = createAsyncThunk(
+  "movies/deleteAllSearchHistory",
+  async (userId: string) => {
+    try {
+      const response: any = await axios.post(
+        `${process.env.REACT_APP_API}/search-history/delete-all-search-history`,
+        { userId }
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);

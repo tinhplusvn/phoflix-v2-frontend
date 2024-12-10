@@ -39,9 +39,13 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
-  const width = useSelector((state: RootState) => state.system.width);
+  const incognitoMode = useSelector(
+    (state: RootState) => state.system.incognitoMode
+  );
 
   useEffect(() => {
+    const searchHistory = [...searchRecent, ...searchFavourite];
+
     const handleInit = async () => {
       setIsLoading(true);
       await dispatch(getSearchHistory(user?.id as string));
@@ -77,7 +81,7 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
     }
 
     if (searchValue !== "") {
-      if (user?.access_token || user?.refresh_token) {
+      if ((user?.access_token || user?.refresh_token) && !incognitoMode) {
         setIsLoadingButton(true);
         await dispatch(
           addSearchHistory({
@@ -190,8 +194,8 @@ const ModalSearch = ({ open, setOpen }: ModalSearch) => {
         <Box
           sx={{
             height: {
-                xs: "calc(100vh - 300px)",
-                sm: "calc(100vh - 200px)",
+              xs: "calc(100vh - 300px)",
+              sm: "calc(100vh - 200px)",
             },
             overflowY: "auto",
             display: "flex",

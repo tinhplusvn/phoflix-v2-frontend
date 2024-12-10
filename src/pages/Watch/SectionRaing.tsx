@@ -25,6 +25,9 @@ const SectionRating = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const theme = useSelector((state: RootState) => state.system.theme);
+  const incognitoMode = useSelector(
+    (state: RootState) => state.system.incognitoMode
+  );
 
   const handleRefreshRating = async () => {
     setIsLoading(true);
@@ -76,12 +79,15 @@ const SectionRating = () => {
     );
 
     if (+res.payload?.EC === 0) {
-      await dispatch(
-        addActivityLog({
-          userId: user?.id as string,
-          action: `Đánh giá ${stars} sao phim ${movieInfo.name}`,
-        })
-      );
+      if (!incognitoMode) {
+        await dispatch(
+          addActivityLog({
+            userId: user?.id as string,
+            action: `Đánh giá ${stars} sao phim ${movieInfo.name}`,
+          })
+        );
+      }
+
       toast.success("Cảm ơn bạn đã đánh giá phim!");
 
       socket.emit("addRating", { slug: params?.slug });
@@ -145,9 +151,11 @@ const SectionRating = () => {
               <Experimental_CssVarsProvider>
                 <Rating
                   sx={{
-                    "& .css-h06ynj-MuiRating-icon": {
+                    "& span": {
                       color: `${
-                        theme === "dark" ? "#9fa6ad" : "rgba(0, 0, 0, 0.26)"
+                        theme === "dark"
+                          ? "#9FA6AD !important"
+                          : "#0b6bcb !important"
                       }`,
                     },
                   }}

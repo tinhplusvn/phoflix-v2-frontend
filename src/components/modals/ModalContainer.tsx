@@ -1,17 +1,17 @@
-import { Modal, Sheet } from "@mui/joy";
+import { Modal, ModalClose, Sheet } from "@mui/joy";
 
 interface ModalContainerProps {
   open: boolean;
-  setOpen: (open: boolean) => void;
   children: React.ReactNode;
   sx?: any;
+  setOpen: (open: boolean) => void;
 }
 
 const ModalContainer = ({
   open,
-  setOpen,
   children,
   sx,
+  setOpen,
 }: ModalContainerProps) => {
   return (
     <Modal

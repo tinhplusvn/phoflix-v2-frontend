@@ -40,6 +40,12 @@ const Navigation = () => {
           backgroundColor: `${
             theme === "light" ? "rgba(255, 255, 255, 0.8)" : "rgb(18,18,18,0.8)"
           }`,
+          padding: {
+            xs: "12px",
+            sm: "12px 16px",
+            md: "16px 24px",
+            lg: "24px 32px",
+          },
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>

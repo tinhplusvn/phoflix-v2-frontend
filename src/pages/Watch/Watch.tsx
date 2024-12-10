@@ -34,7 +34,9 @@ const Watch = () => {
   const currentEpisode = useSelector(
     (state: RootState) => state.watch.currentEpisode
   );
-
+  const incognitoMode = useSelector(
+    (state: RootState) => state.system.incognitoMode
+  );
   const [open, setOpen] = useState<boolean>(false);
   const breadcrumbsPaths = [
     "Đang xem",
@@ -59,7 +61,7 @@ const Watch = () => {
   }, [params?.slug]);
 
   useEffect(() => {
-    if (user?.access_token || user?.refresh_token) {
+    if ((user?.access_token || user?.refresh_token) && !incognitoMode) {
       if (movieInfo?.slug) {
         dispatch(
           addMovie({

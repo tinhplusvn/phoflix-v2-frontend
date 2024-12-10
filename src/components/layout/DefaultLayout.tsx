@@ -28,9 +28,10 @@ const DefaultLayout = ({ children }: IProps) => {
         <Box
           sx={{
             padding: {
-              xs: "16px",
-              sm: "24px",
-              lg: "32px",
+              xs: "12px",
+              sm: "12px 16px",
+              md: "16px 24px",
+              lg: "24px 32px",
             },
           }}
         >
